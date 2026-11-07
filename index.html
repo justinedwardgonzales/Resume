@@ -1,51 +1,74 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#101a2b">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
   <title>Interactive Resume</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="stage">
-    <div class="phone" id="phone">
+    <div class="phone" id="phone" aria-label="Interactive iPhone resume">
       <div class="screen">
-        <div class="dynamic-island"></div>
+        <div class="wallpaper" aria-hidden="true"></div>
+        <div class="dynamic-island" aria-hidden="true"><span></span></div>
 
         <section id="lockScreen" class="lock-screen">
           <div class="ios-status-bar">
             <span id="statusTime">9:41</span>
-            <span class="status-icons">● ● ▰</span>
+            <span class="status-icons" aria-label="Cellular, Wi-Fi and battery">
+              <svg viewBox="0 0 68 18" aria-hidden="true">
+                <path d="M2 15V11M7 15V8M12 15V5M17 15V2" />
+                <path d="M27 5c5-5 12-5 17 0M30 8c3-3 8-3 11 0M34 12c1-1 2-1 3 0" />
+                <rect x="51" y="3" width="14" height="11" rx="2"/>
+                <path d="M66 6v5" />
+                <rect class="battery-fill" x="53" y="5" width="10" height="7" rx="1"/>
+              </svg>
+            </span>
           </div>
+
           <div class="lock-date" id="lockDate">Monday, November 7</div>
           <div class="lock-clock" id="lockClock">9:41</div>
+
           <div class="lock-profile">
             <div class="avatar">JG</div>
             <h1>Your Name</h1>
             <p>Senior Media Planner</p>
             <p>Publicis</p>
           </div>
+
           <div class="lock-widgets">
-            <div class="lock-widget"><span class="widget-symbol">☀</span><span>Creative</span><strong>Think</strong></div>
+            <div class="lock-widget"><span class="widget-symbol">✦</span><span>Creative</span><strong>Think differently</strong></div>
             <div class="lock-widget"><span class="widget-symbol">◷</span><span>Always</span><strong>Connected</strong></div>
           </div>
+
           <div class="lock-bottom">
             <div class="lock-shortcuts">
-              <button id="lockButton" type="button">●</button>
-              <button id="languageButton" type="button">⌁</button>
+              <button id="lockButton" type="button" aria-label="Unlock phone"><span>⌑</span></button>
+              <button id="languageButton" type="button" aria-label="Language"><span>文A</span></button>
             </div>
-            <p>Tap anywhere or swipe up to unlock</p>
+            <p>Swipe up to unlock</p>
             <div class="swipe-pill"></div>
           </div>
-          <div id="languagePopover" class="hidden"></div>
+          <div id="languagePopover" class="language-popover hidden">
+            <button type="button">English <span>✓</span></button>
+            <button type="button">Français</button>
+          </div>
         </section>
 
         <section id="homeScreen" class="home-screen hidden">
           <div class="ios-status-bar">
             <span id="homeDate">9:41</span>
-            <span class="status-icons">● ● ▰</span>
+            <span class="status-icons" aria-label="Cellular, Wi-Fi and battery">
+              <svg viewBox="0 0 68 18" aria-hidden="true">
+                <path d="M2 15V11M7 15V8M12 15V5M17 15V2" />
+                <path d="M27 5c5-5 12-5 17 0M30 8c3-3 8-3 11 0M34 12c1-1 2-1 3 0" />
+                <rect x="51" y="3" width="14" height="11" rx="2"/>
+                <path d="M66 6v5" />
+                <rect class="battery-fill" x="53" y="5" width="10" height="7" rx="1"/>
+              </svg>
+            </span>
           </div>
           <div class="home-greeting">
             <p>MY PROFESSIONAL WORLD</p>
@@ -70,7 +93,15 @@
         <section id="appScreen" class="app-screen hidden">
           <div class="ios-status-bar app-status-bar">
             <span id="appStatusTime">9:41</span>
-            <span class="status-icons">● ● ▰</span>
+            <span class="status-icons" aria-label="Cellular, Wi-Fi and battery">
+              <svg viewBox="0 0 68 18" aria-hidden="true">
+                <path d="M2 15V11M7 15V8M12 15V5M17 15V2" />
+                <path d="M27 5c5-5 12-5 17 0M30 8c3-3 8-3 11 0M34 12c1-1 2-1 3 0" />
+                <rect x="51" y="3" width="14" height="11" rx="2"/>
+                <path d="M66 6v5" />
+                <rect class="battery-fill" x="53" y="5" width="10" height="7" rx="1"/>
+              </svg>
+            </span>
           </div>
           <header class="app-header">
             <button id="backButton" type="button">‹ Back</button>
@@ -78,6 +109,7 @@
             <span class="header-spacer"></span>
           </header>
           <div id="appContent" class="app-content"></div>
+          <div class="app-home-indicator"></div>
         </section>
       </div>
       <div class="home-indicator"></div>
