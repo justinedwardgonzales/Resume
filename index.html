@@ -35,17 +35,21 @@
             <div class="lock-clock" id="lockClock">9:41</div>
           </div>
 
-          <div class="lock-widgets" aria-label="Weather and reminder widgets">
-            <div class="lock-widget weather-widget">
-              <div class="widget-heading"><span class="widget-symbol" id="weatherSymbol">☁</span><span>TORONTO</span></div>
-              <div class="weather-temperature" id="weatherTemperature">--°</div>
-              <div class="weather-condition" id="weatherCondition">Current weather</div>
-              <div class="weather-range" id="weatherRange">High --° · Low --°</div>
+          <div class="lock-widgets" aria-label="Lock Screen widgets">
+            <div class="lock-widget weather-widget" aria-label="Toronto weather">
+              <div class="widget-app-label"><span class="widget-app-icon" id="weatherSymbol">☁</span><span>Weather</span></div>
+              <div class="weather-main">
+                <span class="weather-temperature" id="weatherTemperature">--°</span>
+                <span class="weather-condition" id="weatherCondition">Loading</span>
+              </div>
+              <div class="weather-range" id="weatherRange">H --°  L --° · Toronto</div>
             </div>
-            <div class="lock-widget reminder-widget">
-              <div class="widget-heading"><span class="reminder-dot"></span><span>REMINDERS</span></div>
-              <div class="reminder-title">Update resume</div>
-              <div class="reminder-subtitle">Today</div>
+            <div class="lock-widget reminder-widget" aria-label="Reminder: Update resume">
+              <div class="widget-app-label"><span class="reminder-app-icon">☑</span><span>Reminders</span></div>
+              <button class="reminder-task" id="reminderTask" type="button" aria-pressed="false">
+                <span class="reminder-check" aria-hidden="true"></span>
+                <span class="reminder-copy"><span class="reminder-title">Update resume</span><span class="reminder-subtitle">Today</span></span>
+              </button>
             </div>
           </div>
 
