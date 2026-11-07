@@ -1,3 +1,4 @@
+
 const lockScreen = document.getElementById("lockScreen");
 const homeScreen = document.getElementById("homeScreen");
 const appScreen = document.getElementById("appScreen");
@@ -80,14 +81,24 @@ const pages = {
 
 function updateClock() {
   const now = new Date();
-  const time = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit", hour12: false });
-  const date = now.toLocaleDateString([], { weekday: "long", month: "long", day: "numeric" });
+  const time = now.toLocaleTimeString([], {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: false
+  });
+  const date = now.toLocaleDateString([], {
+    weekday: "long",
+    month: "long",
+    day: "numeric"
+  });
+
   document.getElementById("lockClock").textContent = time;
   document.getElementById("statusTime").textContent = time;
   document.getElementById("appStatusTime").textContent = time;
   document.getElementById("lockDate").textContent = date;
   document.getElementById("homeDate").textContent = date;
 }
+
 updateClock();
 setInterval(updateClock, 30000);
 
@@ -95,83 +106,113 @@ function unlock() {
   lockScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
 }
-// Allow tapping the lock screen to unlock
-lockScreen.addEventListener("click", (event) => {
-  if (event.target.closest("button")) return;
-  if (event.target.closest("#languagePopover")) return;
-  unlock();
-});
+
 function lockPhone() {
   appScreen.classList.add("hidden");
   homeScreen.classList.add("hidden");
   lockScreen.classList.remove("hidden");
 }
+
 function openApp(key) {
   if (key === "email") {
     window.location.href = `mailto:${profile.email}`;
     return;
   }
+
   if (key === "linkedin") {
     window.open(profile.linkedin, "_blank", "noopener,noreferrer");
     return;
   }
+
   const page = pages[key];
   if (!page) return;
+
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   homeScreen.classList.add("hidden");
   appScreen.classList.remove("hidden");
   appContent.scrollTop = 0;
 }
+
 function goHome() {
   appScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
 }
+
 document.getElementById("backButton").addEventListener("click", goHome);
+
 document.querySelectorAll("[data-app]").forEach(button => {
   button.addEventListener("click", () => openApp(button.dataset.app));
 });
 
-document.getElementById("lockButton").addEventListener("click", () => {
-  lockScreen.classList.toggle("lock-muted");
+document.getElementById("lockButton").addEventListener("click", event => {
+  event.stopPropagation();
+  unlock();
 });
-document.getElementById("languageButton").addEventListener("click", () => {
+
+document.getElementById("languageButton").addEventListener("click", event => {
+  event.stopPropagation();
   languagePopover.classList.toggle("hidden");
 });
+
 languagePopover.querySelectorAll("button").forEach(button => {
-  button.addEventListener("click", () => {
+  button.addEventListener("click", event => {
+    event.stopPropagation();
     languagePopover.classList.add("hidden");
-    languagePopover.querySelectorAll("span").forEach(mark => mark.remove());
-    const mark = document.createElement("span");
-    mark.textContent = "✓";
-    button.appendChild(mark);
   });
 });
 
+lockScreen.addEventListener("click", event => {
+  if (event.target.closest("button")) return;
+  unlock();
+});
+
 let startY = null;
+
 phone.addEventListener("touchstart", event => {
   startY = event.touches[0].clientY;
 }, { passive: true });
+
 phone.addEventListener("touchend", event => {
   if (startY === null) return;
+
   const delta = event.changedTouches[0].clientY - startY;
-  if (!lockScreen.classList.contains("hidden") && delta < -45) unlock();
-  else if (!homeScreen.classList.contains("hidden") && delta > 90) lockPhone();
+
+  if (!lockScreen.classList.contains("hidden") && delta < -30) {
+    unlock();
+  } else if (!homeScreen.classList.contains("hidden") && delta > 90) {
+    lockPhone();
+  }
+
   startY = null;
 }, { passive: true });
 
 let mouseStart = null;
-phone.addEventListener("mousedown", event => { mouseStart = event.clientY; });
+
+phone.addEventListener("mousedown", event => {
+  mouseStart = event.clientY;
+});
+
 phone.addEventListener("mouseup", event => {
   if (mouseStart === null) return;
+
   const delta = event.clientY - mouseStart;
-  if (!lockScreen.classList.contains("hidden") && delta < -45) unlock();
-  else if (!homeScreen.classList.contains("hidden") && delta > 90) lockPhone();
+
+  if (!lockScreen.classList.contains("hidden") && delta < -30) {
+    unlock();
+  } else if (!homeScreen.classList.contains("hidden") && delta > 90) {
+    lockPhone();
+  }
+
   mouseStart = null;
 });
+
 document.addEventListener("keydown", event => {
   if (event.key === "Escape") {
-    if (!appScreen.classList.contains("hidden")) goHome();
-    else if (!homeScreen.classList.contains("hidden")) lockPhone();
+    if (!appScreen.classList.contains("hidden")) {
+      goHome();
+    } else if (!homeScreen.classList.contains("hidden")) {
+      lockPhone();
+    }
   }
 });
