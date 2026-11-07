@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,165 +9,80 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
   <main class="stage">
-    <div class="phone">
+    <div class="phone" id="phone">
       <div class="screen">
-
-        <!-- Dynamic Island -->
         <div class="dynamic-island"></div>
 
-        <!-- Lock Screen -->
         <section id="lockScreen" class="lock-screen">
-
           <div class="ios-status-bar">
-            <span>9:41</span>
+            <span id="statusTime">9:41</span>
             <span class="status-icons">● ● ▰</span>
           </div>
-
-          <div class="lock-date">Monday, November 7</div>
-
-          <div class="lock-clock" id="clock">9:41</div>
-
+          <div class="lock-date" id="lockDate">Monday, November 7</div>
+          <div class="lock-clock" id="lockClock">9:41</div>
           <div class="lock-profile">
             <div class="avatar">JG</div>
             <h1>Your Name</h1>
             <p>Senior Media Planner</p>
             <p>Publicis</p>
           </div>
-
           <div class="lock-widgets">
-            <div class="lock-widget">
-              <span class="widget-symbol">☀</span>
-              <span>Creative</span>
-              <strong>Think</strong>
-            </div>
-            <div class="lock-widget">
-              <span class="widget-symbol">◷</span>
-              <span>Always</span>
-              <strong>Connected</strong>
-            </div>
+            <div class="lock-widget"><span class="widget-symbol">☀</span><span>Creative</span><strong>Think</strong></div>
+            <div class="lock-widget"><span class="widget-symbol">◷</span><span>Always</span><strong>Connected</strong></div>
           </div>
-
           <div class="lock-bottom">
             <div class="lock-shortcuts">
-              <span>●</span>
-              <span>⌁</span>
+              <button id="lockButton" type="button">●</button>
+              <button id="languageButton" type="button">⌁</button>
             </div>
-            <p>Swipe up to unlock</p>
+            <p>Tap anywhere or swipe up to unlock</p>
             <div class="swipe-pill"></div>
           </div>
+          <div id="languagePopover" class="hidden"></div>
         </section>
 
-        <!-- Home Screen -->
         <section id="homeScreen" class="home-screen hidden">
-
           <div class="ios-status-bar">
-            <span>9:41</span>
+            <span id="homeDate">9:41</span>
             <span class="status-icons">● ● ▰</span>
           </div>
-
           <div class="home-greeting">
             <p>MY PROFESSIONAL WORLD</p>
-            <h1>Justine's iPhone</h1>
+            <h1>My iPhone</h1>
           </div>
-
           <div class="app-grid">
-
-            <button class="app" onclick="openApp('about')">
-              <span class="app-icon contacts">
-                <span class="icon-glyph">●</span>
-              </span>
-              <span>About</span>
-            </button>
-
-            <button class="app" onclick="openApp('work')">
-              <span class="app-icon work-icon">
-                <span class="icon-glyph">▣</span>
-              </span>
-              <span>Experience</span>
-            </button>
-
-            <button class="app" onclick="openApp('skills')">
-              <span class="app-icon settings-icon">
-                <span class="icon-glyph">⚙</span>
-              </span>
-              <span>Skills</span>
-            </button>
-
-            <button class="app" onclick="openApp('photos')">
-              <span class="app-icon photos-icon">
-                <span class="icon-glyph">✿</span>
-              </span>
-              <span>Campaigns</span>
-            </button>
-
-            <button class="app" onclick="openApp('education')">
-              <span class="app-icon education-icon">
-                <span class="icon-glyph">◆</span>
-              </span>
-              <span>Education</span>
-            </button>
-
-            <button class="app" onclick="openApp('resume')">
-              <span class="app-icon files-icon">
-                <span class="icon-glyph">▤</span>
-              </span>
-              <span>Resume</span>
-            </button>
-
-            <button class="app" onclick="openApp('messages')">
-              <span class="app-icon messages-icon">
-                <span class="icon-glyph">●</span>
-              </span>
-              <span>Contact</span>
-            </button>
-
-            <button class="app" onclick="openLinkedIn()">
-              <span class="app-icon linkedin-icon">
-                <span class="icon-glyph">in</span>
-              </span>
-              <span>LinkedIn</span>
-            </button>
-
+            <button class="app" data-app="about"><span class="app-icon contacts"><span class="icon-glyph">●</span></span><span>About</span></button>
+            <button class="app" data-app="experience"><span class="app-icon work-icon"><span class="icon-glyph">▣</span></span><span>Experience</span></button>
+            <button class="app" data-app="skills"><span class="app-icon settings-icon"><span class="icon-glyph">⚙</span></span><span>Skills</span></button>
+            <button class="app" data-app="campaigns"><span class="app-icon photos-icon"><span class="icon-glyph">✿</span></span><span>Campaigns</span></button>
+            <button class="app" data-app="education"><span class="app-icon education-icon"><span class="icon-glyph">◆</span></span><span>Education</span></button>
+            <button class="app" data-app="resume"><span class="app-icon files-icon"><span class="icon-glyph">▤</span></span><span>Resume</span></button>
+            <button class="app" data-app="contact"><span class="app-icon messages-icon"><span class="icon-glyph">●</span></span><span>Contact</span></button>
+            <button class="app" data-app="linkedin"><span class="app-icon linkedin-icon"><span class="icon-glyph">in</span></span><span>LinkedIn</span></button>
           </div>
-
           <div class="dock">
-            <button class="app" onclick="emailMe()">
-              <span class="app-icon mail-icon">
-                <span class="icon-glyph">✉</span>
-              </span>
-              <span>Email</span>
-            </button>
+            <button class="app" data-app="email"><span class="app-icon mail-icon"><span class="icon-glyph">✉</span></span><span>Email</span></button>
           </div>
-
           <div class="home-page-indicator"></div>
         </section>
 
-        <!-- App Window -->
         <section id="appScreen" class="app-screen hidden">
-
           <div class="ios-status-bar app-status-bar">
-            <span>9:41</span>
+            <span id="appStatusTime">9:41</span>
             <span class="status-icons">● ● ▰</span>
           </div>
-
           <header class="app-header">
-            <button onclick="closeApp()">‹ Back</button>
+            <button id="backButton" type="button">‹ Back</button>
             <h2 id="appTitle">About</h2>
             <span class="header-spacer"></span>
           </header>
-
           <div id="appContent" class="app-content"></div>
-
         </section>
-
       </div>
-
       <div class="home-indicator"></div>
     </div>
   </main>
-
   <script src="app.js"></script>
 </body>
 </html>
