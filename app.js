@@ -96,7 +96,9 @@ function updateClock() {
   document.getElementById("statusTime").textContent = time;
   document.getElementById("appStatusTime").textContent = time;
   document.getElementById("lockDate").textContent = date;
-  document.getElementById("homeDate").textContent = date;
+  const homeCalendarDate = document.getElementById("homeCalendarDate");
+  if (homeCalendarDate) homeCalendarDate.textContent = date;
+  document.getElementById("homeDate").textContent = time;
 }
 
 updateClock();
