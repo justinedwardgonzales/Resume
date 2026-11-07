@@ -147,6 +147,16 @@ async function updateTorontoWeather() {
 updateTorontoWeather();
 setInterval(updateTorontoWeather, 30 * 60 * 1000);
 
+const reminderTask = document.getElementById("reminderTask");
+if (reminderTask) {
+  reminderTask.addEventListener("click", event => {
+    event.stopPropagation();
+    const completed = reminderTask.getAttribute("aria-pressed") !== "true";
+    reminderTask.setAttribute("aria-pressed", String(completed));
+    reminderTask.setAttribute("aria-label", completed ? "Mark Update resume incomplete" : "Mark Update resume complete");
+  });
+}
+
 function unlock() {
   lockScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
