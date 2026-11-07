@@ -104,6 +104,49 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 30000);
 
+async function updateTorontoWeather() {
+  const temperature = document.getElementById("weatherTemperature");
+  const condition = document.getElementById("weatherCondition");
+  const range = document.getElementById("weatherRange");
+  const symbol = document.getElementById("weatherSymbol");
+  if (!temperature || !condition || !range || !symbol) return;
+
+  try {
+    const endpoint = "https://api.open-meteo.com/v1/forecast?latitude=43.6532&longitude=-79.3832&current=temperature_2m,apparent_temperature,weather_code&daily=temperature_2m_max,temperature_2m_min&temperature_unit=celsius&timezone=America%2FToronto&forecast_days=1";
+    const response = await fetch(endpoint);
+    if (!response.ok) throw new Error("Weather request failed");
+    const data = await response.json();
+    const current = data.current;
+    const daily = data.daily;
+    const code = current.weather_code;
+    const descriptions = {
+      0: ["Clear", "☀"], 1: ["Mostly clear", "🌤"], 2: ["Partly cloudy", "⛅"],
+      3: ["Overcast", "☁"], 45: ["Foggy", "🌫"], 48: ["Icy fog", "🌫"],
+      51: ["Light drizzle", "🌦"], 53: ["Drizzle", "🌦"], 55: ["Heavy drizzle", "🌧"],
+      56: ["Freezing drizzle", "🌧"], 57: ["Freezing drizzle", "🌧"],
+      61: ["Light rain", "🌧"], 63: ["Rain", "🌧"], 65: ["Heavy rain", "🌧"],
+      66: ["Freezing rain", "🌧"], 67: ["Heavy freezing rain", "🌧"],
+      71: ["Light snow", "🌨"], 73: ["Snow", "🌨"], 75: ["Heavy snow", "❄"],
+      77: ["Snow grains", "🌨"], 80: ["Rain showers", "🌦"], 81: ["Showers", "🌧"],
+      82: ["Heavy showers", "🌧"], 85: ["Snow showers", "🌨"], 86: ["Heavy snow showers", "❄"],
+      95: ["Thunderstorm", "⛈"], 96: ["Thunderstorm", "⛈"], 99: ["Thunderstorm", "⛈"]
+    };
+    const [label, glyph] = descriptions[code] || ["Current conditions", "☁"];
+    temperature.textContent = Math.round(current.temperature_2m) + "°";
+    condition.textContent = label;
+    range.textContent = "H " + Math.round(daily.temperature_2m_max[0]) + "° · L " + Math.round(daily.temperature_2m_min[0]) + "°";
+    symbol.textContent = glyph;
+  } catch (error) {
+    temperature.textContent = "--°";
+    condition.textContent = "Weather unavailable";
+    range.textContent = "Toronto, ON";
+    symbol.textContent = "☁";
+  }
+}
+
+updateTorontoWeather();
+setInterval(updateTorontoWeather, 30 * 60 * 1000);
+
 function unlock() {
   lockScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
