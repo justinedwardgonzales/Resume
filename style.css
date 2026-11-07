@@ -12,7 +12,7 @@ body {
 button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .stage { width: 100%; min-height: 100svh; display: grid; place-items: center; padding: 22px; }
 .phone {
-  position: relative; width: min(393px, 100vw); height: min(852px, 94svh);
+  position: relative; width: min(393px, 94svh * 0.46127, calc(100vw - 44px)); height: auto; aspect-ratio: 393 / 852; max-height: 94svh;
   padding: 8px; border-radius: 57px; overflow: hidden;
   background: linear-gradient(115deg,#d8d9dc 0%,#676a70 5%,#17191e 14%,#090a0d 78%,#8d9095 96%,#d9dade 100%);
   box-shadow: 0 0 0 1px #090a0c, 0 0 0 2px #777a80, 0 34px 90px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.18);
@@ -133,7 +133,7 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 @media (max-width:600px) {
   body { background:#000; }
   .stage { padding:0; min-height:100svh; }
-  .phone { width:100vw; height:100svh; padding:0; border:0; border-radius:0; background:#000; box-shadow:none; }
+  .phone { width:100vw; height:100svh; max-height:none; aspect-ratio:auto; padding:0; border:0; border-radius:0; background:#000; box-shadow:none; }
   .phone::before,.phone::after,.outer-home-indicator { display:none; }
   .screen { border-radius:0; }
   .dynamic-island { top:11px; }
