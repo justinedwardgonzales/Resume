@@ -45,7 +45,7 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .lock-content { position:absolute; top:15.3%; left:0; right:0; display:flex; flex-direction:column; align-items:center; text-align:center; }
 .lock-date { font-size:18px; font-weight:600; letter-spacing:-.25px; text-shadow:0 1px 8px rgba(0,0,0,.24); }
 .lock-clock {
-  margin-top:2px; font-size:clamp(90px,25vw,112px); line-height:1.08; font-weight:300;
+  margin-top:2px; font-size:clamp(78px,22vw,88px); line-height:1.08; font-weight:300;
   letter-spacing:-6.5px; font-variant-numeric:tabular-nums; text-shadow:0 2px 18px rgba(0,0,0,.12);
 }
 .lock-widgets {
@@ -162,12 +162,12 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   .phone::before,.phone::after,.outer-home-indicator { display:none; }
   .screen { border-radius:0; }
   .dynamic-island { top:11px; }
-  .lock-clock { font-size:clamp(88px,25vw,112px); }
+  .lock-clock { font-size:clamp(78px,22vw,86px); }
   .home-screen { padding-left:22px; padding-right:22px; }
 }
 @media (max-height:740px) {
   .lock-content { top:14%; }
-  .lock-clock { font-size:88px; }
+  .lock-clock { font-size:78px; }
   .home-top { margin-top:76px; margin-bottom:22px; }
   .app-grid { row-gap:17px; }
   .app-icon { width:54px; height:54px; }
