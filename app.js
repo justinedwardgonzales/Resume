@@ -95,6 +95,12 @@ function unlock() {
   lockScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
 }
+// Allow tapping the lock screen to unlock
+lockScreen.addEventListener("click", (event) => {
+  if (event.target.closest("button")) return;
+  if (event.target.closest("#languagePopover")) return;
+  unlock();
+});
 function lockPhone() {
   appScreen.classList.add("hidden");
   homeScreen.classList.add("hidden");
