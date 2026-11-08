@@ -100,9 +100,33 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .app { min-width:0; padding:0; border:0; background:transparent; color:#fff; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; transition:transform .14s ease; }
 .app:active { transform:scale(.91); }
 .app>span:last-child { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:500; text-shadow:0 1px 5px rgba(0,0,0,.8); }
- .app-icon { position:relative; width:60px; height:60px; border-radius:15px; display:grid; place-items:center; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,.28),0 1px 1px rgba(255,255,255,.2) inset; }
-.app-icon svg { width:100%; height:100%; display:block; }
-.contacts,.work-icon,.settings-icon,.photos-icon,.education-icon,.files-icon,.messages-icon,.linkedin-icon,.mail-icon { border-radius:15px; }
+ .app-icon {
+  position:relative; width:60px; height:60px; border-radius:17px; display:grid; place-items:center;
+  overflow:hidden; isolation:isolate;
+  border:1px solid rgba(255,255,255,.42);
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.25),
+    0 1px 1px rgba(255,255,255,.7) inset,
+    0 -1px 1px rgba(0,0,0,.12) inset;
+  background:rgba(255,255,255,.14);
+  backdrop-filter:blur(18px) saturate(170%);
+  -webkit-backdrop-filter:blur(18px) saturate(170%);
+}
+.app-icon svg { width:100%; height:100%; display:block; position:relative; z-index:0; }
+.app-icon::before {
+  content:""; position:absolute; z-index:2; inset:0; border-radius:inherit; pointer-events:none;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.58) 0%,rgba(255,255,255,.18) 23%,rgba(255,255,255,0) 48%),
+    linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,0) 55%,rgba(0,0,0,.10));
+  mix-blend-mode:screen;
+}
+.app-icon::after {
+  content:""; position:absolute; z-index:3; left:8%; right:8%; top:5%; height:35%;
+  border-radius:999px; pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));
+  filter:blur(4px); opacity:.7;
+}
+.contacts,.work-icon,.settings-icon,.photos-icon,.education-icon,.files-icon,.messages-icon,.linkedin-icon,.mail-icon { border-radius:17px; }
 .dock {
   position:absolute; left:15px; right:15px; bottom:28px; height:87px; display:flex; justify-content:space-around; align-items:center; padding:0 8px;
   border:1px solid rgba(255,255,255,.24); border-radius:27px; background:rgba(238,244,251,.27);
@@ -110,7 +134,7 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 }
 .dock .app { gap:0; }
 .dock .app>span:last-child { display:none; }
-.dock .app-icon { width:59px; height:59px; }
+.dock .app-icon { width:59px; height:59px; border-radius:17px; }
 .home-page-indicator { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); }
 .app-screen { position:absolute; z-index:10; inset:0; display:flex; flex-direction:column; overflow:hidden; background:#f2f2f7; color:#1c1c1e; }
 .app-status-bar { position:relative; flex:0 0 49px; color:#111; text-shadow:none; }
