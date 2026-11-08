@@ -100,18 +100,9 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .app { min-width:0; padding:0; border:0; background:transparent; color:#fff; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; transition:transform .14s ease; }
 .app:active { transform:scale(.91); }
 .app>span:last-child { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:500; text-shadow:0 1px 5px rgba(0,0,0,.8); }
-.app-icon { position:relative; width:60px; height:60px; border-radius:14px; display:grid; place-items:center; overflow:hidden; box-shadow:0 2px 9px rgba(0,0,0,.32),inset 0 1px 1px rgba(255,255,255,.45); }
+ .app-icon { position:relative; width:60px; height:60px; border-radius:15px; display:grid; place-items:center; overflow:hidden; box-shadow:0 2px 5px rgba(0,0,0,.28),0 1px 1px rgba(255,255,255,.2) inset; }
 .app-icon svg { width:100%; height:100%; display:block; }
-.contacts { background:linear-gradient(145deg,#fff,#dce7f6); }
-.work-icon { background:linear-gradient(145deg,#64c8ff,#0877d9); }
-.settings-icon { background:linear-gradient(145deg,#d8dce4,#737d8e); }
-.photos-icon { background:linear-gradient(145deg,#fff,#ececf2); }
-.education-icon { background:linear-gradient(145deg,#67dfa5,#13895f); }
-.files-icon { background:linear-gradient(145deg,#eef7ff,#a2c9f5); }
-.messages-icon { background:linear-gradient(145deg,#6bed87,#159d4a); }
-.linkedin-icon { background:linear-gradient(145deg,#278ed6,#07558e); color:white; }
-.linkedin-mark { font-family:Arial,sans-serif; font-size:29px; font-weight:800; letter-spacing:-2px; }
-.mail-icon { background:linear-gradient(145deg,#fff,#d8e7f8); }
+.contacts,.work-icon,.settings-icon,.photos-icon,.education-icon,.files-icon,.messages-icon,.linkedin-icon,.mail-icon { border-radius:15px; }
 .dock {
   position:absolute; left:15px; right:15px; bottom:28px; height:87px; display:flex; justify-content:space-around; align-items:center; padding:0 8px;
   border:1px solid rgba(255,255,255,.24); border-radius:27px; background:rgba(238,244,251,.27);
