@@ -92,16 +92,15 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 }
 #languagePopover button { width:100%; display:flex; justify-content:space-between; padding:11px 10px; border:0; border-radius:9px; background:transparent; color:#fff; text-align:left; font-size:13px; }
 #languagePopover button:active { background:rgba(255,255,255,.13); }
-.home-screen { position:absolute; z-index:3; inset:0; padding:0 23px 49px; color:#fff; overflow:hidden; }
+ .home-screen { position:absolute; z-index:3; inset:0; padding:0 23px 49px; color:#fff; overflow:hidden; }
 .home-screen::before { content:""; position:absolute; z-index:-1; inset:0; background:rgba(10,18,30,.08); }
-.home-top { margin-top:93px; margin-bottom:28px; text-align:left; text-shadow:0 1px 8px rgba(0,0,0,.32); }
-.home-date-line { font-size:13px; font-weight:600; color:rgba(255,255,255,.88); }
-.home-greeting { margin-top:3px; font-size:27px; font-weight:700; letter-spacing:-.8px; }
-.app-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); column-gap:8px; row-gap:25px; }
+.home-top { display:none; }
+.home-date-line,.home-greeting { display:none; }
+.app-grid { margin-top:92px; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); column-gap:8px; row-gap:24px; }
 .app { min-width:0; padding:0; border:0; background:transparent; color:#fff; display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; transition:transform .14s ease; }
 .app:active { transform:scale(.91); }
 .app>span:last-child { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:500; text-shadow:0 1px 5px rgba(0,0,0,.8); }
-.app-icon { position:relative; width:59px; height:59px; border-radius:14px; display:grid; place-items:center; overflow:hidden; box-shadow:0 2px 7px rgba(0,0,0,.25),inset 0 1px 1px rgba(255,255,255,.42); }
+.app-icon { position:relative; width:60px; height:60px; border-radius:14px; display:grid; place-items:center; overflow:hidden; box-shadow:0 2px 9px rgba(0,0,0,.32),inset 0 1px 1px rgba(255,255,255,.45); }
 .app-icon svg { width:100%; height:100%; display:block; }
 .contacts { background:linear-gradient(145deg,#fff,#dce7f6); }
 .work-icon { background:linear-gradient(145deg,#64c8ff,#0877d9); }
@@ -114,7 +113,7 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .linkedin-mark { font-family:Arial,sans-serif; font-size:29px; font-weight:800; letter-spacing:-2px; }
 .mail-icon { background:linear-gradient(145deg,#fff,#d8e7f8); }
 .dock {
-  position:absolute; left:15px; right:15px; bottom:28px; height:87px; display:flex; justify-content:center; align-items:center;
+  position:absolute; left:15px; right:15px; bottom:28px; height:87px; display:flex; justify-content:space-around; align-items:center; padding:0 8px;
   border:1px solid rgba(255,255,255,.24); border-radius:27px; background:rgba(238,244,251,.27);
   backdrop-filter:blur(28px) saturate(155%); box-shadow:0 8px 28px rgba(0,0,0,.13);
 }
@@ -164,6 +163,7 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   .dynamic-island { top:11px; }
   .lock-clock { font-size:clamp(78px,22vw,86px); }
   .home-screen { padding-left:22px; padding-right:22px; }
+  .app-grid { margin-top:92px; }
 }
 @media (max-height:740px) {
   .lock-content { top:14%; }
