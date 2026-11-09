@@ -174,6 +174,12 @@ function updateClock() {
   document.getElementById("lockDate").textContent = date;
   const homeCalendarDate = document.getElementById("homeCalendarDate");
   if (homeCalendarDate) homeCalendarDate.textContent = date;
+  const homeCalendarWeekday = document.getElementById("homeCalendarWeekday");
+  const homeCalendarDay = document.getElementById("homeCalendarDay");
+  const homeCalendarMonth = document.getElementById("homeCalendarMonth");
+  if (homeCalendarWeekday) homeCalendarWeekday.textContent = now.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+  if (homeCalendarDay) homeCalendarDay.textContent = now.toLocaleDateString("en-US", { day: "2-digit" });
+  if (homeCalendarMonth) homeCalendarMonth.textContent = now.toLocaleDateString("en-US", { month: "long" }).toUpperCase();
   document.getElementById("homeDate").textContent = time;
 }
 
