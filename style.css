@@ -447,3 +447,17 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Contacts.jpeg?quality=82&strip=all&w=1024");
 }
 .ios-notes > *, .ios-photos > *, .ios-contacts > * { display: none !important; }
+
+
+/* Keep app artwork clean: no extra frame or outline around individual icons */
+.app-icon {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+.app-icon img,
+.app-icon svg {
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+}
