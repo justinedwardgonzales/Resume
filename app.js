@@ -12,70 +12,89 @@ const profile = {
   role: "Senior Media Planner",
   company: "Publicis",
   email: "YOUR_EMAIL@example.com",
-  linkedin: "https://www.linkedin.com/",
+  linkedin: "",
   location: "YOUR CITY"
 };
 
 const pages = {
+  notes: {
+    title: "Notes",
+    html: `<div class="notes-toolbar"><span>Folders</span><strong>All Notes</strong><span>•••</span></div>
+      <h1 class="notes-heading">Your professional story.</h1>
+      <p class="notes-intro">A collection of notes on experience, strengths and the way you approach media planning.</p>
+      <div class="notes-search">⌕ <span>Search Notes</span></div>
+      <div class="section-label">Pinned</div>
+      <div class="note-list">
+        <article class="note-paper"><div class="note-date">PROFILE · PINNED</div><h3>About me</h3><p>A short introduction to your background, point of view and what makes your approach to media planning distinct. Replace this prompt with your own story.</p></article>
+        <article class="note-paper"><div class="note-date">CAREER · PINNED</div><h3>Professional experience</h3><p><b>Senior Media Planner · Publicis</b><br>Add your actual dates, client categories, responsibilities and the work you personally led or contributed to.</p></article>
+      </div>
+      <div class="section-label">Career notes</div>
+      <div class="note-list">
+        <article class="note-paper"><div class="note-date">SKILLS</div><h3>What I bring to the table</h3><p>Media strategy · Audience insights · Integrated planning · Campaign management · Measurement and optimization</p><p class="note-hint">Edit this list to include only your verified strengths and platforms.</p></article>
+        <article class="note-paper"><div class="note-date">ACHIEVEMENTS</div><h3>Highlights & wins</h3><p>Add measurable outcomes, recognition, successful launches, process improvements and examples of client or team impact.</p></article>
+        <article class="note-paper"><div class="note-date">MY APPROACH</div><h3>How I think about media</h3><p>Describe how you connect audience understanding, business objectives, channel choices and performance learning.</p></article>
+      </div>
+      <div class="notes-footer">Updated just now</div>`
+  },
+  photos: {
+    title: "Photos",
+    html: `<div class="photos-topline"><span>Albums</span><span>•••</span></div><h1>Campaign gallery</h1><p>A visual collection of selected work, planning and campaign moments.</p>
+      <div class="photo-albums">
+        <div class="photo-album"><div class="album-art album-one">01</div><strong>Campaign highlights</strong><small>Add selected campaign visuals</small></div>
+        <div class="photo-album"><div class="album-art album-two">02</div><strong>Strategy & planning</strong><small>Plans, channel mixes, insights</small></div>
+        <div class="photo-album"><div class="album-art album-three">03</div><strong>Creative & execution</strong><small>Creative examples and placements</small></div>
+        <div class="photo-album"><div class="album-art album-four">04</div><strong>Results & impact</strong><small>Approved performance snapshots</small></div>
+      </div><div class="ios-card"><p>Use only work you have permission to share. Client names and confidential performance data can be anonymized.</p></div>`
+  },
+  files: {
+    title: "Files",
+    html: `<div class="files-location">On My iPhone <span>•••</span></div><h1>Files</h1><p>Your professional documents, ready to open.</p>
+      <div class="section-label">Documents</div><div class="ios-card file-list">
+        <a class="file-row" href="resume.pdf" download><span class="file-symbol pdf-symbol">PDF</span><span><b>Resume.pdf</b><small>Current resume · Add your PDF to the project</small></span><span class="arrow">↓</span></a>
+        <div class="file-row"><span class="file-symbol deck-symbol">PPT</span><span><b>Campaign case studies</b><small>Add approved presentation or PDF files</small></span><span class="arrow">›</span></div>
+        <div class="file-row"><span class="file-symbol doc-symbol">DOC</span><span><b>Certifications</b><small>Add certificates and relevant training</small></span><span class="arrow">›</span></div>
+      </div><p class="file-footnote">Files shown here should link to real documents in the website repository.</p>`
+  },
+  linkedin: {
+    title: "LinkedIn",
+    html: `<div class="ios-card external-profile-card"><div class="linkedin-mark large">in</div><h1>Find me on LinkedIn</h1><p>Visit my professional profile for my full career history, connections and updates.</p><p class="note-hint">Add your personal LinkedIn profile URL in app.js to activate this link.</p></div>`
+  },
+  spotify: {
+    title: "Spotify",
+    html: `<div class="spotify-card"><div class="spotify-disc">≋</div><div class="spotify-eyebrow">A LITTLE PERSONALITY</div><h1>Soundtrack to the work.</h1><p>A playlist for focus, creative thinking and the in-between moments.</p><div class="spotify-link-placeholder">Add your Spotify playlist link to feature your soundtrack here.</div></div>`
+  },
   about: {
     title: "About",
-    html: `<div class="ios-card profile-card">
-      <div class="profile-avatar">JG</div>
-      <h1>${profile.name}</h1>
-      <p>${profile.role} · ${profile.company}</p>
-    </div>
-    <div class="section-label">About me</div>
-    <div class="ios-card"><p>Media planner passionate about connecting people, brands and culture through thoughtful media strategy. I bring together audience insight, creative thinking and data to help campaigns make an impact.</p></div>
-    <div class="section-label">Details</div>
-    <div class="ios-card">
-      <div class="ios-row"><div><strong>Role</strong><small>${profile.role}</small></div><span class="arrow">›</span></div>
-      <div class="ios-row"><div><strong>Company</strong><small>${profile.company}</small></div><span class="arrow">›</span></div>
-      <div class="ios-row"><div><strong>Location</strong><small>${profile.location}</small></div><span class="arrow">›</span></div>
-    </div>`
+    html: `<h1>About me</h1><p>Use the Notes app to tell your professional story.</p>`
   },
   experience: {
     title: "Experience",
-    html: `<h1>Work Experience</h1>
-      <p>A snapshot of my professional journey.</p>
-      <div class="section-label">Career</div>
-      <div class="ios-card">
-        <div class="timeline-item"><h3>Senior Media Planner</h3><p>${profile.company}</p><div class="meta">2024 – Present · Replace with your actual dates</div><p>• Develop media plans informed by audience insights and campaign objectives.<br>• Coordinate campaign delivery across channels and partners.<br>• Monitor performance and translate results into actionable recommendations.</p></div>
-        <div class="timeline-item"><h3>Previous role</h3><p>Previous company</p><div class="meta">Add your dates</div><p>Add your previous role, responsibilities and measurable achievements here.</p></div>
-      </div>`
+    html: `<h1>Experience</h1><p>Your career history and accomplishments live in Notes.</p>`
   },
   skills: {
     title: "Skills",
-    html: `<h1>Skills & Expertise</h1><p>Tools and capabilities I bring to media planning.</p>
-      <div class="section-label">Media strategy</div><div class="ios-card"><span class="skill-pill">Media planning</span><span class="skill-pill">Audience strategy</span><span class="skill-pill">Campaign management</span><span class="skill-pill">Media research</span><span class="skill-pill">Performance analysis</span></div>
-      <div class="section-label">Ways of working</div><div class="ios-card"><span class="skill-pill">Client communication</span><span class="skill-pill">Cross-functional collaboration</span><span class="skill-pill">Presentation</span><span class="skill-pill">Problem solving</span></div>
-      <div class="section-label">Platforms & tools</div><div class="ios-card"><p>Add the planning, analytics and buying platforms you use here.</p></div>`
+    html: `<h1>Skills</h1><p>Your strengths and platforms live in Notes.</p>`
   },
   campaigns: {
     title: "Campaigns",
-    html: `<h1>Campaigns</h1><p>Selected work and campaign highlights.</p>
-      <div class="section-label">Portfolio</div>
-      <div class="photo-grid"><div class="photo-tile">Campaign One</div><div class="photo-tile">Campaign Two</div><div class="photo-tile">Campaign Three</div><div class="photo-tile">Campaign Four</div></div>
-      <div class="ios-card" style="margin-top:14px"><p>Replace these placeholders with campaign visuals, your role, objectives and outcomes. Only include work you are permitted to share.</p></div>`
+    html: `<h1>Campaigns</h1><p>Explore the Photos app for your visual portfolio.</p>`
   },
   education: {
     title: "Education",
-    html: `<h1>Education</h1><div class="section-label">Academic background</div>
-      <div class="ios-card"><div class="ios-row"><div><strong>Your degree / program</strong><small>Institution name</small><small>Graduation year</small></div><span class="arrow">›</span></div></div>
-      <div class="section-label">Certifications</div><div class="ios-card"><p>Add relevant certifications, courses and professional development.</p></div>`
+    html: `<h1>Education</h1><div class="ios-card"><p>Add your education and certifications to Notes or Files.</p></div>`
   },
   resume: {
     title: "Resume",
-    html: `<h1>Resume</h1><p>Your resume at a glance.</p>
-      <div class="ios-card"><div style="font-size:42px;text-align:center;padding:18px 0;color:#4386ce">PDF</div><h3 style="text-align:center">Your Name — Resume</h3><p style="text-align:center;margin-top:7px">Add a PDF file named <b>resume.pdf</b> to your project folder to enable the download.</p></div>
-      <a class="ios-row" href="resume.pdf" download><strong>Download resume.pdf</strong><span class="arrow">↓</span></a>`
+    html: `<h1>Resume</h1><p>Your PDF resume is in Files.</p><a href="resume.pdf" download>Download resume.pdf</a>`
   },
   contact: {
     title: "Contact",
     html: `<h1>Let's connect.</h1><p>I'd love to hear from you.</p>
       <div class="section-label">Contact information</div><div class="ios-card">
       <div class="ios-row"><div><strong>Email</strong><small>${profile.email}</small></div><span class="arrow">›</span></div>
-      <div class="ios-row"><div><strong>LinkedIn</strong><small>Connect professionally</small></div><span class="arrow">›</span></div></div>
-      <p style="margin-top:14px">Update the email address and LinkedIn URL in app.js before publishing.</p>`
+      <div class="ios-row"><div><strong>LinkedIn</strong><small>Professional profile</small></div><span class="arrow">›</span></div>
+      <div class="ios-row"><div><strong>Location</strong><small>${profile.location}</small></div><span class="arrow">›</span></div></div>
+      <p style="margin-top:14px">Update your email, location and profile links in app.js before publishing.</p>`
   }
 };
 
