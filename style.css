@@ -620,7 +620,7 @@ body {
 }
 .lock-clock {
   margin-top: 2px;
-  font-size: 104px;
+  font-size: 88px;
   line-height: .96;
   font-weight: 500;
   letter-spacing: -5px;
@@ -644,7 +644,7 @@ body {
   padding: 0;
 }
 .home-widgets {
-  top: 62px;
+  top: 48px;
   left: 18px;
   right: 18px;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -813,7 +813,7 @@ body {
 }
 
 .app-grid {
-  top: 258px;
+  top: 244px;
   left: 18px;
   width: 358px;
   display: grid;
