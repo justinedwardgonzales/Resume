@@ -55,12 +55,22 @@ const pages = {
   },
   files: {
     title: "Files",
-    html: `<div class="files-location">On My iPhone <span>•••</span></div><h1>Files</h1><p>Your professional documents, ready to open.</p>
-      <div class="section-label">Documents</div><div class="ios-card file-list">
-        <a class="file-row" href="resume.pdf" download><span class="file-symbol pdf-symbol">PDF</span><span><b>Resume.pdf</b><small>Current resume · Add your PDF to the project</small></span><span class="arrow">↓</span></a>
-        <div class="file-row"><span class="file-symbol deck-symbol">PPT</span><span><b>Campaign case studies</b><small>Add approved presentation or PDF files</small></span><span class="arrow">›</span></div>
-        <div class="file-row"><span class="file-symbol doc-symbol">DOC</span><span><b>Certifications</b><small>Add certificates and relevant training</small></span><span class="arrow">›</span></div>
-      </div><p class="file-footnote">Files shown here should link to real documents in the website repository.</p>`
+    html: `<div class="files-location">Browse <span>•••</span></div><h1>Resume</h1><p>Your resume is ready to download.</p>
+      <div class="ios-card file-list">
+        <a class="file-row resume-download" href="resume.pdf" download><span class="file-symbol pdf-symbol">PDF</span><span><b>Resume.pdf</b><small>PDF document</small></span><span class="arrow">↓</span></a>
+      </div>`
+  },
+  safari: {
+    title: "Safari",
+    html: `<div class="safari-browser">
+      <div class="safari-address"><span class="safari-lock">⌑</span><span>Favorites</span><span class="safari-refresh">↻</span></div>
+      <h1>Favorites</h1>
+      <p class="safari-intro">A few places I visit to stay connected to the creative and advertising industry.</p>
+      <a class="safari-bookmark lbb-bookmark" href="https://lbbonline.com/" target="_blank" rel="noopener noreferrer"><span class="bookmark-monogram">LBB</span><span><b>Little Black Book</b><small>Creative work, campaigns & industry news</small></span><span class="arrow">↗</span></a>
+      <a class="safari-bookmark feats-bookmark" href="https://www.feats.co/" target="_blank" rel="noopener noreferrer"><span class="bookmark-monogram">F</span><span><b>Feats</b><small>Verified projects & creative collaborators</small></span><span class="arrow">↗</span></a>
+      <div class="safari-note">Saved pages</div>
+      <div class="safari-toolbar"><span>‹</span><span>›</span><span>□</span><span>☰</span></div>
+    </div>`
   },
   linkedin: {
     title: "LinkedIn",
