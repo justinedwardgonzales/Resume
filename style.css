@@ -478,3 +478,29 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   object-fit: cover;
   border-radius: inherit;
 }
+
+
+/* Reliable local fallbacks: keep the system icons visible without external image requests. */
+.ios-notes {
+  background:
+    repeating-linear-gradient(to bottom, transparent 0 11px, rgba(125,125,125,.42) 11px 12px, transparent 12px 17px) 50% 27px / 72% 60% no-repeat,
+    linear-gradient(#ffd936 0 25%, #fff 25% 100%) !important;
+}
+.ios-photos {
+  background-color: #fff !important;
+  background-image:
+    radial-gradient(ellipse 19% 32% at 50% 24%, #ff9c00 0 70%, transparent 73%),
+    radial-gradient(ellipse 19% 32% at 50% 76%, #2587ed 0 70%, transparent 73%),
+    radial-gradient(ellipse 32% 19% at 24% 50%, #d94dd1 0 70%, transparent 73%),
+    radial-gradient(ellipse 32% 19% at 76% 50%, #61c92f 0 70%, transparent 73%),
+    radial-gradient(ellipse 19% 32% at 30% 30%, #ff547b 0 70%, transparent 73%),
+    radial-gradient(ellipse 19% 32% at 70% 30%, #ffc400 0 70%, transparent 73%),
+    radial-gradient(ellipse 19% 32% at 30% 70%, #8c5ce8 0 70%, transparent 73%),
+    radial-gradient(ellipse 19% 32% at 70% 70%, #20b78d 0 70%, transparent 73%) !important;
+}
+.ios-contacts {
+  background:
+    radial-gradient(circle at 50% 35%, #fff 0 18%, transparent 19%),
+    radial-gradient(ellipse at 50% 100%, #fff 0 37%, transparent 38%),
+    linear-gradient(135deg, #b9d8df, #e8e3c9) !important;
+}
