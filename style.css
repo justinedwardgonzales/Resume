@@ -289,13 +289,6 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 
 /* Personal, playful Home Screen widgets */
 .personal-widgets .home-widget { height:clamp(130px,39vw,154px); padding:14px 13px; }
-.widget-joke {
-  background:radial-gradient(circle at 88% 8%,rgba(255,255,255,.45),transparent 32%),linear-gradient(145deg,#f2bd8d,#cf8c83 55%,#936e83);
-}
-.widget-joke .widget-heading {
-  font-size:clamp(14px,3.8vw,17px); line-height:1.2; letter-spacing:-.35px;
-  font-weight:650; text-shadow:0 1px 5px rgba(65,35,30,.16);
-}
 .widget-streak {
   background:radial-gradient(circle at 85% 12%,rgba(255,255,255,.35),transparent 34%),linear-gradient(145deg,#e6a34c,#dc754f 55%,#a84e55);
 }
@@ -304,5 +297,8 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .streak-count small { font-size:14px; font-weight:650; }
 .widget-streak .widget-foot { font-size:9px; }
 @media (max-width:600px) {
-  .personal-widgets { top:15.5%; }
+  .personal-widgets { top:15.5%; grid-template-columns:1fr; }
+  .personal-widgets .widget-streak { width:calc(50% - 5px); }
 }
+
+@media (min-width:601px) { .personal-widgets { grid-template-columns:1fr; } .personal-widgets .widget-streak { width:calc(50% - 5px); } }
