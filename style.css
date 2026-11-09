@@ -878,3 +878,235 @@ body {
     min-height: 155px;
   }
 }
+
+
+
+/* Final Home Screen pass: make the layout read as an iPhone Home Screen first. */
+.home-widgets {
+  top: 62px;
+  left: 18px;
+  right: 18px;
+  height: 172px;
+  gap: 12px;
+}
+
+.home-widget {
+  height: 172px;
+  min-height: 172px;
+  border-radius: 22px;
+  padding: 14px;
+  border: 0;
+  box-shadow: 0 7px 22px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.16);
+}
+
+.home-widgets .widget-about {
+  background:
+    linear-gradient(180deg, rgba(7,12,18,.02), rgba(7,12,18,.36)),
+    radial-gradient(ellipse at 22% 18%, rgba(255,231,190,.95) 0 14%, transparent 15%),
+    radial-gradient(ellipse at 70% 36%, rgba(184,154,126,.95) 0 22%, transparent 23%),
+    linear-gradient(135deg, #c6a887 0%, #6f6d70 54%, #34414a 100%);
+}
+
+.home-widgets .widget-experience {
+  background:
+    linear-gradient(180deg, rgba(7,12,18,.02), rgba(7,12,18,.4)),
+    radial-gradient(ellipse at 28% 25%, rgba(214,229,222,.95) 0 16%, transparent 17%),
+    radial-gradient(ellipse at 74% 38%, rgba(106,129,137,.95) 0 25%, transparent 26%),
+    linear-gradient(135deg, #83999c 0%, #4d6370 53%, #293d50 100%);
+}
+
+.widget-kicker {
+  font-size: 9px;
+  letter-spacing: 1.15px;
+  font-weight: 700;
+}
+
+.widget-heading {
+  font-size: 23px;
+  line-height: 1.02;
+  letter-spacing: -.8px;
+  font-weight: 700;
+}
+
+.widget-foot {
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.app-grid {
+  top: 254px;
+  left: 18px;
+  width: 358px;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 76px;
+  column-gap: 0;
+  row-gap: 17px;
+}
+
+.app-grid .app {
+  width: 100%;
+  min-height: 76px;
+  gap: 5px;
+}
+
+.app-grid [data-app="notes"] {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.app-grid [data-app="photos"] {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.app-grid [data-app="linkedin"] {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.app-grid [data-app="spotify"] {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.home-feature {
+  position: relative;
+  top: auto;
+  right: auto;
+  grid-column: 3 / 5;
+  grid-row: 1 / 3;
+  width: auto;
+  height: 169px;
+  min-height: 169px;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  overflow: hidden;
+  display: block;
+  background:
+    linear-gradient(145deg, #d9d0c3 0%, #8b9495 48%, #3f5360 100%);
+  box-shadow: 0 7px 22px rgba(0,0,0,.16);
+}
+
+.feature-photo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  background:
+    linear-gradient(150deg, rgba(255,255,255,.22), transparent 42%),
+    radial-gradient(ellipse at 20% 18%, #e8d9c6 0 15%, transparent 16%),
+    linear-gradient(135deg, transparent 0 34%, rgba(47,64,75,.82) 35% 58%, transparent 59%),
+    linear-gradient(35deg, #b5c0bf 0 38%, #71878b 39% 64%, #d8c5ae 65% 100%);
+  transform: scale(1.02);
+}
+
+.feature-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 48%, rgba(8,13,18,.48) 100%);
+}
+
+.feature-photo-card {
+  position: absolute;
+  display: block;
+  border-radius: 9px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+}
+
+.feature-photo-card.card-one {
+  width: 88px;
+  height: 108px;
+  left: 18px;
+  top: 24px;
+  transform: rotate(-8deg);
+  background: linear-gradient(145deg, #d8b18d, #6c7880);
+}
+
+.feature-photo-card.card-two {
+  width: 92px;
+  height: 116px;
+  right: 18px;
+  top: 12px;
+  transform: rotate(7deg);
+  background: linear-gradient(145deg, #b8d0d0, #435765);
+}
+
+.feature-photo-card.card-three {
+  width: 76px;
+  height: 94px;
+  left: 103px;
+  bottom: -7px;
+  transform: rotate(2deg);
+  background: linear-gradient(145deg, #e0d0ba, #8e6d61);
+}
+
+.feature-photo-label {
+  position: absolute;
+  z-index: 2;
+  left: 14px;
+  right: 14px;
+  bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 650;
+  text-shadow: 0 1px 5px rgba(0,0,0,.55);
+}
+
+.feature-photo-label span:last-child {
+  font-size: 21px;
+  line-height: 12px;
+  font-weight: 400;
+}
+
+.feature-orbit,
+.feature-kicker,
+.feature-heading,
+.feature-link {
+  display: none;
+}
+
+.dock {
+  left: 14px;
+  right: 14px;
+  bottom: 24px;
+  height: 88px;
+  padding: 0 8px;
+  border-radius: 34px;
+  background: rgba(255,255,255,.24);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+.dock .app-icon {
+  width: 60px;
+  height: 60px;
+  flex-basis: 60px;
+  border-radius: 14px;
+}
+
+@media (max-height: 740px) {
+  .home-widgets {
+    top: 50px;
+    height: 150px;
+  }
+
+  .home-widget {
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .app-grid {
+    top: 220px;
+    row-gap: 12px;
+  }
+
+  .home-feature {
+    height: 155px;
+    min-height: 155px;
+  }
+}
