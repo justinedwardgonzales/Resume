@@ -157,6 +157,28 @@ if (reminderTask) {
   });
 }
 
+const assistiveTouch = document.getElementById("assistiveTouch");
+const assistiveTouchButton = document.getElementById("assistiveTouchButton");
+const assistiveTouchMenu = document.getElementById("assistiveTouchMenu");
+const assistiveLockButton = document.getElementById("assistiveLockButton");
+
+function updateAssistiveTouch() {
+  if (!assistiveTouch) return;
+  const visible = !lockScreen.classList.contains("hidden");
+  assistiveTouch.classList.toggle("hidden", visible);
+  assistiveTouchMenu?.classList.add("hidden");
+}
+
+assistiveTouchButton?.addEventListener("click", event => {
+  event.stopPropagation();
+  assistiveTouchMenu?.classList.toggle("hidden");
+});
+
+assistiveLockButton?.addEventListener("click", event => {
+  event.stopPropagation();
+  lockPhone();
+});
+
 function unlock() {
   lockScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
