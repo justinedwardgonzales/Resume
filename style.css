@@ -433,7 +433,8 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .ios-photos,
 .ios-contacts {
   background-repeat: no-repeat;
-  background-size: 200% 100%;
+  /* Crop the comparison image's dark outer canvas so only the app artwork fills the icon. */
+  background-size: 250% 125%;
   background-position: right center;
   background-color: #fff;
 }
