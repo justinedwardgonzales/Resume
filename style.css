@@ -1367,3 +1367,56 @@ body {
   .app-grid { top: 220px; }
   .calendar-day { font-size: 43px; }
 }
+
+
+/* Match the proportions of two native iOS small widgets on a 393–394pt iPhone. */
+.home-widgets.photography-widgets {
+  top: 62px;
+  left: 50%;
+  right: auto;
+  width: 332px;
+  height: 158px;
+  transform: translateX(-50%);
+  grid-template-columns: repeat(2, 158px);
+  gap: 16px;
+}
+.photography-widgets .home-widget {
+  width: 158px;
+  height: 158px;
+  min-height: 158px;
+  border-radius: 22px;
+}
+.photography-widgets .calendar-widget {
+  padding: 13px 12px;
+}
+.calendar-day { font-size: 47px; }
+.app-grid { top: 244px; }
+@media (max-width: 360px) {
+  .home-widgets.photography-widgets {
+    width: calc(100% - 36px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .photography-widgets .home-widget {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1;
+  }
+}
+@media (max-height: 740px) {
+  .home-widgets.photography-widgets {
+    top: 50px;
+    height: 148px;
+    grid-template-columns: repeat(2, 148px);
+    width: 312px;
+    gap: 16px;
+  }
+  .photography-widgets .home-widget {
+    width: 148px;
+    height: 148px;
+    min-height: 148px;
+  }
+  .app-grid { top: 220px; }
+  .calendar-day { font-size: 43px; }
+}
