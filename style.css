@@ -626,8 +626,8 @@ body {
   letter-spacing: -5px;
 }
 .lock-widgets {
-  top: auto;
-  bottom: 145px;
+  top: 198px;
+  bottom: auto;
   left: 12px;
   right: 12px;
   gap: 8px;
