@@ -285,3 +285,24 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .spotify-card h1 { margin-top:9px; color:#fff; }
 .spotify-card p { color:#d0ded4; }
 .spotify-link-placeholder { margin-top:26px; padding:15px; border:1px solid #ffffff35; border-radius:12px; color:#d0ded4; font-size:12px; line-height:1.5; }
+
+
+/* Personal, playful Home Screen widgets */
+.personal-widgets .home-widget { height:clamp(130px,39vw,154px); padding:14px 13px; }
+.widget-joke {
+  background:radial-gradient(circle at 88% 8%,rgba(255,255,255,.45),transparent 32%),linear-gradient(145deg,#f2bd8d,#cf8c83 55%,#936e83);
+}
+.widget-joke .widget-heading {
+  font-size:clamp(14px,3.8vw,17px); line-height:1.2; letter-spacing:-.35px;
+  font-weight:650; text-shadow:0 1px 5px rgba(65,35,30,.16);
+}
+.widget-streak {
+  background:radial-gradient(circle at 85% 12%,rgba(255,255,255,.35),transparent 34%),linear-gradient(145deg,#e6a34c,#dc754f 55%,#a84e55);
+}
+.streak-count { display:flex; align-items:baseline; gap:6px; margin:auto 0 5px; }
+.streak-count strong { font-size:54px; line-height:.95; font-weight:750; letter-spacing:-2px; }
+.streak-count small { font-size:14px; font-weight:650; }
+.widget-streak .widget-foot { font-size:9px; }
+@media (max-width:600px) {
+  .personal-widgets { top:15.5%; }
+}
