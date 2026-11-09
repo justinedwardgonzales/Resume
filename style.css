@@ -530,3 +530,28 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   outline: 0;
   box-shadow: none;
 }
+
+
+/* Native iOS 26 system artwork: isolate the right-hand icon from each verified side-by-side reference image. */
+.app-icon.ios-notes,
+.app-icon.ios-photos,
+.app-icon.ios-contacts {
+  background-repeat: no-repeat !important;
+  background-size: 257% 129% !important;
+  background-position: 89% 42% !important;
+  background-color: transparent !important;
+}
+.app-icon.ios-notes {
+  background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Notes.jpeg?quality=82&strip=all&w=1024") !important;
+}
+.app-icon.ios-photos {
+  background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Photos.jpeg?quality=82&strip=all&w=1024") !important;
+}
+.app-icon.ios-contacts {
+  background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Contacts.jpeg?quality=82&strip=all&w=1024") !important;
+}
+.app-icon.ios-notes > svg,
+.app-icon.ios-photos > svg,
+.app-icon.ios-contacts > svg {
+  display: none !important;
+}
