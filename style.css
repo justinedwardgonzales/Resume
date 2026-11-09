@@ -1110,3 +1110,114 @@ body {
     min-height: 155px;
   }
 }
+
+
+/* Safari Favorites app */
+.app-icon.ios-safari {
+  overflow: hidden;
+  background: transparent;
+}
+.app-icon.ios-safari svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.safari-browser {
+  position: relative;
+  min-height: 100%;
+  margin: -2px -2px 0;
+  padding: 12px 14px 76px;
+  background: #f2f2f7;
+  color: #17171b;
+}
+.safari-address {
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 13px;
+  border-radius: 13px;
+  background: #fff;
+  color: #74747c;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  font-size: 13px;
+}
+.safari-lock { color: #3985d6; font-size: 15px; }
+.safari-refresh { font-size: 18px; }
+.safari-browser h1 {
+  margin: 27px 2px 7px;
+  color: #17171b;
+  font-size: 28px;
+  letter-spacing: -.8px;
+}
+.safari-intro {
+  margin: 0 2px 20px;
+  color: #777780;
+  font-size: 12px;
+  line-height: 1.45;
+}
+.safari-bookmark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 0;
+  padding: 14px 12px;
+  min-height: 76px;
+  border-radius: 15px;
+  background: #fff;
+  color: #17171b;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.06);
+}
+.bookmark-monogram {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 11px;
+  background: #20232b;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -.5px;
+}
+.feats-bookmark .bookmark-monogram {
+  background: #e9f0ff;
+  color: #244c8f;
+  font-size: 23px;
+}
+.safari-bookmark b,
+.safari-bookmark small { display: block; }
+.safari-bookmark b { font-size: 13px; }
+.safari-bookmark small {
+  margin-top: 4px;
+  color: #85858d;
+  font-size: 10px;
+  line-height: 1.3;
+}
+.safari-bookmark .arrow {
+  margin-left: auto;
+  color: #8c8c94;
+}
+.safari-note {
+  margin: 26px 3px 0;
+  color: #92929a;
+  font-size: 11px;
+  font-weight: 600;
+}
+.safari-toolbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 58px;
+  border-top: 1px solid #dedee4;
+  background: rgba(250,250,252,.96);
+  color: #287fd0;
+  font-size: 23px;
+}
