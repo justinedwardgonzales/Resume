@@ -404,3 +404,25 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   .app-grid .app { min-height: 78px; }
   .app-icon { width: 54px; height: 54px; flex-basis: 54px; }
 }
+
+
+/* iOS-like app launch and return motion */
+.app-screen.is-opening {
+  animation: appLaunch 280ms cubic-bezier(.2,.82,.25,1) both;
+  transform-origin: 50% 52%;
+}
+.app-screen.is-closing {
+  animation: appClose 200ms cubic-bezier(.4,0,1,1) both;
+  transform-origin: 50% 52%;
+}
+@keyframes appLaunch {
+  from { opacity: 0; transform: scale(.94); filter: blur(2px); }
+  to { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+@keyframes appClose {
+  from { opacity: 1; transform: scale(1); filter: blur(0); }
+  to { opacity: 0; transform: scale(.97); filter: blur(1px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-screen.is-opening, .app-screen.is-closing { animation-duration: 1ms; }
+}
