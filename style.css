@@ -357,3 +357,50 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
   .app-grid { top: 27%; row-gap: 17px; }
   .app-icon { width: 53px; height: 53px; }
 }
+
+
+/* Home screen spacing + recognizable brand marks */
+.app-grid {
+  top: 30%;
+  left: 4%;
+  width: 92%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  justify-items: center;
+  column-gap: 0;
+  row-gap: 29px;
+}
+.app-grid .app { width: 100%; min-height: 88px; gap: 8px; }
+.app-grid .app:nth-child(5) { grid-column: 2; }
+.app-grid .app:nth-child(6) { grid-column: 3; }
+.app-icon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.22);
+}
+.app>span:last-child {
+  font-size: 12px;
+  line-height: 15px;
+  min-height: 15px;
+}
+.brand-icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 13px;
+  object-fit: contain;
+}
+.linkedin-icon { background: #fff; }
+.ios-spotify { background: #1ed760; }
+.dock { gap: 0; padding-inline: 12px; }
+.dock .app-icon { width: 58px; height: 58px; flex-basis: 58px; }
+@media (max-width: 600px) {
+  .app-grid { top: 30%; left: 4%; width: 92%; row-gap: 25px; }
+}
+@media (max-height: 740px) {
+  .app-grid { top: 28%; row-gap: 15px; }
+  .app-grid .app { min-height: 78px; }
+  .app-icon { width: 54px; height: 54px; flex-basis: 54px; }
+}
