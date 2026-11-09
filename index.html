@@ -85,16 +85,16 @@
             </span>
           </div>
 
-          <div class="home-widgets">
-            <button class="home-widget widget-about" data-app="notes" type="button">
-              <span class="widget-kicker">PROFILE</span>
-              <span class="widget-heading">A little<br>about me.</span>
-              <span class="widget-foot">Senior Media Planner <span>↗</span></span>
-            </button>
-            <button class="home-widget widget-experience" data-app="notes" type="button">
-              <span class="widget-kicker">EXPERIENCE</span>
-              <span class="widget-heading">Strategy<br>that moves<br>people.</span>
-              <span class="widget-foot">My career <span>↗</span></span>
+          <div class="home-widgets personal-widgets">
+            <section class="home-widget widget-joke" aria-label="Joke of the day">
+              <span class="widget-kicker">A LITTLE DAILY HUMOUR</span>
+              <span class="widget-heading" id="dailyJoke">Why did the marketer bring a ladder? To reach a higher audience.</span>
+              <span class="widget-foot"><span>Joke of the day</span><span>☻</span></span>
+            </section>
+            <button class="home-widget widget-streak" id="streakWidget" type="button" aria-label="Check in for your curiosity streak">
+              <span class="widget-kicker">CURIOSITY STREAK</span>
+              <span class="streak-count"><strong id="streakCount">0</strong><small>days</small></span>
+              <span class="widget-foot"><span id="streakMessage">Tap to start a streak</span><span>🔥</span></span>
             </button>
           </div>
           <div class="app-grid">
