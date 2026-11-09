@@ -218,7 +218,7 @@ function openApp(key) {
     return;
   }
 
-  if (key === "linkedin") {
+  if (key === "linkedin" && profile.linkedin) {
     window.open(profile.linkedin, "_blank", "noopener,noreferrer");
     return;
   }
