@@ -334,24 +334,43 @@ languagePopover.querySelectorAll("button").forEach(button => {
 });
 
 let startY = null;
+let startX = null;
+let startedAtBottomEdge = false;
 
 phone.addEventListener("pointerdown", event => {
+  const phoneRect = phone.getBoundingClientRect();
   startY = event.clientY;
+  startX = event.clientX;
+  startedAtBottomEdge = phoneRect.bottom - event.clientY <= 44;
 }, { passive: true });
 
 phone.addEventListener("pointerup", event => {
   if (startY === null) return;
 
-  const delta = event.clientY - startY;
+  const deltaY = event.clientY - startY;
+  const deltaX = event.clientX - startX;
+  const mostlyVertical = Math.abs(deltaY) > Math.abs(deltaX) * 1.2;
 
-  // Match the real Face ID Lock Screen gesture: swipe upward from the bottom edge.
-  if (!lockScreen.classList.contains("hidden") && delta < -60) {
-    unlock();
-  } else if (!homeScreen.classList.contains("hidden") && delta > 90) {
+  // Face ID iPhone gesture: a quick upward swipe from the bottom edge returns Home.
+  if (startedAtBottomEdge && mostlyVertical && deltaY < -65) {
+    if (!appScreen.classList.contains("hidden")) {
+      goHome();
+    } else if (!lockScreen.classList.contains("hidden")) {
+      unlock();
+    }
+  } else if (!homeScreen.classList.contains("hidden") && deltaY > 90) {
     lockPhone();
   }
 
   startY = null;
+  startX = null;
+  startedAtBottomEdge = false;
+}, { passive: true });
+
+phone.addEventListener("pointercancel", () => {
+  startY = null;
+  startX = null;
+  startedAtBottomEdge = false;
 }, { passive: true });
 
 document.addEventListener("keydown", event => {
