@@ -246,11 +246,15 @@ function unlock() {
 }
 
 function lockPhone() {
+  clearTimeout(appTransitionTimer);
+  appScreen.classList.remove("is-opening", "is-closing");
   appScreen.classList.add("hidden");
   homeScreen.classList.add("hidden");
   lockScreen.classList.remove("hidden");
   updateAssistiveTouch();
 }
+
+let appTransitionTimer = null;
 
 function openApp(key) {
   if (key === "email") {
@@ -268,15 +272,25 @@ function openApp(key) {
 
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
+  clearTimeout(appTransitionTimer);
   homeScreen.classList.add("hidden");
-  appScreen.classList.remove("hidden");
+  appScreen.classList.remove("hidden", "is-closing", "is-opening");
+  void appScreen.offsetWidth;
+  appScreen.classList.add("is-opening");
   appContent.scrollTop = 0;
 }
 
 function goHome() {
-  appScreen.classList.add("hidden");
-  homeScreen.classList.remove("hidden");
-  updateAssistiveTouch();
+  if (appScreen.classList.contains("hidden")) return;
+  clearTimeout(appTransitionTimer);
+  appScreen.classList.remove("is-opening");
+  appScreen.classList.add("is-closing");
+  appTransitionTimer = setTimeout(() => {
+    appScreen.classList.add("hidden");
+    appScreen.classList.remove("is-closing");
+    homeScreen.classList.remove("hidden");
+    updateAssistiveTouch();
+  }, 210);
 }
 
 document.getElementById("backButton").addEventListener("click", goHome);
