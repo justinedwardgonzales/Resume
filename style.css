@@ -426,3 +426,24 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce) {
   .app-screen.is-opening, .app-screen.is-closing { animation-duration: 1ms; }
 }
+
+
+/* Actual iOS 26 system app artwork (right-hand icon in the side-by-side reference images) */
+.ios-notes,
+.ios-photos,
+.ios-contacts {
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+  background-position: right center;
+  background-color: #fff;
+}
+.ios-notes {
+  background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Notes.jpeg?quality=82&strip=all&w=1024");
+}
+.ios-photos {
+  background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Photos.jpeg?quality=82&strip=all&w=1024");
+}
+.ios-contacts {
+  background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Contacts.jpeg?quality=82&strip=all&w=1024");
+}
+.ios-notes > *, .ios-photos > *, .ios-contacts > * { display: none !important; }
