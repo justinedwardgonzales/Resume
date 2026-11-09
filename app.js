@@ -323,23 +323,19 @@ languagePopover.querySelectorAll("button").forEach(button => {
   });
 });
 
-lockScreen.addEventListener("click", event => {
-  if (event.target.closest("button")) return;
-  unlock();
-});
-
 let startY = null;
 
-phone.addEventListener("touchstart", event => {
-  startY = event.touches[0].clientY;
+phone.addEventListener("pointerdown", event => {
+  startY = event.clientY;
 }, { passive: true });
 
-phone.addEventListener("touchend", event => {
+phone.addEventListener("pointerup", event => {
   if (startY === null) return;
 
-  const delta = event.changedTouches[0].clientY - startY;
+  const delta = event.clientY - startY;
 
-  if (!lockScreen.classList.contains("hidden") && delta < -30) {
+  // Match the real Face ID Lock Screen gesture: swipe upward from the bottom edge.
+  if (!lockScreen.classList.contains("hidden") && delta < -60) {
     unlock();
   } else if (!homeScreen.classList.contains("hidden") && delta > 90) {
     lockPhone();
@@ -347,26 +343,6 @@ phone.addEventListener("touchend", event => {
 
   startY = null;
 }, { passive: true });
-
-let mouseStart = null;
-
-phone.addEventListener("mousedown", event => {
-  mouseStart = event.clientY;
-});
-
-phone.addEventListener("mouseup", event => {
-  if (mouseStart === null) return;
-
-  const delta = event.clientY - mouseStart;
-
-  if (!lockScreen.classList.contains("hidden") && delta < -30) {
-    unlock();
-  } else if (!homeScreen.classList.contains("hidden") && delta > 90) {
-    lockPhone();
-  }
-
-  mouseStart = null;
-});
 
 document.addEventListener("keydown", event => {
   if (event.key === "Escape") {
