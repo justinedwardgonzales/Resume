@@ -1420,3 +1420,44 @@ body {
   .app-grid { top: 220px; }
   .calendar-day { font-size: 43px; }
 }
+
+
+/* Compact, glanceable schedule rows for the small Calendar widget. */
+.photography-widgets .calendar-events {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  margin-top: auto;
+}
+.photography-widgets .calendar-event {
+  display: grid;
+  grid-template-columns: 5px 39px minmax(0, 1fr);
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  min-width: 0;
+  color: #77777d;
+  font-size: 8px;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+.photography-widgets .calendar-event time {
+  font-size: 7px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.photography-widgets .calendar-event strong {
+  overflow: hidden;
+  color: #303036;
+  font-size: 8px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+}
+.photography-widgets .calendar-event-dot {
+  width: 5px;
+  height: 5px;
+  margin: 0;
+}
+.photography-widgets .run-dot { background: #34c759; }
+.photography-widgets .lesson-dot { background: #0a84ff; }
