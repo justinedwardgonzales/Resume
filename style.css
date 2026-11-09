@@ -1236,3 +1236,134 @@ body {
   grid-column: 1;
   grid-row: 2;
 }
+
+
+/* Photography-led Home Screen widgets */
+.home-widgets.photography-widgets {
+  top: 62px;
+  left: 18px;
+  right: 18px;
+  height: 172px;
+  display: grid;
+  grid-template-columns: minmax(0, 2.05fr) minmax(104px, 1fr);
+  gap: 12px;
+}
+.photography-widgets .home-widget {
+  height: 172px;
+  min-height: 172px;
+  padding: 0;
+  border: 0;
+  border-radius: 22px;
+  box-shadow: 0 7px 22px rgba(0,0,0,.18);
+}
+.photo-widget {
+  position: relative;
+  justify-content: space-between;
+  overflow: hidden;
+  color: #fff;
+  text-align: left;
+  background:
+    linear-gradient(180deg, rgba(9,14,22,.05) 20%, rgba(9,14,22,.62) 100%),
+    url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=85") center 48% / cover;
+}
+.photo-widget::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.photo-widget-caption {
+  position: relative;
+  z-index: 1;
+  margin: 13px 14px;
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 1.35px;
+  font-weight: 750;
+  color: rgba(255,255,255,.94);
+  text-shadow: 0 1px 5px rgba(0,0,0,.45);
+}
+.photo-widget-bottom {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 0 14px 13px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  text-shadow: 0 1px 7px rgba(0,0,0,.48);
+}
+.photo-widget-bottom strong {
+  font-size: 17px;
+  line-height: 1.05;
+  letter-spacing: -.45px;
+  font-weight: 720;
+}
+.photo-widget-bottom span {
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 650;
+  color: rgba(255,255,255,.9);
+}
+.photography-widgets .calendar-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 14px 12px;
+  overflow: hidden;
+  background: rgba(255,255,255,.96);
+  color: #1c1c1e;
+  border: 1px solid rgba(255,255,255,.82);
+}
+.calendar-weekday {
+  color: #ff453a;
+  font-size: 10px;
+  line-height: 13px;
+  font-weight: 750;
+  letter-spacing: .55px;
+}
+.calendar-day {
+  margin-top: 1px;
+  font-size: 49px;
+  line-height: 1.02;
+  letter-spacing: -2.5px;
+  font-weight: 350;
+  font-variant-numeric: tabular-nums;
+}
+.calendar-month {
+  margin-top: 3px;
+  color: #77777d;
+  font-size: 8px;
+  line-height: 1;
+  font-weight: 750;
+  letter-spacing: .9px;
+}
+.calendar-event {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto;
+  color: #77777d;
+  font-size: 8px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.calendar-event-dot {
+  width: 5px;
+  height: 5px;
+  flex: 0 0 5px;
+  border-radius: 50%;
+  background: #ff453a;
+}
+.app-grid { top: 254px; }
+.app-grid .home-feature { display: none; }
+@media (max-height: 740px) {
+  .home-widgets.photography-widgets { top: 50px; height: 150px; }
+  .photography-widgets .home-widget { height: 150px; min-height: 150px; }
+  .app-grid { top: 220px; }
+  .calendar-day { font-size: 43px; }
+}
