@@ -555,3 +555,219 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .app-icon.ios-contacts > svg {
   display: none !important;
 }
+
+
+/* Reference-based device and home-screen layout (394 × 852 design canvas). */
+body {
+  min-height: 100svh;
+  background: #0e0e10;
+}
+.stage {
+  width: 100%;
+  height: 100svh;
+  min-height: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.phone {
+  width: 394px;
+  height: 852px;
+  max-height: none;
+  aspect-ratio: auto;
+  padding: 0;
+  border-radius: 62px;
+  background: #000;
+  box-shadow: 0 0 0 3px #3a3a3c, 0 0 0 10px #151517, 0 40px 90px #000a;
+  transform: scale(var(--phone-scale, 1));
+  transform-origin: center center;
+}
+.phone::before,
+.phone::after,
+.outer-home-indicator {
+  display: none !important;
+}
+.screen {
+  width: 394px;
+  height: 852px;
+  border-radius: 60px;
+}
+.dynamic-island {
+  top: 11px;
+  width: 120px;
+  height: 35px;
+  border-radius: 20px;
+}
+.camera-dot { display: none; }
+.ios-status-bar {
+  height: 54px;
+  padding: 6px 34px 0 46px;
+  font-size: 16px;
+  font-weight: 600;
+  z-index: 90;
+}
+.app-status-bar {
+  flex: 0 0 54px;
+  padding: 6px 34px 0 46px;
+}
+.lock-content {
+  top: 78px;
+}
+.lock-date {
+  font-size: 20px;
+  font-weight: 600;
+}
+.lock-clock {
+  margin-top: 2px;
+  font-size: 104px;
+  line-height: .96;
+  font-weight: 500;
+  letter-spacing: -5px;
+}
+.lock-widgets {
+  top: auto;
+  bottom: 118px;
+  left: 12px;
+  right: 12px;
+  gap: 8px;
+}
+.lock-widget {
+  height: 76px;
+  padding: 10px 12px;
+  border-radius: 24px;
+  background: rgba(154,149,162,.50);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+.home-screen {
+  padding: 0;
+}
+.home-widgets {
+  top: 62px;
+  left: 18px;
+  right: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.home-widget {
+  height: 172px;
+  min-height: 172px;
+  border-radius: 22px;
+  padding: 14px;
+  border: 0;
+  box-shadow: none;
+}
+.app-grid {
+  top: 254px;
+  left: 18px;
+  width: 358px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 76px;
+  column-gap: 0;
+  row-gap: 16px;
+  align-items: start;
+  justify-items: center;
+}
+.app-grid .app {
+  width: 100%;
+  min-height: 76px;
+  gap: 5px;
+  grid-column: auto;
+  grid-row: auto;
+}
+.app-icon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  border-radius: 14px;
+  box-shadow: none !important;
+}
+.app > span:last-child {
+  font-size: 11px;
+  line-height: 11px;
+  min-height: 11px;
+  font-weight: 500;
+}
+.home-feature {
+  position: relative;
+  top: auto;
+  right: auto;
+  grid-column: 3 / 5;
+  grid-row: 1 / 3;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  padding: 14px 13px;
+  border: 0;
+  border-radius: 14px;
+  box-shadow: none;
+}
+.feature-heading {
+  font-size: 29px;
+  line-height: .98;
+  margin-bottom: 15px;
+}
+.feature-orbit {
+  width: 170px;
+  height: 170px;
+  right: -60px;
+  top: 28px;
+}
+.dock {
+  left: 14px;
+  right: 14px;
+  bottom: 24px;
+  height: 88px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: 34px;
+  background: rgba(255,255,255,.22);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: none;
+}
+.dock .app-icon {
+  width: 60px;
+  height: 60px;
+  flex-basis: 60px;
+  border-radius: 14px;
+}
+.home-page-indicator {
+  bottom: 8px;
+  width: 134px;
+  height: 5px;
+}
+.app-icon.ios-notes,
+.app-icon.ios-photos,
+.app-icon.ios-contacts,
+.app-icon.ios-files,
+.app-icon.ios-resume,
+.app-icon.ios-books {
+  background: transparent !important;
+  background-image: none !important;
+  overflow: hidden;
+}
+.app-icon.ios-notes > svg,
+.app-icon.ios-photos > svg,
+.app-icon.ios-contacts > svg,
+.app-icon.ios-files > svg,
+.app-icon.ios-resume > svg,
+.app-icon.ios-books > svg {
+  display: block !important;
+  width: 100%;
+  height: 100%;
+}
+@media (max-width: 600px) {
+  .stage { padding: 0; }
+  .phone {
+    width: 394px;
+    height: 852px;
+    max-height: none;
+    padding: 0;
+    border-radius: 62px;
+    background: #000;
+    box-shadow: 0 0 0 3px #3a3a3c, 0 0 0 10px #151517, 0 40px 90px #000a;
+  }
+  .screen { width: 394px; height: 852px; border-radius: 60px; }
+}
