@@ -771,3 +771,10 @@ body {
   }
   .screen { width: 394px; height: 852px; border-radius: 60px; }
 }
+
+
+/* Clear an older one-off grid placement so all four app icons auto-flow beside the featured tile. */
+.app-grid .app:nth-child(n) {
+  grid-column: auto;
+  grid-row: auto;
+}
