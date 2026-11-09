@@ -168,6 +168,35 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .photo-tile:nth-child(4) { background:linear-gradient(145deg,#c5b7df,#61547e); }
 .app-home-indicator { flex:0 0 5px; align-self:center; margin:8px 0 9px; background:#1c1c1e; }
 .outer-home-indicator { position:absolute; z-index:80; bottom:10px; left:50%; transform:translateX(-50%); }
+.assistive-touch {
+  position:absolute; z-index:90; right:18px; bottom:82px;
+}
+.assistive-touch-button {
+  width:48px; height:48px; padding:0; border:1px solid rgba(255,255,255,.48);
+  border-radius:50%; display:grid; place-items:center; color:#fff;
+  background:rgba(38,40,46,.46); backdrop-filter:blur(22px) saturate(150%);
+  -webkit-backdrop-filter:blur(22px) saturate(150%);
+  box-shadow:0 4px 18px rgba(0,0,0,.3), inset 0 1px 1px rgba(255,255,255,.42);
+  cursor:pointer;
+}
+.assistive-touch-ring {
+  width:21px; height:21px; border:2px solid rgba(255,255,255,.88); border-radius:50%;
+  box-shadow:0 0 0 4px rgba(255,255,255,.08);
+}
+.assistive-touch-menu {
+  position:absolute; right:0; bottom:58px; width:146px; padding:7px;
+  border:1px solid rgba(255,255,255,.25); border-radius:18px;
+  background:rgba(30,31,36,.88); backdrop-filter:blur(25px) saturate(150%);
+  -webkit-backdrop-filter:blur(25px) saturate(150%);
+  box-shadow:0 12px 35px rgba(0,0,0,.38);
+}
+.assistive-touch-menu button {
+  width:100%; display:flex; align-items:center; gap:9px; padding:10px 9px;
+  border:0; border-radius:12px; background:transparent; color:#fff;
+  font-size:12px; font-weight:600; text-align:left; cursor:pointer;
+}
+.assistive-touch-menu button:active { background:rgba(255,255,255,.13); }
+.assistive-menu-icon { width:24px; height:24px; display:grid; place-items:center; border-radius:50%; background:rgba(255,255,255,.14); font-size:17px; }
 .hidden { display:none !important; }
 @media (max-width:600px) {
   body { background:#000; }
