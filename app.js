@@ -164,8 +164,8 @@ const assistiveLockButton = document.getElementById("assistiveLockButton");
 
 function updateAssistiveTouch() {
   if (!assistiveTouch) return;
-  const visible = !lockScreen.classList.contains("hidden");
-  assistiveTouch.classList.toggle("hidden", visible);
+  const visible = !homeScreen.classList.contains("hidden") && appScreen.classList.contains("hidden");
+  assistiveTouch.classList.toggle("hidden", !visible);
   assistiveTouchMenu?.classList.add("hidden");
 }
 
@@ -181,13 +181,16 @@ assistiveLockButton?.addEventListener("click", event => {
 
 function unlock() {
   lockScreen.classList.add("hidden");
+  appScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
+  updateAssistiveTouch();
 }
 
 function lockPhone() {
   appScreen.classList.add("hidden");
   homeScreen.classList.add("hidden");
   lockScreen.classList.remove("hidden");
+  updateAssistiveTouch();
 }
 
 function openApp(key) {
@@ -214,6 +217,7 @@ function openApp(key) {
 function goHome() {
   appScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
+  updateAssistiveTouch();
 }
 
 document.getElementById("backButton").addEventListener("click", goHome);
