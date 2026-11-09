@@ -1221,3 +1221,18 @@ body {
   color: #287fd0;
   font-size: 23px;
 }
+
+
+/* Final unique Home Screen app placement: non-Dock apps only. */
+.app-grid [data-app="notes"] {
+  grid-column: 1;
+  grid-row: 1;
+}
+.app-grid [data-app="files"] {
+  grid-column: 2;
+  grid-row: 1;
+}
+.app-grid [data-app="safari"] {
+  grid-column: 1;
+  grid-row: 2;
+}
