@@ -5,6 +5,13 @@ const appScreen = document.getElementById("appScreen");
 const appTitle = document.getElementById("appTitle");
 const appContent = document.getElementById("appContent");
 const phone = document.getElementById("phone");
+
+function fitPhoneToViewport() {
+  const scale = Math.min(1, (window.innerWidth - 40) / 394, (window.innerHeight - 40) / 852);
+  phone.style.setProperty("--phone-scale", String(Math.max(0.25, scale)));
+}
+fitPhoneToViewport();
+window.addEventListener("resize", fitPhoneToViewport, { passive: true });
 const languagePopover = document.getElementById("languagePopover");
 
 const profile = {
