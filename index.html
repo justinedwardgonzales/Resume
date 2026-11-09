@@ -112,10 +112,47 @@
             <button class="app" data-app="spotify"><span class="app-icon ios-spotify"><img class="brand-icon spotify-brand" src="https://cdn.simpleicons.org/spotify/FFFFFF" alt=""></span><span>Spotify</span></button>
           </div>
           <div class="dock">
-            <button class="app" data-app="contact"><span class="app-icon ios-contacts" role="img" aria-label="Apple Contacts app icon"><svg viewBox="0 0 60 60" aria-hidden="true"><defs><linearGradient id="contactBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dce7e8"/><stop offset="1" stop-color="#a8c2ca"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#contactBg)"/><rect x="12" y="7" width="36" height="46" rx="5" fill="#fff" opacity=".97"/><circle cx="30" cy="23" r="8" fill="#a7b6bc"/><path d="M16 48c1.4-9 6.8-13.5 14-13.5S42.6 39 44 48" fill="#a7b6bc"/><path d="M12 16h-4m4 9h-4m4 9h-4m40-18h4m-4 9h4m-4 9h4" stroke="#7f9ca6" stroke-width="3" stroke-linecap="round"/></svg></span><span>Contact</span></button>
-            <button class="app" data-app="files"><span class="app-icon ios-files"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="14" fill="#fff"/><path d="M8 20a5 5 0 0 1 5-5h13l5 5h16a5 5 0 0 1 5 5v18a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z" fill="#1687e5"/><path d="M9 26h42" stroke="#6bc4ff" stroke-width="2" opacity=".7"/></svg></span><span>Files</span></button>
-            <button class="app" data-app="resume"><span class="app-icon ios-resume"><svg viewBox="0 0 60 60" aria-hidden="true"><defs><linearGradient id="resumeBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ff6b63"/><stop offset="1" stop-color="#d9273f"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#resumeBg)"/><path d="M17 10h19l9 9v31H17z" fill="#fff"/><path d="M36 10v10h9" fill="#ffd8d8"/><path d="M23 28h16M23 34h16M23 40h10" stroke="#e54b57" stroke-width="2.2" stroke-linecap="round"/><rect x="22" y="45" width="16" height="7" rx="2" fill="#d9273f"/></svg></span><span>Resume</span></button>
-            <button class="app" data-app="education"><span class="app-icon ios-books"><svg viewBox="0 0 60 60" aria-hidden="true"><defs><linearGradient id="booksBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ee6a88"/><stop offset="1" stop-color="#8b3fc4"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#booksBg)"/><path d="M9 19c8-3 15-1 21 4 6-5 13-7 21-4v24c-8-3-15-1-21 4-6-5-13-7-21-4z" fill="#fff"/><path d="M30 23v24" stroke="#d6a5d9" stroke-width="2"/><path d="M14 25c5-1 9 0 12 2M14 32c5-1 9 0 12 2M46 25c-5-1-9 0-12 2M46 32c-5-1-9 0-12 2" stroke="#d9c0e8" stroke-width="1.5" stroke-linecap="round"/></svg></span><span>Education</span></button>
+            <button class="app" data-app="photos" aria-label="Open Photos">
+              <span class="app-icon ios-photos" role="img" aria-label="Photos app icon">
+                <svg viewBox="0 0 60 60" aria-hidden="true">
+                  <rect width="60" height="60" rx="14" fill="#fff"/>
+                  <g transform="translate(30 30)">
+                    <ellipse cx="0" cy="-10.5" rx="7.3" ry="12" fill="#ff375f"/>
+                    <ellipse cx="10.5" cy="0" rx="12" ry="7.3" transform="rotate(45)" fill="#ff9f0a"/>
+                    <ellipse cx="0" cy="10.5" rx="7.3" ry="12" transform="rotate(90)" fill="#34c759"/>
+                    <ellipse cx="-10.5" cy="0" rx="12" ry="7.3" transform="rotate(135)" fill="#0a84ff"/>
+                    <ellipse cx="0" cy="-10.5" rx="7.3" ry="12" transform="rotate(315)" fill="#af52de"/>
+                    <circle cx="0" cy="0" r="5.1" fill="#fff"/>
+                  </g>
+                </svg>
+              </span>
+              <span>Photos</span>
+            </button>
+            <button class="app" data-app="linkedin" aria-label="Open LinkedIn">
+              <span class="app-icon linkedin-icon" role="img" aria-label="LinkedIn app icon">
+                <img class="brand-icon linkedin-brand" src="https://cdn.simpleicons.org/linkedin/0A66C2" alt="">
+              </span>
+              <span>LinkedIn</span>
+            </button>
+            <button class="app" data-app="spotify" aria-label="Open Spotify">
+              <span class="app-icon ios-spotify" role="img" aria-label="Spotify app icon">
+                <img class="brand-icon spotify-brand" src="https://cdn.simpleicons.org/spotify/FFFFFF" alt="">
+              </span>
+              <span>Spotify</span>
+            </button>
+            <button class="app" data-app="contact" aria-label="Open Contact">
+              <span class="app-icon ios-contacts" role="img" aria-label="Contacts app icon">
+                <svg viewBox="0 0 60 60" aria-hidden="true">
+                  <defs><linearGradient id="contactDockBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#dce7e8"/><stop offset="1" stop-color="#a8c2ca"/></linearGradient></defs>
+                  <rect width="60" height="60" rx="14" fill="url(#contactDockBg)"/>
+                  <rect x="12" y="7" width="36" height="46" rx="5" fill="#fff" opacity=".97"/>
+                  <circle cx="30" cy="23" r="8" fill="#a7b6bc"/>
+                  <path d="M16 48c1.4-9 6.8-13.5 14-13.5S42.6 39 44 48" fill="#a7b6bc"/>
+                  <path d="M12 16h-4m4 9h-4m4 9h-4m40-18h4m-4 9h4m-4 9h4" stroke="#7f9ca6" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span>Contact</span>
+            </button>
           </div>
           <div class="home-page-indicator"></div>
         </section>
