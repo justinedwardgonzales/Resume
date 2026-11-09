@@ -169,7 +169,7 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 .app-home-indicator { flex:0 0 5px; align-self:center; margin:8px 0 9px; background:#1c1c1e; }
 .outer-home-indicator { position:absolute; z-index:80; bottom:10px; left:50%; transform:translateX(-50%); }
 .assistive-touch {
-  position:absolute; z-index:90; right:18px; bottom:82px;
+  position:absolute; z-index:90; right:24px; top:50%; transform:translateY(-50%);
 }
 .assistive-touch-button {
   width:48px; height:48px; padding:0; border:1px solid rgba(255,255,255,.48);
