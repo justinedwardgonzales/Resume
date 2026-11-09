@@ -98,6 +98,46 @@ const pages = {
   }
 };
 
+const dailyJokes = [
+  "Why did the marketer bring a ladder? To reach a higher audience.",
+  "I asked the media plan for a day off. It said the schedule was fully booked.",
+  "Why are planners great at parties? They always know the right mix.",
+  "My favourite KPI? Keeping People Interested.",
+  "Why did the insight cross the road? To get to the other side of the audience."
+];
+
+function initPersonalWidgets() {
+  const joke = document.getElementById("dailyJoke");
+  const streakCount = document.getElementById("streakCount");
+  const streakMessage = document.getElementById("streakMessage");
+  const streakButton = document.getElementById("streakWidget");
+  if (joke) {
+    const day = Math.floor(Date.now() / 86400000);
+    joke.textContent = dailyJokes[day % dailyJokes.length];
+  }
+  if (!streakCount || !streakMessage || !streakButton) return;
+
+  const key = "justin-curiosity-streak";
+  const today = new Date().toLocaleDateString("en-CA");
+  let state = {};
+  try { state = JSON.parse(localStorage.getItem(key) || "{}"); } catch {}
+  const render = () => {
+    streakCount.textContent = state.count || 0;
+    streakMessage.textContent = state.lastDate === today ? "You're all checked in ✓" : "Tap to check in";
+  };
+  render();
+  streakButton.addEventListener("click", () => {
+    if (state.lastDate === today) return;
+    const yesterday = new Date(Date.now() - 86400000).toLocaleDateString("en-CA");
+    state.count = state.lastDate === yesterday ? (state.count || 0) + 1 : 1;
+    state.lastDate = today;
+    try { localStorage.setItem(key, JSON.stringify(state)); } catch {}
+    render();
+  });
+}
+
+initPersonalWidgets();
+
 function updateClock() {
   const now = new Date();
   const time = now.toLocaleTimeString([], {
