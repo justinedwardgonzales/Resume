@@ -263,9 +263,19 @@ assistiveLockButton?.addEventListener("click", event => {
 });
 
 assistiveHomeButton?.addEventListener("click", event => {
+  event.preventDefault();
   event.stopPropagation();
   assistiveTouchMenu?.classList.add("hidden");
-  if (!appScreen.classList.contains("hidden")) goHome();
+  // Accessibility shortcut: return immediately, independent of swipe or transition timing.
+  clearTimeout(appTransitionTimer);
+  appTransitionTimer = null;
+  appScreen.classList.remove("is-opening", "is-closing");
+  appScreen.classList.add("hidden");
+  lockScreen.classList.add("hidden");
+  homeScreen.classList.remove("hidden", "home-arriving", "home-returning");
+  void homeScreen.offsetWidth;
+  homeScreen.classList.add("home-returning");
+  updateAssistiveTouch();
 });
 
 function unlock() {
