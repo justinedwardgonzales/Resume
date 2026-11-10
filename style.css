@@ -1663,3 +1663,17 @@ body {
 .li-native-footer a{font-size:13px;color:#0a66c2;text-decoration:none;font-weight:700}
 .li-profile-only .li-content{scrollbar-width:none}
 .li-profile-only .li-content::-webkit-scrollbar{display:none}
+
+/* Relevant visual assets for LinkedIn profile */
+.li-profile-only .li-cover{position:relative;overflow:hidden;height:122px;background:linear-gradient(115deg,#112e45 0%,#235e75 52%,#8cb6b8 100%)}
+.li-cover-art{position:absolute;inset:0;overflow:hidden}
+.li-cover-grid{position:absolute;inset:0;opacity:.22;background-image:linear-gradient(#ffffff35 1px,transparent 1px),linear-gradient(90deg,#ffffff35 1px,transparent 1px);background-size:23px 23px;transform:skewY(-9deg) scale(1.4)}
+.li-cover-orbit{position:absolute;width:180px;height:180px;border:1px solid #ffffff55;border-radius:50%;right:-22px;top:-98px}
+.li-cover-orbit.orbit-two{width:110px;height:110px;right:24px;top:-56px;border-width:2px}
+.li-cover-caption{position:absolute;right:15px;bottom:17px;color:#fff;font-size:11px;font-weight:800;letter-spacing:2px;text-shadow:0 1px 6px #0005}
+.li-cover-caption b{color:#9ce3df}
+.li-native-company-icon{position:relative;overflow:hidden;background:#fff;border:1px solid #e6e8ea}
+.li-native-company-icon img{position:absolute;inset:5px;width:calc(100% - 10px);height:calc(100% - 10px);object-fit:contain;background:#fff;z-index:1}
+.li-native-company-icon span{font-size:13px;color:#31516a;font-weight:800}
+.li-native-affiliation{display:flex;align-items:center;gap:8px}
+.li-native-affiliation img{width:21px;height:21px;object-fit:contain}
