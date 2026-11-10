@@ -311,7 +311,11 @@ const safariFavorites = [
   { title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales", icon: "LBB", subtitle: "Creative industry news" },
   { title: "Feats", url: "https://www.feats.co/profile/justin-gonzales/overview", icon: "F", subtitle: "Creative projects and collaborators" }
 ];
-let safariTabsState = [{ history: [{ title: "Start Page", url: "" }], index: 0 }];
+let safariTabsState = [
+  { history: [{ title: "Start Page", url: "" }], index: 0 },
+  { history: [{ title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales" }], index: 0 },
+  { history: [{ title: "Feats", url: "https://www.feats.co/profile/justin-gonzales/overview" }], index: 0 }
+];
 let safariActiveTab = 0;
 let safariShowingTabs = false;
 function safariCurrent() {
