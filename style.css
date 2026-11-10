@@ -1488,3 +1488,11 @@ body {
   .home-screen.home-arriving .home-widgets,.home-screen.home-arriving .app-grid .app,.home-screen.home-arriving .dock,.home-screen.home-returning .home-widgets,.home-screen.home-returning .app-grid,.home-screen.home-returning .dock { animation:none !important; }
   .home-screen .app-icon,.home-screen .home-widget { transition:none !important; }
 }
+
+/* Discoverable mouse interaction for the iPhone bottom-edge swipe gesture. */
+@media (hover: hover) and (pointer: fine) {
+  .phone.swipe-ready, .phone.swipe-ready .screen, .phone.swipe-ready .screen * { cursor: grab !important; }
+  .phone.swipe-dragging, .phone.swipe-dragging .screen, .phone.swipe-dragging .screen * { cursor: grabbing !important; }
+  .swipe-pill, .app-home-indicator, .home-page-indicator, .outer-home-indicator { cursor: grab; }
+  .swipe-pill:hover, .app-home-indicator:hover, .outer-home-indicator:hover { box-shadow: 0 0 0 4px rgba(255,255,255,.12); }
+}
