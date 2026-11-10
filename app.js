@@ -309,7 +309,7 @@ let appTransitionTimer = null;
 // because many websites prohibit embedding in iframes.
 const safariFavorites = [
   { title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales", icon: "LBB", subtitle: "Creative industry news" },
-  { title: "Feats", url: "https://www.feats.co/", icon: "F", subtitle: "Creative projects and collaborators" }
+  { title: "Feats", url: "https://www.feats.co/profile/justin-gonzales/overview", icon: "F", subtitle: "Creative projects and collaborators" }
 ];
 let safariTabsState = [{ history: [{ title: "Start Page", url: "" }], index: 0 }];
 let safariActiveTab = 0;
