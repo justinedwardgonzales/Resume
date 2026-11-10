@@ -329,7 +329,7 @@ function linkedInProfile() {
   return `<div class="li-profile">
     <div class="li-cover"><div class="li-cover-art"><span class="li-cover-grid"></span><span class="li-cover-orbit orbit-one"></span><span class="li-cover-orbit orbit-two"></span><span class="li-cover-caption">MEDIA <b>×</b> STRATEGY</span></div></div>
     <div class="li-profile-body">
-      <div class="li-profile-avatar">JG</div>
+      <div class="li-profile-avatar"><img src="linkedin-headshot.jpg" alt="Justin Gonzales profile photo" loading="eager"></div>
       <div class="li-profile-name">Justin Gonzales</div>
       <p class="li-headline">Media Planning &amp; Strategy at Spark Foundry</p>
       <p class="li-location">Canada · <a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Contact info</a></p>
