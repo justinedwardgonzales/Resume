@@ -327,7 +327,7 @@ function linkedInProfile() {
   const certifications = ["Prisma (Buyer Workflow) for Google Ads Foundations Plus","Prisma (Buyer Workflow) for Google DV360 Foundations Plus","Mimic Social Certificate of Completion","Hootsuite Social Marketing Certification"];
   const awards = ["J. Harry Ebbs Achievement Award","Margaret Brown Byron Award","Grand Clio, Partnerships & Collaborations","Concours TACTIL — Finalistes de la catégorie Contenu de marque (XTRA)","Les Cas d’Or Montreal Activation événementielle"];
   return `<div class="li-profile">
-    <div class="li-cover"><div class="li-cover-art"><span class="li-cover-grid"></span><span class="li-cover-orbit orbit-one"></span><span class="li-cover-orbit orbit-two"></span><span class="li-cover-caption">MEDIA <b>×</b> STRATEGY</span></div></div>
+    <div class="li-cover li-photo-banner"></div>
     <div class="li-profile-body">
       <div class="li-profile-avatar"><img src="linkedin-headshot.jpg" alt="Justin Gonzales profile photo" loading="eager"></div>
       <div class="li-profile-name">Justin Gonzales</div>
