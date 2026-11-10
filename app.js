@@ -360,6 +360,23 @@ let startY = null;
 let startX = null;
 let startedAtBottomEdge = false;
 
+// Show a grab cursor only over the bottom-edge swipe gesture zone.
+function updateSwipeCursor(event) {
+  if (event.pointerType === "touch") return;
+  const rect = phone.getBoundingClientRect();
+  const inSwipeZone = event.clientX >= rect.left && event.clientX <= rect.right &&
+    event.clientY >= rect.bottom - 54 && event.clientY <= rect.bottom;
+  phone.classList.toggle("swipe-ready", inSwipeZone);
+}
+phone.addEventListener("pointermove", updateSwipeCursor, { passive: true });
+phone.addEventListener("pointerleave", () => {
+  phone.classList.remove("swipe-ready", "swipe-dragging");
+});
+phone.addEventListener("pointerdown", event => {
+  if (event.pointerType !== "touch") updateSwipeCursor(event);
+  phone.classList.toggle("swipe-dragging", event.pointerType !== "touch" && phone.classList.contains("swipe-ready"));
+});
+
 phone.addEventListener("pointerdown", event => {
   const phoneRect = phone.getBoundingClientRect();
   startY = event.clientY;
@@ -368,6 +385,7 @@ phone.addEventListener("pointerdown", event => {
 }, { passive: true });
 
 phone.addEventListener("pointerup", event => {
+  phone.classList.remove("swipe-dragging");
   if (startY === null) return;
 
   const deltaY = event.clientY - startY;
@@ -391,6 +409,7 @@ phone.addEventListener("pointerup", event => {
 }, { passive: true });
 
 phone.addEventListener("pointercancel", () => {
+  phone.classList.remove("swipe-dragging", "swipe-ready");
   startY = null;
   startX = null;
   startedAtBottomEdge = false;
