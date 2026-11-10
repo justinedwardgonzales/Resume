@@ -1466,3 +1466,25 @@ body {
 .home-screen .app-icon { border-radius: 14px; overflow: hidden; background: transparent; box-shadow: 0 2px 7px rgba(0,0,0,.22); }
 .home-screen .app-icon > svg { display:block; width:100%; height:100%; }
 .home-screen .app:active .app-icon { filter: brightness(.82); }
+
+/* iPhone-inspired Home Screen motion */
+.home-screen.home-arriving .home-widgets { animation: iosWidgetIn 540ms cubic-bezier(.2,.9,.24,1.08) both; }
+.home-screen.home-arriving .app-grid .app { animation: iosIconIn 490ms cubic-bezier(.2,.85,.25,1.08) both; }
+.home-screen.home-arriving .app-grid .app:nth-child(1) { animation-delay: 70ms; }
+.home-screen.home-arriving .app-grid .app:nth-child(2) { animation-delay: 105ms; }
+.home-screen.home-arriving .app-grid .app:nth-child(3) { animation-delay: 140ms; }
+.home-screen.home-arriving .dock { animation: iosDockIn 570ms cubic-bezier(.18,.85,.25,1.08) both; }
+.home-screen.home-returning .home-widgets,.home-screen.home-returning .app-grid,.home-screen.home-returning .dock { animation: iosReturnIn 320ms cubic-bezier(.18,.85,.25,1) both; }
+.home-screen .app-icon { transition: transform 180ms cubic-bezier(.2,.8,.2,1), filter 180ms ease; }
+.home-screen .app:active .app-icon { transform: scale(.88); filter: brightness(.82); }
+.home-screen .home-widget { transition: scale 180ms cubic-bezier(.2,.8,.2,1), filter 180ms ease; }
+.home-screen button.home-widget:active { scale: .96; filter: brightness(.9); }
+.app-screen.is-opening,.app-screen.is-closing { transform-origin: var(--app-origin, 50% 50%); }
+@keyframes iosWidgetIn { from { opacity:0; transform:translateX(-50%) translateY(23px) scale(.94); } to { opacity:1; transform:translateX(-50%) translateY(0) scale(1); } }
+@keyframes iosIconIn { from { opacity:0; transform:translateY(24px) scale(.78); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes iosDockIn { from { opacity:0; transform:translateY(40px) scale(.94); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes iosReturnIn { from { opacity:.65; scale:.96; } to { opacity:1; scale:1; } }
+@media (prefers-reduced-motion: reduce) {
+  .home-screen.home-arriving .home-widgets,.home-screen.home-arriving .app-grid .app,.home-screen.home-arriving .dock,.home-screen.home-returning .home-widgets,.home-screen.home-returning .app-grid,.home-screen.home-returning .dock { animation:none !important; }
+  .home-screen .app-icon,.home-screen .home-widget { transition:none !important; }
+}
