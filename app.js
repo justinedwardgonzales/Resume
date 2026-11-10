@@ -357,7 +357,7 @@ function safariRender() {
   } else if (!current.url) {
     view.innerHTML = `<div class="safari-start"><h1>Favourites</h1><div class="safari-favorites">${safariFavorites.map((f,i)=>`<button class="safari-favorite" data-safari-favorite="${i}"><span class="safari-favorite-icon">${safariEscape(f.icon)}</span><strong>${safariEscape(f.title)}</strong><small>${safariEscape(f.subtitle)}</small></button>`).join("")}</div><h2>Privacy Report</h2><div class="safari-privacy">🛡️ Safari-style browsing, designed for your interactive resume.</div></div>`;
   } else {
-    view.innerHTML = `<div class="safari-site-preview"><span class="safari-site-globe">◎</span><h1>${safariEscape(current.title)}</h1><p>${safariEscape(current.url)}</p><p>For security and compatibility, this website opens in a separate browser tab.</p><a class="safari-open-site" href="${safariEscape(current.url)}" target="_blank" rel="noopener noreferrer">Open Website ↗</a><button class="safari-start-link" data-safari-action="start">Go to Start Page</button></div>`;
+    view.innerHTML = `<div class="safari-embedded-page"><iframe title="${safariEscape(current.title)} website" src="${safariEscape(current.url)}" referrerpolicy="strict-origin-when-cross-origin"></iframe><div class="safari-embedded-fallback"><span>Website not displaying?</span><a href="${safariEscape(current.url)}" target="_blank" rel="noopener noreferrer">Open in browser ↗</a></div></div>`;
   }
 }
 function initSafari() {
