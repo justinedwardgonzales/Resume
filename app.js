@@ -308,7 +308,7 @@ let appTransitionTimer = null;
 // Safari is a simulated in-phone browser: external sites open in a real browser tab
 // because many websites prohibit embedding in iframes.
 const safariFavorites = [
-  { title: "Little Black Book", url: "https://lbbonline.com/", icon: "LBB", subtitle: "Creative industry news" },
+  { title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales", icon: "LBB", subtitle: "Creative industry news" },
   { title: "Feats", url: "https://www.feats.co/", icon: "F", subtitle: "Creative projects and collaborators" }
 ];
 let safariTabsState = [{ history: [{ title: "Start Page", url: "" }], index: 0 }];
