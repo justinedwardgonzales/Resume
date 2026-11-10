@@ -476,11 +476,6 @@ function openApp(key, sourceButton) {
     return;
   }
 
-  if (key === "linkedin" && profile.linkedin) {
-    window.open(profile.linkedin, "_blank", "noopener,noreferrer");
-    return;
-  }
-
   const page = pages[key];
   if (!page) return;
 
