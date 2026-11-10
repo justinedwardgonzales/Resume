@@ -112,13 +112,22 @@ const pages = {
     html: `<h1>Resume</h1><p>Your PDF resume is in Files.</p><a href="resume.pdf" download>Download resume.pdf</a>`
   },
   contact: {
-    title: "Contact",
-    html: `<h1>Let's connect.</h1><p>I'd love to hear from you.</p>
-      <div class="section-label">Contact information</div><div class="ios-card">
-      <div class="ios-row"><div><strong>Email</strong><small>${profile.email}</small></div><span class="arrow">›</span></div>
-      <div class="ios-row"><div><strong>LinkedIn</strong><small>Professional profile</small></div><span class="arrow">›</span></div>
-      <div class="ios-row"><div><strong>Location</strong><small>${profile.location}</small></div><span class="arrow">›</span></div></div>
-      <p style="margin-top:14px">Update your email, location and profile links in app.js before publishing.</p>`
+    title: "Contacts",
+    html: `<div class="contacts-ios">
+      <div class="contacts-top"><span>‹ Lists</span><strong>My Card</strong><span class="contacts-edit">Edit</span></div>
+      <div class="contacts-scroll">
+        <div class="contacts-identity"><img src="linkedin-headshot.jpg" alt="Justin Gonzales" class="contacts-photo"><h1>Justin Gonzales</h1><p>Media Planning &amp; Strategy at Spark Foundry</p></div>
+        <div class="contacts-quick-actions">
+          <a href="mailto:gonzales.justin.edward@gmail.com" class="contacts-action"><span class="contacts-action-icon">✉</span><span>mail</span></a>
+          <a href="https://www.linkedin.com/in/justin-edward-gonzales/" target="_blank" rel="noopener noreferrer" class="contacts-action"><span class="contacts-action-icon">↗</span><span>LinkedIn</span></a>
+        </div>
+        <div class="contacts-section"><div class="contacts-field"><small>email</small><a href="mailto:gonzales.justin.edward@gmail.com">gonzales.justin.edward@gmail.com</a></div></div>
+        <div class="contacts-section"><div class="contacts-field"><small>LinkedIn</small><a href="https://www.linkedin.com/in/justin-edward-gonzales/" target="_blank" rel="noopener noreferrer">justin-edward-gonzales</a></div></div>
+        <div class="contacts-section"><div class="contacts-field"><small>company</small><span>Spark Foundry Canada</span></div><div class="contacts-field"><small>job title</small><span>Senior Media Planner</span></div></div>
+        <div class="contacts-section"><div class="contacts-field"><small>location</small><span>Toronto, Ontario, Canada</span></div></div>
+        <div class="contacts-section contacts-save"><button type="button" id="contactsSave">Share Contact</button></div>
+      </div>
+    </div>`
   }
 };
 
@@ -355,6 +364,18 @@ function initLinkedIn() {
     else if (navigator.clipboard) navigator.clipboard.writeText(linkedInUrl).then(()=>alert("Profile link copied")).catch(()=>{});
   });
 }
+function initContacts() {
+  const button = document.getElementById("contactsSave");
+  if (!button) return;
+  button.addEventListener("click", () => {
+    const vcard = ["BEGIN:VCARD","VERSION:3.0","FN:Justin Gonzales","N:Gonzales;Justin;;;","ORG:Spark Foundry Canada","TITLE:Senior Media Planner","EMAIL;TYPE=INTERNET:gonzales.justin.edward@gmail.com","URL:https://www.linkedin.com/in/justin-edward-gonzales/","ADR;TYPE=WORK:;;;Toronto;Ontario;;Canada","END:VCARD"].join("\\r\\n");
+    const blob = new Blob([vcard], {type:"text/vcard;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href=url;link.download="Justin-Gonzales.vcf";document.body.appendChild(link);link.click();link.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+}
 const safariFavorites = [
   { title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales", icon: "LBB", subtitle: "Creative industry news" },
   { title: "Feats", url: "https://www.feats.co/profile/justin-gonzales/overview", icon: "F", subtitle: "Creative projects and collaborators" }
@@ -461,6 +482,7 @@ function openApp(key, sourceButton) {
 
   appScreen.classList.toggle("safari-active", key === "safari");
   appScreen.classList.toggle("linkedin-active", key === "linkedin");
+  appScreen.classList.toggle("contacts-active", key === "contact");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -482,6 +504,7 @@ function openApp(key, sourceButton) {
   appContent.scrollTop = 0;
   if (key === "safari") initSafari();
   if (key === "linkedin") initLinkedIn();
+  if (key === "contact") initContacts();
   updateAssistiveTouch();
 }
 
