@@ -123,7 +123,6 @@ const pages = {
         </div>
         <div class="contacts-section"><div class="contacts-field"><small>email</small><a href="mailto:gonzales.justin.edward@gmail.com">gonzales.justin.edward@gmail.com</a></div></div>
         <div class="contacts-section"><div class="contacts-field"><small>LinkedIn</small><a href="https://www.linkedin.com/in/justin-edward-gonzales/" target="_blank" rel="noopener noreferrer">justin-edward-gonzales</a></div></div>
-        <div class="contacts-section"><div class="contacts-field"><small>company</small><span>Spark Foundry Canada</span></div><div class="contacts-field"><small>job title</small><span>Senior Media Planner</span></div></div>
         <div class="contacts-section"><div class="contacts-field"><small>location</small><span>Toronto, Ontario, Canada</span></div></div>
         <div class="contacts-section contacts-save"><button type="button" id="contactsSave">Share Contact</button></div>
       </div>
@@ -369,7 +368,7 @@ function initContacts() {
   const button = document.getElementById("contactsSave");
   if (!button) return;
   button.addEventListener("click", () => {
-    const vcard = ["BEGIN:VCARD","VERSION:3.0","FN:Justin Gonzales","N:Gonzales;Justin;;;","ORG:Spark Foundry Canada","TITLE:Senior Media Planner","EMAIL;TYPE=INTERNET:gonzales.justin.edward@gmail.com","URL:https://www.linkedin.com/in/justin-edward-gonzales/","ADR;TYPE=WORK:;;;Toronto;Ontario;;Canada","END:VCARD"].join(String.fromCharCode(13,10));
+    const vcard = ["BEGIN:VCARD","VERSION:3.0","FN:Justin Gonzales","N:Gonzales;Justin;;;","EMAIL;TYPE=INTERNET:gonzales.justin.edward@gmail.com","URL:https://www.linkedin.com/in/justin-edward-gonzales/","ADR;TYPE=HOME:;;;Toronto;Ontario;;Canada","END:VCARD"].join(String.fromCharCode(13,10));
     const blob = new Blob([vcard], {type:"text/vcard;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
