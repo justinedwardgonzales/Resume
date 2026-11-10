@@ -368,7 +368,7 @@ function initContacts() {
   const button = document.getElementById("contactsSave");
   if (!button) return;
   button.addEventListener("click", () => {
-    const vcard = ["BEGIN:VCARD","VERSION:3.0","FN:Justin Gonzales","N:Gonzales;Justin;;;","ORG:Spark Foundry Canada","TITLE:Senior Media Planner","EMAIL;TYPE=INTERNET:gonzales.justin.edward@gmail.com","URL:https://www.linkedin.com/in/justin-edward-gonzales/","ADR;TYPE=WORK:;;;Toronto;Ontario;;Canada","END:VCARD"].join("\r\n");
+    const vcard = ["BEGIN:VCARD","VERSION:3.0","FN:Justin Gonzales","N:Gonzales;Justin;;;","ORG:Spark Foundry Canada","TITLE:Senior Media Planner","EMAIL;TYPE=INTERNET:gonzales.justin.edward@gmail.com","URL:https://www.linkedin.com/in/justin-edward-gonzales/","ADR;TYPE=WORK:;;;Toronto;Ontario;;Canada","END:VCARD"].join(String.fromCharCode(13,10));
     const blob = new Blob([vcard], {type:"text/vcard;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
