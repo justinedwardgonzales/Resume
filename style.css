@@ -1461,3 +1461,8 @@ body {
 }
 .photography-widgets .run-dot { background: #34c759; }
 .photography-widgets .lesson-dot { background: #0a84ff; }
+
+/* Minjeong HAR reference: clean iOS icon artwork and 14px corner geometry. */
+.home-screen .app-icon { border-radius: 14px; overflow: hidden; background: transparent; box-shadow: 0 2px 7px rgba(0,0,0,.22); }
+.home-screen .app-icon > svg { display:block; width:100%; height:100%; }
+.home-screen .app:active .app-icon { filter: brightness(.82); }
