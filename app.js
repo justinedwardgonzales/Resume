@@ -485,6 +485,7 @@ function openApp(key, sourceButton) {
   if (!page) return;
 
   appScreen.classList.toggle("safari-active", key === "safari");
+  appScreen.classList.toggle("linkedin-active", key === "linkedin");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -505,6 +506,7 @@ function openApp(key, sourceButton) {
   appScreen.classList.add("is-opening");
   appContent.scrollTop = 0;
   if (key === "safari") initSafari();
+  if (key === "linkedin") initLinkedIn();
   updateAssistiveTouch();
 }
 
