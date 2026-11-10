@@ -65,13 +65,13 @@ const pages = {
     html: `<div class="safari-shell">
       <div class="safari-view" id="safariView"></div>
       <div class="safari-bottom">
-        <div class="safari-url-row"><span id="safariSecure" aria-hidden="true">⌕</span><form id="safariAddressForm"><input id="safariAddressInput" aria-label="Search or enter website name" placeholder="Search or enter website name" autocomplete="off" spellcheck="false"></form><button id="safariReload" type="button" aria-label="Reload page">↻</button></div>
+        <div class="safari-url-row"><span id="safariSecure" aria-hidden="true">⌕</span><form id="safariAddressForm"><input id="safariAddressInput" aria-label="Search or enter website name" placeholder="Search or enter website name" autocomplete="off" spellcheck="false"></form><button id="safariReload" type="button" aria-label="Reload page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 7v5h-5M19.1 12a7.1 7.1 0 1 0-2 5" /></svg></button></div>
         <div class="safari-controls">
-          <button id="safariBack" type="button" aria-label="Back">‹</button>
-          <button id="safariForward" type="button" aria-label="Forward">›</button>
-          <button id="safariShare" type="button" aria-label="Share current page">♧</button>
-          <button id="safariTabs" type="button" aria-label="Show tabs">▢ <span id="safariTabCount">1</span></button>
-          <button id="safariNewTab" type="button" aria-label="New tab">＋</button>
+          <button id="safariBack" type="button" aria-label="Back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+          <button id="safariForward" type="button" aria-label="Forward"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+          <button id="safariShare" type="button" aria-label="Share current page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3m-4 4 4-4 4 4M6 11H5a2 2 0 0 0-2 2v7h18v-7a2 2 0 0 0-2-2h-1"/></svg></button>
+          <button id="safariTabs" type="button" aria-label="Show tabs"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/></svg><span id="safariTabCount">3</span></button>
+          <button id="safariNewTab" type="button" aria-label="New tab"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
       </div>
     </div>`
@@ -347,15 +347,15 @@ function safariRender() {
   if (!view) return;
   const current = safariCurrent();
   const tab = safariTabsState[safariActiveTab];
-  document.getElementById("safariAddressInput").value = current.url ? current.url.replace(/^https?:\/\//,"") : "";
-  document.getElementById("safariSecure").textContent = current.url ? "⌑" : "⌕";
+  document.getElementById("safariAddressInput").value = current.url ? new URL(current.url).hostname.replace(/^www\./, "") : "";
+  document.getElementById("safariSecure").textContent = current.url ? "♙" : "⌕";
   document.getElementById("safariBack").disabled = tab.index === 0;
   document.getElementById("safariForward").disabled = tab.index >= tab.history.length - 1;
   document.getElementById("safariTabCount").textContent = safariTabsState.length;
   if (safariShowingTabs) {
-    view.innerHTML = `<div class="safari-tab-heading"><h1>Tab Overview</h1><button type="button" data-safari-action="done">Done</button></div><div class="safari-tab-grid">${safariTabsState.map((t,i) => `<button class="safari-tab-card ${i===safariActiveTab?"selected":""}" data-safari-tab="${i}"><span>${safariEscape(t.history[t.index].title)}</span><small>${safariEscape(t.history[t.index].url || "Favourites")}</small><span class="safari-tab-close" data-safari-close="${i}" aria-label="Close tab">×</span></button>`).join("")}</div>`;
+    view.innerHTML = `<div class="safari-tab-heading"><h1>Tabs</h1><button type="button" data-safari-action="done">Done</button></div><div class="safari-tab-grid">${safariTabsState.map((t,i) => `<button class="safari-tab-card ${i===safariActiveTab?"selected":""}" data-safari-tab="${i}"><span>${safariEscape(t.history[t.index].title)}</span><small>${safariEscape(t.history[t.index].url || "Favourites")}</small><span class="safari-tab-close" data-safari-close="${i}" aria-label="Close tab">×</span></button>`).join("")}</div>`;
   } else if (!current.url) {
-    view.innerHTML = `<div class="safari-start"><h1>Favourites</h1><div class="safari-favorites">${safariFavorites.map((f,i)=>`<button class="safari-favorite" data-safari-favorite="${i}"><span class="safari-favorite-icon">${safariEscape(f.icon)}</span><strong>${safariEscape(f.title)}</strong><small>${safariEscape(f.subtitle)}</small></button>`).join("")}</div><h2>Privacy Report</h2><div class="safari-privacy">🛡️ Safari-style browsing, designed for your interactive resume.</div></div>`;
+    view.innerHTML = `<div class="safari-start"><div class="safari-start-title">Start Page</div><h1>Favourites</h1><div class="safari-favorites">${safariFavorites.map((f,i)=>`<button class="safari-favorite" data-safari-favorite="${i}"><span class="safari-favorite-icon">${safariEscape(f.icon)}</span><strong>${safariEscape(f.title)}</strong><small>${safariEscape(f.subtitle)}</small></button>`).join("")}</div><h2>Privacy Report</h2><div class="safari-privacy">🛡️ Safari-style browsing, designed for your interactive resume.</div></div>`;
   } else if (new URL(current.url).hostname.replace(/^www\./, "") === "feats.co") {
     view.innerHTML = `<div class="safari-feats-preview"><div class="safari-feats-mark">F</div><div class="safari-feats-eyebrow">FEATS PROFILE</div><h1>Justin Gonzales</h1><p>Explore my professional profile, projects and creative collaborations on Feats.</p><div class="safari-feats-domain">feats.co/profile/justin-gonzales/overview</div><a class="safari-feats-open" href="${safariEscape(current.url)}" target="_blank" rel="noopener noreferrer">View Feats Profile ↗</a><small>Opens in a new browser tab</small></div>`;
   } else {
@@ -366,6 +366,7 @@ function initSafari() {
   const view = document.getElementById("safariView");
   if (!view) return;
   safariShowingTabs = false;
+  appScreen.classList.add("safari-active");
   safariRender();
   document.getElementById("safariAddressForm").addEventListener("submit", event => {
     event.preventDefault();
@@ -415,6 +416,7 @@ function openApp(key, sourceButton) {
   const page = pages[key];
   if (!page) return;
 
+  appScreen.classList.toggle("safari-active", key === "safari");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
