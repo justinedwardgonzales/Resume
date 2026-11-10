@@ -114,7 +114,7 @@ const pages = {
   contact: {
     title: "Contacts",
     html: `<div class="contacts-ios">
-      <div class="contacts-top"><span>‹ Lists</span><strong>My Card</strong><span class="contacts-edit">Edit</span></div>
+      <div class="contacts-top"><button type="button" id="contactsBack" aria-label="Back to Home Screen">‹ Back</button><strong>Contacts</strong><span class="contacts-top-spacer"></span></div>
       <div class="contacts-scroll">
         <div class="contacts-identity"><img src="linkedin-headshot.jpg" alt="Justin Gonzales" class="contacts-photo"><h1>Justin Gonzales</h1><p>Media Planning &amp; Strategy at Spark Foundry</p></div>
         <div class="contacts-quick-actions">
@@ -365,6 +365,7 @@ function initLinkedIn() {
   });
 }
 function initContacts() {
+  document.getElementById("contactsBack")?.addEventListener("click", goHome);
   const button = document.getElementById("contactsSave");
   if (!button) return;
   button.addEventListener("click", () => {
