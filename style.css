@@ -1677,3 +1677,7 @@ body {
 .li-native-company-icon span{font-size:13px;color:#31516a;font-weight:800}
 .li-native-affiliation{display:flex;align-items:center;gap:8px}
 .li-native-affiliation img{width:21px;height:21px;object-fit:contain}
+
+/* Uploaded LinkedIn profile headshot */
+.li-profile-only .li-profile-avatar{overflow:hidden;background:#fff}
+.li-profile-only .li-profile-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 38%;border-radius:50%}
