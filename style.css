@@ -1590,3 +1590,51 @@ body {
 .safari-tab-card small{font-size:10px;line-height:1.4}
 .safari-tab-close{top:8px;right:10px;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#00000012;font-size:20px}
 @media(max-width:360px){.safari-start{padding-left:16px;padding-right:16px}.safari-favorite-icon{width:53px;height:53px}.safari-controls{gap:2px}}
+
+/* LinkedIn-inspired native mobile app */
+.app-screen.linkedin-active .app-header{display:none}
+.app-screen.linkedin-active .app-content{padding:0;overflow:hidden;background:#f3f2ef}
+.li-app{height:100%;min-height:0;display:flex;flex-direction:column;background:#f3f2ef;color:#191919;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.li-topbar{flex:none;height:53px;display:flex;align-items:center;gap:11px;padding:7px 13px;background:#fff;border-bottom:1px solid #e5e5e5}
+.li-avatar,.li-profile-avatar{display:grid;place-items:center;flex:none;background:#536e87;color:#fff;border-radius:50%;font-weight:700}
+.li-avatar{width:33px;height:33px;font-size:11px;cursor:pointer}
+.li-search{height:35px;display:flex;align-items:center;gap:8px;flex:1;padding:0 12px;background:#edf3f8;border-radius:5px;color:#596774;font-size:14px}
+.li-search span{font-size:24px}
+.li-top-icon{border:0;background:none;color:#555;font-size:26px;padding:4px}
+.li-content{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.li-nav{flex:none;height:61px;display:flex;justify-content:space-around;align-items:center;background:#fff;border-top:1px solid #ddd}
+.li-nav button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:5px 0;border:0;background:none;color:#777;font-size:9px;white-space:nowrap}
+.li-nav button.active{color:#191919;border-top:2px solid #191919}
+.li-nav-icon{font-size:23px;line-height:26px}
+.li-profile{padding-bottom:20px}
+.li-cover{height:104px;background:linear-gradient(135deg,#395c77,#9ab7c7 62%,#dce7ec)}
+.li-profile-body{position:relative;background:#fff;padding:56px 17px 20px;margin-bottom:9px}
+.li-profile-avatar{position:absolute;top:-48px;left:16px;width:91px;height:91px;border:4px solid #fff;font-size:28px}
+.li-profile-name{font-size:22px;line-height:1.2;font-weight:750;letter-spacing:-.45px}
+.li-degree{font-size:12px;font-weight:400;color:#666;white-space:nowrap}
+.li-headline{font-size:14px;line-height:1.45;margin:8px 0 4px}
+.li-location{font-size:12px;line-height:1.5;color:#666;margin:0 0 17px}
+.li-profile-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.li-primary,.li-secondary{display:inline-flex;justify-content:center;align-items:center;padding:9px 16px;border-radius:25px;font-size:13px;font-weight:700;text-decoration:none}
+.li-primary{background:#0a66c2;color:white!important;border:1px solid #0a66c2}
+.li-secondary{color:#0a66c2;border:1px solid #0a66c2;background:#fff}
+.li-panel{background:#fff;padding:18px 16px;margin-bottom:9px}
+.li-panel h2{font-size:18px;letter-spacing:-.3px;margin:0 0 12px}
+.li-panel p{font-size:13px;line-height:1.55;margin:0 0 9px;color:#444}
+.li-panel a,.li-feed-card a{font-size:13px;color:#0a66c2;font-weight:700;text-decoration:none}
+.li-experience-row{display:flex;gap:11px}
+.li-experience-logo{display:grid;place-items:center;flex:none;width:44px;height:44px;background:#0a66c2;color:#fff;font-size:23px;font-weight:800}
+.li-experience-row strong{font-size:14px}
+.li-feed{padding:12px 0}
+.li-feed-label{padding:0 15px 12px;font-size:12px;color:#666}
+.li-feed-card{background:#fff;padding:15px;margin-bottom:9px}
+.li-feed-author{display:flex;align-items:center;gap:9px}
+.li-feed-author strong{font-size:13px}
+.li-feed-author small{display:block;font-size:11px;color:#777}
+.li-feed-card p{font-size:13px;line-height:1.55;margin:15px 0}
+.li-feed-link{border:0;background:none;padding:0;color:#0a66c2;font-size:13px;font-weight:700}
+.li-feed-actions{display:flex;justify-content:space-between;border-top:1px solid #eee;padding-top:13px;margin-top:16px;color:#666;font-size:11px}
+.li-placeholder{display:flex;flex-direction:column;align-items:center;text-align:center;padding:72px 24px}
+.li-placeholder-icon{display:grid;place-items:center;width:66px;height:66px;background:#0a66c2;color:#fff;font-size:35px;font-weight:800;border-radius:13px}
+.li-placeholder h1{font-size:23px;margin:22px 0 9px}
+.li-placeholder p{font-size:13px;line-height:1.6;color:#666;margin:0 0 24px}
