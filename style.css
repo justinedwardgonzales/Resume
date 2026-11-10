@@ -1683,4 +1683,4 @@ body {
 .li-profile-only .li-profile-avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 38%;border-radius:50%}
 
 /* LinkedIn banner photo supplied by profile owner */
-.li-profile-only .li-cover.li-photo-banner{background:#a4a5a2 url("linkedin-banner.jpg") center center/cover no-repeat}
+.li-profile-only .li-cover.li-photo-banner{background:#a4a5a2 url("assets/linkedin-banner.jpg") center center/cover no-repeat}
