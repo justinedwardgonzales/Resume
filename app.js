@@ -19,7 +19,7 @@ const profile = {
   role: "Senior Media Planner",
   company: "Publicis",
   email: "YOUR_EMAIL@example.com",
-  linkedin: "",
+  linkedin: "https://www.linkedin.com/in/justin-edward-gonzales/",
   location: "YOUR CITY"
 };
 
@@ -78,7 +78,17 @@ const pages = {
   },
   linkedin: {
     title: "LinkedIn",
-    html: `<div class="ios-card external-profile-card"><div class="linkedin-mark large">in</div><h1>Find me on LinkedIn</h1><p>Visit my professional profile for my full career history, connections and updates.</p><p class="note-hint">Add your personal LinkedIn profile URL in app.js to activate this link.</p></div>`
+    html: `<div class="li-app">
+      <div class="li-topbar"><div class="li-avatar" aria-hidden="true">JG</div><div class="li-search"><span>⌕</span> Search</div><button class="li-top-icon" type="button" data-li-action="messages" aria-label="Messaging">☏</button></div>
+      <div class="li-content" id="liContent"></div>
+      <nav class="li-nav" aria-label="LinkedIn navigation">
+        <button type="button" data-li-nav="home"><span class="li-nav-icon">⌂</span>Home</button>
+        <button type="button" data-li-nav="network"><span class="li-nav-icon">♧</span>My Network</button>
+        <button type="button" data-li-nav="post"><span class="li-nav-icon">⊞</span>Post</button>
+        <button type="button" data-li-nav="notifications"><span class="li-nav-icon">♢</span>Notifications</button>
+        <button type="button" data-li-nav="jobs"><span class="li-nav-icon">▣</span>Jobs</button>
+      </nav>
+    </div>`
   },
   spotify: {
     title: "Spotify",
@@ -307,6 +317,64 @@ let appTransitionTimer = null;
 
 // Safari is a simulated in-phone browser: external sites open in a real browser tab
 // because many websites prohibit embedding in iframes.
+const linkedInUrl = "https://www.linkedin.com/in/justin-edward-gonzales/";
+let linkedInSection = "home";
+function linkedInProfile() {
+  return `<div class="li-profile">
+    <div class="li-cover"></div>
+    <div class="li-profile-body">
+      <div class="li-profile-avatar">JG</div>
+      <div class="li-profile-name">Justin Edward Gonzales <span class="li-degree">· Profile</span></div>
+      <p class="li-headline">Professional profile</p>
+      <p class="li-location">Explore my career, experience and connections on LinkedIn</p>
+      <div class="li-profile-actions"><a class="li-primary" href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View LinkedIn profile ↗</a><button type="button" class="li-secondary" data-li-action="share">Share</button></div>
+    </div>
+    <section class="li-panel"><h2>About</h2><p>Get to know my professional background, experience and work through my LinkedIn profile.</p></section>
+    <section class="li-panel"><h2>Experience</h2><div class="li-experience-row"><div class="li-experience-logo">in</div><div><strong>Professional experience</strong><p>See my current roles and full career history on LinkedIn.</p><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View experience ↗</a></div></div></section>
+    <section class="li-panel"><h2>Activity</h2><p>See my latest professional updates and activity on LinkedIn.</p><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View activity ↗</a></section>
+  </div>`;
+}
+function linkedInRender() {
+  const view = document.getElementById("liContent");
+  if (!view) return;
+  document.querySelectorAll("[data-li-nav]").forEach(button => {
+    button.classList.toggle("active", button.dataset.liNav === linkedInSection);
+    button.setAttribute("aria-current", button.dataset.liNav === linkedInSection ? "page" : "false");
+  });
+  if (linkedInSection === "home") {
+    view.innerHTML = `<div class="li-feed"><div class="li-feed-label">Your professional network</div><div class="li-feed-card"><div class="li-feed-author"><div class="li-avatar">JG</div><div><strong>Justin Edward Gonzales</strong><small>Professional profile</small></div></div><p>Welcome to my professional space. Explore my profile, experience and work.</p><button type="button" class="li-feed-link" data-li-action="profile">View profile →</button><div class="li-feed-actions"><span>♡ Like</span><span>▤ Comment</span><span>↗ Share</span></div></div><div class="li-feed-card li-profile-teaser"><strong>About this profile</strong><p>This is an interactive LinkedIn-inspired experience. Visit LinkedIn to see my live profile and updates.</p><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Open LinkedIn ↗</a></div></div>`;
+  } else if (linkedInSection === "profile") {
+    view.innerHTML = linkedInProfile();
+  } else {
+    const pages = {
+      network:["My Network","Explore my professional network and connections on LinkedIn.","View connections"],
+      post:["Create a post","Posting is available on LinkedIn. Open my profile to interact with updates.","Open LinkedIn"],
+      notifications:["Notifications","Your LinkedIn notifications are private to your account.","Open LinkedIn"],
+      jobs:["Jobs","Explore opportunities and professional interests on LinkedIn.","Explore LinkedIn"],
+      messages:["Messaging","Continue the conversation through LinkedIn.","Message on LinkedIn"]
+    };
+    const [heading,description,action] = pages[linkedInSection] || pages.network;
+    view.innerHTML = `<div class="li-placeholder"><div class="li-placeholder-icon">in</div><h1>${heading}</h1><p>${description}</p><a class="li-primary" href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">${action} ↗</a></div>`;
+  }
+  view.scrollTop = 0;
+}
+function initLinkedIn() {
+  linkedInSection = "profile";
+  linkedInRender();
+  const app = document.querySelector(".li-app");
+  app.addEventListener("click", event => {
+    const nav = event.target.closest("[data-li-nav]");
+    const action = event.target.closest("[data-li-action]");
+    if (nav) { linkedInSection = nav.dataset.liNav; linkedInRender(); }
+    else if (action?.dataset.liAction === "profile") { linkedInSection = "profile"; linkedInRender(); }
+    else if (action?.dataset.liAction === "messages") { linkedInSection = "messages"; linkedInRender(); }
+    else if (action?.dataset.liAction === "share") {
+      if (navigator.share) navigator.share({url:linkedInUrl}).catch(()=>{});
+      else if (navigator.clipboard) navigator.clipboard.writeText(linkedInUrl).then(()=>alert("Profile link copied")).catch(()=>{});
+    }
+  });
+  app.querySelector(".li-avatar").addEventListener("click", () => {linkedInSection="profile";linkedInRender();});
+}
 const safariFavorites = [
   { title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales", icon: "LBB", subtitle: "Creative industry news" },
   { title: "Feats", url: "https://www.feats.co/profile/justin-gonzales/overview", icon: "F", subtitle: "Creative projects and collaborators" }
