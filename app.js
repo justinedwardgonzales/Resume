@@ -262,6 +262,9 @@ assistiveLockButton?.addEventListener("click", event => {
 });
 
 function unlock() {
+  homeScreen.classList.remove("home-arriving");
+  void homeScreen.offsetWidth;
+  homeScreen.classList.add("home-arriving");
   lockScreen.classList.add("hidden");
   appScreen.classList.add("hidden");
   homeScreen.classList.remove("hidden");
@@ -270,6 +273,7 @@ function unlock() {
 
 function lockPhone() {
   clearTimeout(appTransitionTimer);
+  homeScreen.classList.remove("home-arriving", "home-returning");
   appScreen.classList.remove("is-opening", "is-closing");
   appScreen.classList.add("hidden");
   homeScreen.classList.add("hidden");
@@ -279,7 +283,7 @@ function lockPhone() {
 
 let appTransitionTimer = null;
 
-function openApp(key) {
+function openApp(key, sourceButton) {
   if (key === "email") {
     window.location.href = `mailto:${profile.email}`;
     return;
@@ -295,6 +299,17 @@ function openApp(key) {
 
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
+  const source = sourceButton?.querySelector(".app-icon") || sourceButton;
+  if (source) {
+    const rect = source.getBoundingClientRect();
+    const screenRect = phone.querySelector(".screen").getBoundingClientRect();
+    const x = (rect.left + rect.width / 2 - screenRect.left) / screenRect.width * 100;
+    const y = (rect.top + rect.height / 2 - screenRect.top) / screenRect.height * 100;
+    appScreen.style.setProperty("--app-origin", `${x.toFixed(1)}% ${y.toFixed(1)}%`);
+  } else {
+    appScreen.style.setProperty("--app-origin", "50% 50%");
+  }
+  homeScreen.classList.remove("home-arriving", "home-returning");
   clearTimeout(appTransitionTimer);
   homeScreen.classList.add("hidden");
   appScreen.classList.remove("hidden", "is-closing", "is-opening");
@@ -311,7 +326,9 @@ function goHome() {
   appTransitionTimer = setTimeout(() => {
     appScreen.classList.add("hidden");
     appScreen.classList.remove("is-closing");
-    homeScreen.classList.remove("hidden");
+    homeScreen.classList.remove("hidden", "home-arriving", "home-returning");
+    void homeScreen.offsetWidth;
+    homeScreen.classList.add("home-returning");
     updateAssistiveTouch();
   }, 210);
 }
@@ -319,7 +336,7 @@ function goHome() {
 document.getElementById("backButton").addEventListener("click", goHome);
 
 document.querySelectorAll("[data-app]").forEach(button => {
-  button.addEventListener("click", () => openApp(button.dataset.app));
+  button.addEventListener("click", () => openApp(button.dataset.app, button));
 });
 
 document.getElementById("lockButton").addEventListener("click", event => {
