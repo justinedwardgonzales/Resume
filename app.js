@@ -116,7 +116,7 @@ const pages = {
     html: `<div class="contacts-ios">
       <div class="contacts-top"><button type="button" id="contactsBack" aria-label="Back to Home Screen">‹ Back</button><strong>Contacts</strong><span class="contacts-top-spacer"></span></div>
       <div class="contacts-scroll">
-        <div class="contacts-identity"><img src="contacts-photo.jpg" alt="Justin Gonzales" class="contacts-photo"><h1>Justin Gonzales</h1></div>
+        <div class="contacts-identity"><img src="assets/contacts-photo.jpg" alt="Justin Gonzales" class="contacts-photo"><h1>Justin Gonzales</h1></div>
         <div class="contacts-quick-actions">
           <a href="mailto:gonzales.justin.edward@gmail.com" class="contacts-action"><span class="contacts-action-icon">✉</span><span>mail</span></a>
           <a href="https://www.linkedin.com/in/justin-edward-gonzales/" target="_blank" rel="noopener noreferrer" class="contacts-action"><span class="contacts-action-icon">↗</span><span>LinkedIn</span></a>
