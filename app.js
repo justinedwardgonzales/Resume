@@ -62,14 +62,18 @@ const pages = {
   },
   safari: {
     title: "Safari",
-    html: `<div class="safari-browser">
-      <div class="safari-address"><span class="safari-lock">⌑</span><span>Favorites</span><span class="safari-refresh">↻</span></div>
-      <h1>Favorites</h1>
-      <p class="safari-intro">A few places I visit to stay connected to the creative and advertising industry.</p>
-      <a class="safari-bookmark lbb-bookmark" href="https://lbbonline.com/" target="_blank" rel="noopener noreferrer"><span class="bookmark-monogram">LBB</span><span><b>Little Black Book</b><small>Creative work, campaigns & industry news</small></span><span class="arrow">↗</span></a>
-      <a class="safari-bookmark feats-bookmark" href="https://www.feats.co/" target="_blank" rel="noopener noreferrer"><span class="bookmark-monogram">F</span><span><b>Feats</b><small>Verified projects & creative collaborators</small></span><span class="arrow">↗</span></a>
-      <div class="safari-note">Saved pages</div>
-      <div class="safari-toolbar"><span>‹</span><span>›</span><span>□</span><span>☰</span></div>
+    html: `<div class="safari-shell">
+      <div class="safari-view" id="safariView"></div>
+      <div class="safari-bottom">
+        <div class="safari-url-row"><span id="safariSecure" aria-hidden="true">⌕</span><form id="safariAddressForm"><input id="safariAddressInput" aria-label="Search or enter website name" placeholder="Search or enter website name" autocomplete="off" spellcheck="false"></form><button id="safariReload" type="button" aria-label="Reload page">↻</button></div>
+        <div class="safari-controls">
+          <button id="safariBack" type="button" aria-label="Back">‹</button>
+          <button id="safariForward" type="button" aria-label="Forward">›</button>
+          <button id="safariShare" type="button" aria-label="Share current page">♧</button>
+          <button id="safariTabs" type="button" aria-label="Show tabs">▢ <span id="safariTabCount">1</span></button>
+          <button id="safariNewTab" type="button" aria-label="New tab">＋</button>
+        </div>
+      </div>
     </div>`
   },
   linkedin: {
@@ -300,6 +304,97 @@ function lockPhone() {
 
 let appTransitionTimer = null;
 
+
+// Safari is a simulated in-phone browser: external sites open in a real browser tab
+// because many websites prohibit embedding in iframes.
+const safariFavorites = [
+  { title: "Little Black Book", url: "https://lbbonline.com/", icon: "LBB", subtitle: "Creative industry news" },
+  { title: "Feats", url: "https://www.feats.co/", icon: "F", subtitle: "Creative projects and collaborators" }
+];
+let safariTabsState = [{ history: [{ title: "Start Page", url: "" }], index: 0 }];
+let safariActiveTab = 0;
+let safariShowingTabs = false;
+function safariCurrent() {
+  const tab = safariTabsState[safariActiveTab];
+  return tab.history[tab.index];
+}
+function safariEscape(value) {
+  return String(value).replace(/[&<>"']/g, char => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[char]));
+}
+function safariNavigate(raw) {
+  const input = raw.trim();
+  if (!input) return;
+  let url;
+  try {
+    url = /^https?:\/\//i.test(input) ? new URL(input) :
+      (/^[\w-]+(?:\.[\w-]+)+(?:\/.*)?$/i.test(input) ? new URL("https://" + input) :
+      new URL("https://www.google.com/search?q=" + encodeURIComponent(input)));
+    if (!["https:", "http:"].includes(url.protocol)) return;
+  } catch { return; }
+  const tab = safariTabsState[safariActiveTab];
+  tab.history = tab.history.slice(0, tab.index + 1);
+  tab.history.push({ title: url.hostname.replace(/^www\./,""), url: url.href });
+  tab.index++;
+  safariShowingTabs = false;
+  safariRender();
+}
+function safariRender() {
+  const view = document.getElementById("safariView");
+  if (!view) return;
+  const current = safariCurrent();
+  const tab = safariTabsState[safariActiveTab];
+  document.getElementById("safariAddressInput").value = current.url ? current.url.replace(/^https?:\/\//,"") : "";
+  document.getElementById("safariSecure").textContent = current.url ? "⌑" : "⌕";
+  document.getElementById("safariBack").disabled = tab.index === 0;
+  document.getElementById("safariForward").disabled = tab.index >= tab.history.length - 1;
+  document.getElementById("safariTabCount").textContent = safariTabsState.length;
+  if (safariShowingTabs) {
+    view.innerHTML = `<div class="safari-tab-heading"><h1>Tab Overview</h1><button type="button" data-safari-action="done">Done</button></div><div class="safari-tab-grid">${safariTabsState.map((t,i) => `<button class="safari-tab-card ${i===safariActiveTab?"selected":""}" data-safari-tab="${i}"><span>${safariEscape(t.history[t.index].title)}</span><small>${safariEscape(t.history[t.index].url || "Favorites")}</small><span class="safari-tab-close" data-safari-close="${i}" aria-label="Close tab">×</span></button>`).join("")}</div>`;
+  } else if (!current.url) {
+    view.innerHTML = `<div class="safari-start"><h1>Favorites</h1><div class="safari-favorites">${safariFavorites.map((f,i)=>`<button class="safari-favorite" data-safari-favorite="${i}"><span class="safari-favorite-icon">${safariEscape(f.icon)}</span><strong>${safariEscape(f.title)}</strong><small>${safariEscape(f.subtitle)}</small></button>`).join("")}</div><h2>Privacy Report</h2><div class="safari-privacy">🛡️ Safari-style browsing, designed for your interactive resume.</div></div>`;
+  } else {
+    view.innerHTML = `<div class="safari-site-preview"><span class="safari-site-globe">◎</span><h1>${safariEscape(current.title)}</h1><p>${safariEscape(current.url)}</p><p>For security and compatibility, this website opens in a separate browser tab.</p><a class="safari-open-site" href="${safariEscape(current.url)}" target="_blank" rel="noopener noreferrer">Open Website ↗</a><button class="safari-start-link" data-safari-action="start">Go to Start Page</button></div>`;
+  }
+}
+function initSafari() {
+  const view = document.getElementById("safariView");
+  if (!view) return;
+  safariShowingTabs = false;
+  safariRender();
+  document.getElementById("safariAddressForm").addEventListener("submit", event => {
+    event.preventDefault();
+    safariNavigate(document.getElementById("safariAddressInput").value);
+    document.getElementById("safariAddressInput").blur();
+  });
+  document.getElementById("safariBack").addEventListener("click", () => {
+    const t=safariTabsState[safariActiveTab]; if(t.index>0){t.index--;safariShowingTabs=false;safariRender();}
+  });
+  document.getElementById("safariForward").addEventListener("click", () => {
+    const t=safariTabsState[safariActiveTab]; if(t.index<t.history.length-1){t.index++;safariShowingTabs=false;safariRender();}
+  });
+  document.getElementById("safariReload").addEventListener("click", safariRender);
+  document.getElementById("safariTabs").addEventListener("click", () => { safariShowingTabs=!safariShowingTabs;safariRender(); });
+  document.getElementById("safariNewTab").addEventListener("click", () => {
+    safariTabsState.push({history:[{title:"Start Page",url:""}],index:0});
+    safariActiveTab=safariTabsState.length-1;safariShowingTabs=false;safariRender();
+  });
+  document.getElementById("safariShare").addEventListener("click", async () => {
+    const url=safariCurrent().url || window.location.href;
+    try { if(navigator.share) await navigator.share({url}); else if(navigator.clipboard) {await navigator.clipboard.writeText(url); alert("Link copied to clipboard");} else prompt("Copy link",url); } catch {}
+  });
+  view.addEventListener("click", event => {
+    const close=event.target.closest("[data-safari-close]");
+    if(close){const i=Number(close.dataset.safariClose);safariTabsState.splice(i,1);if(!safariTabsState.length)safariTabsState=[{history:[{title:"Start Page",url:""}],index:0}];safariActiveTab=Math.min(safariActiveTab,safariTabsState.length-1);safariRender();return;}
+    const favorite=event.target.closest("[data-safari-favorite]");
+    if(favorite){safariNavigate(safariFavorites[Number(favorite.dataset.safariFavorite)].url);return;}
+    const selected=event.target.closest("[data-safari-tab]");
+    if(selected){safariActiveTab=Number(selected.dataset.safariTab);safariShowingTabs=false;safariRender();return;}
+    const action=event.target.closest("[data-safari-action]");
+    if(action?.dataset.safariAction==="done"){safariShowingTabs=false;safariRender();}
+    if(action?.dataset.safariAction==="start"){const t=safariTabsState[safariActiveTab];t.history=t.history.slice(0,t.index+1);t.history.push({title:"Start Page",url:""});t.index++;safariRender();}
+  });
+}
+
 function openApp(key, sourceButton) {
   if (key === "email") {
     window.location.href = `mailto:${profile.email}`;
@@ -333,6 +428,7 @@ function openApp(key, sourceButton) {
   void appScreen.offsetWidth;
   appScreen.classList.add("is-opening");
   appContent.scrollTop = 0;
+  if (key === "safari") initSafari();
   updateAssistiveTouch();
 }
 
