@@ -78,16 +78,9 @@ const pages = {
   },
   linkedin: {
     title: "LinkedIn",
-    html: `<div class="li-app">
-      <div class="li-topbar"><div class="li-avatar" aria-hidden="true">JG</div><div class="li-search"><span>⌕</span> Search</div><button class="li-top-icon" type="button" data-li-action="messages" aria-label="Messaging">☏</button></div>
+    html: `<div class="li-app li-profile-only">
+      <div class="li-native-header"><span class="li-native-brand">in</span><strong>Justin Gonzales</strong><a href="https://www.linkedin.com/in/justin-edward-gonzales/" target="_blank" rel="noopener noreferrer" aria-label="Open on LinkedIn">↗</a></div>
       <div class="li-content" id="liContent"></div>
-      <nav class="li-nav" aria-label="LinkedIn navigation">
-        <button type="button" data-li-nav="home"><span class="li-nav-icon">⌂</span>Home</button>
-        <button type="button" data-li-nav="network"><span class="li-nav-icon">♧</span>My Network</button>
-        <button type="button" data-li-nav="post"><span class="li-nav-icon">⊞</span>Post</button>
-        <button type="button" data-li-nav="notifications"><span class="li-nav-icon">♢</span>Notifications</button>
-        <button type="button" data-li-nav="jobs"><span class="li-nav-icon">▣</span>Jobs</button>
-      </nav>
     </div>`
   },
   spotify: {
@@ -318,62 +311,49 @@ let appTransitionTimer = null;
 // Safari is a simulated in-phone browser: external sites open in a real browser tab
 // because many websites prohibit embedding in iframes.
 const linkedInUrl = "https://www.linkedin.com/in/justin-edward-gonzales/";
-let linkedInSection = "home";
 function linkedInProfile() {
+  const jobs = [
+    ["Senior Media Planner","Spark Foundry Canada","Mar 2025 – Present","Toronto, Ontario","Lead national media strategy for Molson Coors' global and above-premium portfolios, including Coors Light, Miller Lite, Molson and Madri. Oversee integrated planning, audience priorities and investment strategy for annual national and local plans exceeding $30M."],
+    ["Media Planner","Spark Foundry Canada","Jul 2024 – Feb 2025","Toronto, Ontario","Led and supported media planning for Heineken, craft and economy beverage portfolios. Developed brand and portfolio plans involving $10M in media investment."],
+    ["Assistant Media Planner","Spark Foundry Canada","Sep 2023 – Jun 2024","Toronto, Ontario","Planned awareness and performance campaigns for Signet, Miele, Molson Coors and Heineken, translating audience and market insights into media plans."],
+    ["Programmatic Account Coordinator","Publicis Media","Jul 2022 – Aug 2023","Toronto, Ontario","Supported campaign execution and optimization for Starbucks, Visa, Stellantis, Epson, Smuckers, Invisalign and Grupo Bimbo. Worked with DV360, Amazon DSP, The Trade Desk and Verizon DSP."],
+    ["Stylist","AllSaints","Mar 2017 – Dec 2020","",""],
+    ["Project Intern","Solset","Sep 2018 – Apr 2019","",""],
+    ["Retail Sales Specialist","Saks Fifth Avenue","Apr 2016 – Mar 2017","",""],
+    ["Apparel Sales Associate","Hudson's Bay","Jun 2014 – Dec 2015","",""]
+  ];
+  const experience = jobs.map(([role,company,dates,location,description],i) => `<div class="li-native-item"><div class="li-native-company-icon">${i<3?"SF":i===3?"PM":"•"}</div><div class="li-native-item-copy"><strong>${role}</strong><span>${company}</span><small>${dates}${location?" · "+location:""}</small>${description?`<p>${description}</p>`:""}</div></div>`).join("");
+  const skills = ["Media Strategy","Programmatic Advertising","Programmatic Media Buying"];
+  const certifications = ["Prisma (Buyer Workflow) for Google Ads Foundations Plus","Prisma (Buyer Workflow) for Google DV360 Foundations Plus","Mimic Social Certificate of Completion","Hootsuite Social Marketing Certification"];
+  const awards = ["J. Harry Ebbs Achievement Award","Margaret Brown Byron Award","Grand Clio, Partnerships & Collaborations","Concours TACTIL — Finalistes de la catégorie Contenu de marque (XTRA)","Les Cas d’Or Montreal Activation événementielle"];
   return `<div class="li-profile">
     <div class="li-cover"></div>
     <div class="li-profile-body">
       <div class="li-profile-avatar">JG</div>
-      <div class="li-profile-name">Justin Edward Gonzales <span class="li-degree">· Profile</span></div>
-      <p class="li-headline">Professional profile</p>
-      <p class="li-location">Explore my career, experience and connections on LinkedIn</p>
-      <div class="li-profile-actions"><a class="li-primary" href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View LinkedIn profile ↗</a><button type="button" class="li-secondary" data-li-action="share">Share</button></div>
+      <div class="li-profile-name">Justin Gonzales</div>
+      <p class="li-headline">Media Planning &amp; Strategy at Spark Foundry</p>
+      <p class="li-location">Canada · <a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Contact info</a></p>
+      <p class="li-native-affiliation">▣ Spark Foundry Canada</p>
+      <div class="li-profile-actions"><a class="li-primary" href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Open in LinkedIn ↗</a><button type="button" class="li-secondary" data-li-action="share">Share profile</button></div>
     </div>
-    <section class="li-panel"><h2>About</h2><p>Get to know my professional background, experience and work through my LinkedIn profile.</p></section>
-    <section class="li-panel"><h2>Experience</h2><div class="li-experience-row"><div class="li-experience-logo">in</div><div><strong>Professional experience</strong><p>See my current roles and full career history on LinkedIn.</p><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View experience ↗</a></div></div></section>
-    <section class="li-panel"><h2>Activity</h2><p>See my latest professional updates and activity on LinkedIn.</p><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View activity ↗</a></section>
+    <section class="li-panel"><h2>About</h2><p>Ever since I was young I wanted to transform unstructured data into actionable business insights.</p></section>
+    <section class="li-panel"><h2>Experience</h2>${experience}</section>
+    <section class="li-panel"><h2>Education</h2><div class="li-native-item"><div class="li-native-company-icon">UT</div><div class="li-native-item-copy"><strong>University of Toronto</strong><span>Bachelor of Kinesiology, Kinesiology and Exercise Science</span></div></div><div class="li-native-item"><div class="li-native-company-icon">SC</div><div class="li-native-item-copy"><strong>Sheridan College</strong><span>Postgraduate Degree, Advertising</span></div></div></section>
+    <section class="li-panel"><h2>Skills</h2>${skills.map(x=>`<div class="li-native-list-row">${x}</div>`).join("")}</section>
+    <section class="li-panel"><h2>Licences &amp; certifications</h2>${certifications.map(x=>`<div class="li-native-list-row">${x}</div>`).join("")}</section>
+    <section class="li-panel"><h2>Honours &amp; awards</h2>${awards.map(x=>`<div class="li-native-list-row">${x}</div>`).join("")}</section>
+    <div class="li-native-footer"><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">View live profile on LinkedIn ↗</a></div>
   </div>`;
 }
-function linkedInRender() {
+function initLinkedIn() {
   const view = document.getElementById("liContent");
   if (!view) return;
-  document.querySelectorAll("[data-li-nav]").forEach(button => {
-    button.classList.toggle("active", button.dataset.liNav === linkedInSection);
-    button.setAttribute("aria-current", button.dataset.liNav === linkedInSection ? "page" : "false");
+  view.innerHTML = linkedInProfile();
+  view.addEventListener("click", event => {
+    if (!event.target.closest('[data-li-action="share"]')) return;
+    if (navigator.share) navigator.share({url:linkedInUrl}).catch(()=>{});
+    else if (navigator.clipboard) navigator.clipboard.writeText(linkedInUrl).then(()=>alert("Profile link copied")).catch(()=>{});
   });
-  if (linkedInSection === "home") {
-    view.innerHTML = `<div class="li-feed"><div class="li-feed-label">Your professional network</div><div class="li-feed-card"><div class="li-feed-author"><div class="li-avatar">JG</div><div><strong>Justin Edward Gonzales</strong><small>Professional profile</small></div></div><p>Welcome to my professional space. Explore my profile, experience and work.</p><button type="button" class="li-feed-link" data-li-action="profile">View profile →</button><div class="li-feed-actions"><span>♡ Like</span><span>▤ Comment</span><span>↗ Share</span></div></div><div class="li-feed-card li-profile-teaser"><strong>About this profile</strong><p>This is an interactive LinkedIn-inspired experience. Visit LinkedIn to see my live profile and updates.</p><a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Open LinkedIn ↗</a></div></div>`;
-  } else if (linkedInSection === "profile") {
-    view.innerHTML = linkedInProfile();
-  } else {
-    const pages = {
-      network:["My Network","Explore my professional network and connections on LinkedIn.","View connections"],
-      post:["Create a post","Posting is available on LinkedIn. Open my profile to interact with updates.","Open LinkedIn"],
-      notifications:["Notifications","Your LinkedIn notifications are private to your account.","Open LinkedIn"],
-      jobs:["Jobs","Explore opportunities and professional interests on LinkedIn.","Explore LinkedIn"],
-      messages:["Messaging","Continue the conversation through LinkedIn.","Message on LinkedIn"]
-    };
-    const [heading,description,action] = pages[linkedInSection] || pages.network;
-    view.innerHTML = `<div class="li-placeholder"><div class="li-placeholder-icon">in</div><h1>${heading}</h1><p>${description}</p><a class="li-primary" href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">${action} ↗</a></div>`;
-  }
-  view.scrollTop = 0;
-}
-function initLinkedIn() {
-  linkedInSection = "profile";
-  linkedInRender();
-  const app = document.querySelector(".li-app");
-  app.addEventListener("click", event => {
-    const nav = event.target.closest("[data-li-nav]");
-    const action = event.target.closest("[data-li-action]");
-    if (nav) { linkedInSection = nav.dataset.liNav; linkedInRender(); }
-    else if (action?.dataset.liAction === "profile") { linkedInSection = "profile"; linkedInRender(); }
-    else if (action?.dataset.liAction === "messages") { linkedInSection = "messages"; linkedInRender(); }
-    else if (action?.dataset.liAction === "share") {
-      if (navigator.share) navigator.share({url:linkedInUrl}).catch(()=>{});
-      else if (navigator.clipboard) navigator.clipboard.writeText(linkedInUrl).then(()=>alert("Profile link copied")).catch(()=>{});
-    }
-  });
-  app.querySelector(".li-avatar").addEventListener("click", () => {linkedInSection="profile";linkedInRender();});
 }
 const safariFavorites = [
   { title: "Little Black Book", url: "https://lbbonline.com/people/justin-gonzales", icon: "LBB", subtitle: "Creative industry news" },
