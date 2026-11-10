@@ -386,7 +386,7 @@ function initSafari() {
     const close=event.target.closest("[data-safari-close]");
     if(close){const i=Number(close.dataset.safariClose);safariTabsState.splice(i,1);if(!safariTabsState.length)safariTabsState=[{history:[{title:"Start Page",url:""}],index:0}];safariActiveTab=Math.min(safariActiveTab,safariTabsState.length-1);safariRender();return;}
     const favorite=event.target.closest("[data-safari-favorite]");
-    if(favorite){safariNavigate(safariFavorites[Number(favorite.dataset.safariFavorite)].url);return;}
+    if(favorite){const url=safariFavorites[Number(favorite.dataset.safariFavorite)].url;window.open(url,"_blank","noopener,noreferrer");return;}
     const selected=event.target.closest("[data-safari-tab]");
     if(selected){safariActiveTab=Number(selected.dataset.safariTab);safariShowingTabs=false;safariRender();return;}
     const action=event.target.closest("[data-safari-action]");
