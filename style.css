@@ -1638,3 +1638,28 @@ body {
 .li-placeholder-icon{display:grid;place-items:center;width:66px;height:66px;background:#0a66c2;color:#fff;font-size:35px;font-weight:800;border-radius:13px}
 .li-placeholder h1{font-size:23px;margin:22px 0 9px}
 .li-placeholder p{font-size:13px;line-height:1.6;color:#666;margin:0 0 24px}
+
+/* Profile-only LinkedIn iOS presentation */
+.li-profile-only .li-native-header{flex:none;height:52px;background:#fff;border-bottom:1px solid #e5e5e5;display:flex;align-items:center;gap:12px;padding:0 16px}
+.li-native-brand{display:grid;place-items:center;background:#0a66c2;color:white;font-weight:800;font-size:18px;width:29px;height:29px;border-radius:4px}
+.li-native-header strong{flex:1;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-native-header a{font-size:23px;color:#555;text-decoration:none}
+.li-profile-only .li-profile-body{padding-top:57px}
+.li-profile-only .li-profile-name{font-size:24px}
+.li-profile-only .li-location a{color:#0a66c2;text-decoration:none;font-weight:600}
+.li-native-affiliation{font-size:12px;font-weight:650;margin:0 0 15px;color:#414141}
+.li-native-item{display:flex;gap:12px;padding:15px 0;border-bottom:1px solid #ededed}
+.li-native-item:last-child{border-bottom:0;padding-bottom:0}
+.li-native-company-icon{flex:none;width:43px;height:43px;display:grid;place-items:center;background:#e6eef4;color:#295371;font-size:14px;font-weight:800;border-radius:3px}
+.li-native-item-copy{flex:1;min-width:0}
+.li-native-item-copy strong,.li-native-item-copy span,.li-native-item-copy small{display:block}
+.li-native-item-copy strong{font-size:14px;line-height:1.35}
+.li-native-item-copy span{font-size:12px;margin-top:2px}
+.li-native-item-copy small{font-size:11px;line-height:1.4;color:#777;margin-top:4px}
+.li-native-item-copy p{margin:11px 0 0;font-size:12px;line-height:1.55;white-space:normal}
+.li-native-list-row{padding:12px 0;border-bottom:1px solid #ededed;font-size:13px;font-weight:550;line-height:1.45}
+.li-native-list-row:last-child{border:0;padding-bottom:0}
+.li-native-footer{text-align:center;padding:18px 12px 28px}
+.li-native-footer a{font-size:13px;color:#0a66c2;text-decoration:none;font-weight:700}
+.li-profile-only .li-content{scrollbar-width:none}
+.li-profile-only .li-content::-webkit-scrollbar{display:none}
