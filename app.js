@@ -322,23 +322,23 @@ function linkedInProfile() {
     ["Retail Sales Specialist","Saks Fifth Avenue","Apr 2016 – Mar 2017","",""],
     ["Apparel Sales Associate","Hudson's Bay","Jun 2014 – Dec 2015","",""]
   ];
-  const experience = jobs.map(([role,company,dates,location,description],i) => `<div class="li-native-item"><div class="li-native-company-icon">${i<3?"SF":i===3?"PM":"•"}</div><div class="li-native-item-copy"><strong>${role}</strong><span>${company}</span><small>${dates}${location?" · "+location:""}</small>${description?`<p>${description}</p>`:""}</div></div>`).join("");
+  const experience = jobs.map(([role,company,dates,location,description],i) => `<div class="li-native-item"><div class="li-native-company-icon"><img src="https://www.google.com/s2/favicons?domain=${encodeURIComponent(["sparkfoundryww.com","sparkfoundryww.com","sparkfoundryww.com","publicisgroupe.com","allsaints.com","solset.com","saksfifthavenue.com","thebay.com"][i])}&sz=128" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span>${["SF","SF","SF","PM","A","S","S","HB"][i]}</span></div><div class="li-native-item-copy"><strong>${role}</strong><span>${company}</span><small>${dates}${location?" · "+location:""}</small>${description?`<p>${description}</p>`:""}</div></div>`).join("");
   const skills = ["Media Strategy","Programmatic Advertising","Programmatic Media Buying"];
   const certifications = ["Prisma (Buyer Workflow) for Google Ads Foundations Plus","Prisma (Buyer Workflow) for Google DV360 Foundations Plus","Mimic Social Certificate of Completion","Hootsuite Social Marketing Certification"];
   const awards = ["J. Harry Ebbs Achievement Award","Margaret Brown Byron Award","Grand Clio, Partnerships & Collaborations","Concours TACTIL — Finalistes de la catégorie Contenu de marque (XTRA)","Les Cas d’Or Montreal Activation événementielle"];
   return `<div class="li-profile">
-    <div class="li-cover"></div>
+    <div class="li-cover"><div class="li-cover-art"><span class="li-cover-grid"></span><span class="li-cover-orbit orbit-one"></span><span class="li-cover-orbit orbit-two"></span><span class="li-cover-caption">MEDIA <b>×</b> STRATEGY</span></div></div>
     <div class="li-profile-body">
       <div class="li-profile-avatar">JG</div>
       <div class="li-profile-name">Justin Gonzales</div>
       <p class="li-headline">Media Planning &amp; Strategy at Spark Foundry</p>
       <p class="li-location">Canada · <a href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Contact info</a></p>
-      <p class="li-native-affiliation">▣ Spark Foundry Canada</p>
+      <p class="li-native-affiliation"><img src="https://www.google.com/s2/favicons?domain=sparkfoundryww.com&sz=128" alt="" loading="lazy"> Spark Foundry Canada</p>
       <div class="li-profile-actions"><a class="li-primary" href="${linkedInUrl}" target="_blank" rel="noopener noreferrer">Open in LinkedIn ↗</a><button type="button" class="li-secondary" data-li-action="share">Share profile</button></div>
     </div>
     <section class="li-panel"><h2>About</h2><p>Ever since I was young I wanted to transform unstructured data into actionable business insights.</p></section>
     <section class="li-panel"><h2>Experience</h2>${experience}</section>
-    <section class="li-panel"><h2>Education</h2><div class="li-native-item"><div class="li-native-company-icon">UT</div><div class="li-native-item-copy"><strong>University of Toronto</strong><span>Bachelor of Kinesiology, Kinesiology and Exercise Science</span></div></div><div class="li-native-item"><div class="li-native-company-icon">SC</div><div class="li-native-item-copy"><strong>Sheridan College</strong><span>Postgraduate Degree, Advertising</span></div></div></section>
+    <section class="li-panel"><h2>Education</h2><div class="li-native-item"><div class="li-native-company-icon"><img src="https://www.google.com/s2/favicons?domain=utoronto.ca&sz=128" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span>UT</span></div><div class="li-native-item-copy"><strong>University of Toronto</strong><span>Bachelor of Kinesiology, Kinesiology and Exercise Science</span></div></div><div class="li-native-item"><div class="li-native-company-icon"><img src="https://www.google.com/s2/favicons?domain=sheridancollege.ca&sz=128" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span>SC</span></div><div class="li-native-item-copy"><strong>Sheridan College</strong><span>Postgraduate Degree, Advertising</span></div></div></section>
     <section class="li-panel"><h2>Skills</h2>${skills.map(x=>`<div class="li-native-list-row">${x}</div>`).join("")}</section>
     <section class="li-panel"><h2>Licences &amp; certifications</h2>${certifications.map(x=>`<div class="li-native-list-row">${x}</div>`).join("")}</section>
     <section class="li-panel"><h2>Honours &amp; awards</h2>${awards.map(x=>`<div class="li-native-list-row">${x}</div>`).join("")}</section>
