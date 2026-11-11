@@ -719,9 +719,21 @@ function initNotes() {
   const show=id=>["notesListView","notesFoldersView","notesEditorView"].forEach(n=>$(n).classList.toggle("hidden",n!==id));
   function render(){
     const q=$("notesSearchInput").value.toLowerCase().trim();
-    const matches=notes.filter(n=>(filter!=="personal"||n.id==="outside"||n.personal)&&((n.title+" "+n.body).toLowerCase().includes(q))).sort((a,b)=>Number(!!b.pinned)-Number(!!a.pinned));
+    const matches=notes.filter(n=>(filter!=="personal"||n.id==="outside"||n.personal)&&((n.title+" "+n.body).toLowerCase().includes(q))).sort((a,b)=>(b.updatedAt||b.createdAt||0)-(a.updatedAt||a.createdAt||0));
+    const now=Date.now(),day=86400000;
+    const heading=timestamp=>{
+      if(!timestamp)return "Earlier Notes";
+      const diff=now-timestamp;
+      if(diff<day&&new Date(timestamp).toDateString()===new Date().toDateString())return "Today";
+      if(diff<2*day)return "Yesterday";
+      if(diff<7*day)return "Previous 7 Days";
+      if(diff<30*day)return "Previous 30 Days";
+      return new Date(timestamp).toLocaleDateString("en-CA",{month:"long",year:"numeric"});
+    };
+    const groups=new Map();
+    matches.forEach(n=>{const group=heading(n.updatedAt||n.createdAt);if(!groups.has(group))groups.set(group,[]);groups.get(group).push(n);});
     $("notesListTitle").textContent=filter==="personal"?"Personal":"Notes";
-    $("notesList").innerHTML=matches.map(n=>`<button class="ios-notes-item" type="button" data-note-id="${escapeHTML(n.id)}"><strong>${escapeHTML(n.title||"New Note")}${n.pinned?' <span class="ios-notes-pin">◆</span>':''}</strong><span><small>${n.updated?"Edited": "Note"}</small> ${escapeHTML(n.body.replace(/\\s+/g," ").slice(0,95)||"No additional text")}</span></button>`).join("");
+    $("notesList").innerHTML=[...groups].map(([label,items])=>`<section class="ios-notes-date-group"><h2>${escapeHTML(label)}</h2><div class="ios-notes-date-card">${items.map(n=>`<button class="ios-notes-item" type="button" data-note-id="${escapeHTML(n.id)}"><strong>${escapeHTML(n.title||"New Note")}</strong><span>${escapeHTML(n.body.replace(/\\s+/g," ").trim().slice(0,95)||"No additional text")}</span></button>`).join("")}</div></section>`).join("");
     $("notesNoResults").classList.toggle("hidden",matches.length!==0);
     $("notesCount").textContent=matches.length+" "+(matches.length===1?"Note":"Notes");
     $("notesFolderCount").textContent=notes.length;
@@ -734,8 +746,8 @@ function initNotes() {
     $("notesTimestamp").textContent="On My iPhone · "+(current.updated?"Edited recently":"Saved note");
     show("notesEditorView");
   }
-  function commit(){if(!current)return;current.title=$("notesTitleInput").value;current.body=$("notesBodyInput").value;current.updated=true;save();}
-  function newNote(){commit();const n={id:"note-"+Date.now(),title:"",body:"",personal:filter==="personal"};notes.unshift(n);save();openNote(n.id);$("notesTitleInput").focus();}
+  function commit(){if(!current)return;current.title=$("notesTitleInput").value;current.body=$("notesBodyInput").value;current.updated=true;current.updatedAt=Date.now();save();}
+  function newNote(){commit();const n={id:"note-"+Date.now(),title:"",body:"",createdAt:Date.now(),personal:filter==="personal"};notes.unshift(n);save();openNote(n.id);$("notesTitleInput").focus();}
   $("notesFolders").addEventListener("click",()=>show("notesFoldersView"));
   $("notesFoldersBack").addEventListener("click",list);
   $("notesAllFolder").addEventListener("click",()=>{filter="all";list();});
