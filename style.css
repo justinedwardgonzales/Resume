@@ -429,25 +429,25 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 
 
 /* Actual iOS 26 system app artwork (right-hand icon in the side-by-side reference images) */
-.ios-notes,
-.ios-photos,
-.ios-contacts {
+.app-icon.ios-notes,
+.app-icon.ios-photos,
+.app-icon.ios-contacts {
   background-repeat: no-repeat;
   /* Crop the comparison image's dark outer canvas so only the app artwork fills the icon. */
   background-size: 250% 125%;
   background-position: right center;
   background-color: #fff;
 }
-.ios-notes {
+.app-icon.ios-notes {
   background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Notes.jpeg?quality=82&strip=all&w=1024");
 }
-.ios-photos {
+.app-icon.ios-photos {
   background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Photos.jpeg?quality=82&strip=all&w=1024");
 }
-.ios-contacts {
+.app-icon.ios-contacts {
   background-image: url("https://9to5mac.com/wp-content/uploads/sites/6/2025/07/Contacts.jpeg?quality=82&strip=all&w=1024");
 }
-.ios-notes > *, .ios-photos > *, .ios-contacts > * { display: none !important; }
+.app-icon.ios-notes > *, .app-icon.ios-photos > *, .app-icon.ios-contacts > * { display: none !important; }
 
 
 /* Keep app artwork clean: no extra frame or outline around individual icons */
@@ -465,9 +465,9 @@ button { font: inherit; -webkit-tap-highlight-color: transparent; }
 
 
 /* Use complete standalone Apple icon files, not crops from comparison images. */
-.ios-notes,
-.ios-photos,
-.ios-contacts {
+.app-icon.ios-notes,
+.app-icon.ios-photos,
+.app-icon.ios-contacts {
   background: transparent !important;
 }
 .system-icon-art {
@@ -2180,3 +2180,7 @@ body {
 .ios-notes-date-card .ios-notes-item>span{font-size:15px;margin-top:2px;color:#89898f}
 .ios-notes-list-view .ios-notes-top button:last-child{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#eee8df;color:#c48b00;font-size:18px}
 .ios-notes-list-view .ios-notes-search{margin-bottom:24px}
+
+/* Notes screen must not inherit the home-screen icon artwork or child hiding. */
+.app-screen.notes-active .app-content .ios-notes{background:#f2f2f7!important;background-image:none!important;background-size:auto!important;background-position:initial!important;display:block!important;place-items:initial!important}
+.app-screen.notes-active .app-content .ios-notes> *{display:flex}
