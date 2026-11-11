@@ -2006,3 +2006,42 @@ body {
   .spotify-ios .spotify-now-playing input[type=range]{margin-top:12px}
   .spotify-ios .spotify-full-controls{margin-top:10px}
 }
+
+/* Compact Spotify playlist header: show more tracks above the mini-player */
+.spotify-sunset-theme .spotify-playlist-header{
+  padding:8px 14px 0;
+}
+.spotify-sunset-theme .spotify-playlist-back{
+  font-size:29px;
+  line-height:29px;
+  margin:0 0 5px;
+  min-height:29px;
+}
+.spotify-sunset-theme .spotify-playlist-cover{
+  width:min(61%,190px);
+  max-width:190px;
+  margin:0 auto 13px;
+}
+.spotify-sunset-theme .spotify-playlist-header h1{
+  font-size:25px;
+  line-height:1.1;
+  margin:0 0 8px;
+  min-height:27px;
+}
+.spotify-sunset-theme .spotify-playlist-owner{gap:8px}
+.spotify-sunset-theme .spotify-playlist-count{
+  margin:7px 0 0;
+  padding-bottom:0;
+}
+.spotify-sunset-theme .spotify-playlist-actions{
+  min-height:48px;
+  gap:12px;
+}
+.spotify-sunset-theme .spotify-playlist-actions .spotify-playlist-play{
+  width:44px;height:44px;min-width:44px;min-height:44px;
+}
+.spotify-sunset-theme .spotify-track-list{padding-top:2px}
+@media(max-height:730px){
+  .spotify-sunset-theme .spotify-playlist-cover{width:min(55%,165px);max-width:165px;margin-bottom:10px}
+  .spotify-sunset-theme .spotify-playlist-actions{min-height:44px}
+}
