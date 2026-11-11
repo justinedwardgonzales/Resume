@@ -478,9 +478,11 @@ function spotifyRender() {
     <button type="button" class="spotify-playlist-back" data-sp-back aria-label="Back to Home Screen">‹</button>
     ${spotifyArtwork(spotifyPlaylist.cover, "spotify-playlist-cover")}
     <h1>${spotifyEscape(spotifyPlaylist.title)}</h1>
-    <div class="spotify-playlist-owner"><span class="spotify-ios-avatar">JG</span><strong>${spotifyEscape(spotifyPlaylist.creator)}</strong></div>
+    <div class="spotify-playlist-owner-actions">
+      <div class="spotify-playlist-owner"><span class="spotify-ios-avatar">JG</span><strong>${spotifyEscape(spotifyPlaylist.creator)}</strong></div>
+      <div class="spotify-playlist-actions"><button type="button" data-sp-shuffle aria-label="Shuffle playlist" aria-pressed="${spotifyShuffle}">⤨</button><button type="button" class="spotify-playlist-play" data-sp-playlist-play aria-label="Play playlist">▶</button><button type="button" data-sp-menu aria-label="Playlist options">•••</button></div>
+    </div>
     <p class="spotify-playlist-count">♫ ${tracks.length} ${tracks.length === 1 ? "song" : "songs"}</p>
-    <div class="spotify-playlist-actions"><button type="button" data-sp-shuffle aria-label="Shuffle playlist" aria-pressed="${spotifyShuffle}">⤨</button><button type="button" class="spotify-playlist-play" data-sp-playlist-play aria-label="Play playlist">▶</button><button type="button" data-sp-menu aria-label="Playlist options">•••</button></div>
   </div>
   <div class="spotify-track-list">${tracks.length ? tracks.map((track,i) => `<button class="spotify-track" type="button" data-sp-track="${i}">${spotifyArtwork(track.artwork,"spotify-track-cover")}<span class="spotify-track-copy"><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span><span class="spotify-track-equaliser" aria-hidden="true"><i></i><i></i><i></i></span><span class="spotify-track-more">•••</span></button>`).join("") : '<div class="spotify-playlist-empty"><strong>Your playlist goes here</strong><p>Share your playlist link to add its real songs and artwork.</p></div>'}</div>`;
   spotifyRenderPlayer();
