@@ -383,13 +383,8 @@ const spotifyPlaylist = {
     {"title":"ten","artist":"Fred again..","artwork":"","audio":""},
     {"title":"All Your Love","artist":"Jai Wolf","artwork":"","audio":""},
     {"title":"Still Here","artist":"Skrillex & Porter Robinson","artwork":"","audio":""},
-    {"title":"Right Here","artist":"Snakehips & keshi","artwork":"","audio":""},
-    {"title":"In Another Life","artist":"Son Lux","artwork":"","audio":""},
-    {"title":"Steps Beach","artist":"Childish Gambino","artwork":"","audio":""},
-    {"title":"Teenage Blue","artist":"Dreamgirl","artwork":"","audio":""},
     {"title":"One Shot","artist":"Jim-E Stack & bearface","artwork":"","audio":""},
     {"title":"Sweet Summer Sweat","artist":"Jim-E Stack","artwork":"","audio":""},
-    {"title":"So Tender","artist":"Say Sue Me","artwork":"","audio":""},
     {"title":"Clementine","artist":"Wet","artwork":"","audio":""},
     {"title":"Slide","artist":"Calvin Harris & Frank Ocean","artwork":"","audio":""}
   ] // Add authorised audio and album art as available.
