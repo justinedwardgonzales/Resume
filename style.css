@@ -1731,3 +1731,31 @@ body {
 .contacts-ios .contacts-field small{display:block;color:#777;font-size:11px;line-height:1.2}
 .contacts-ios .contacts-field a,.contacts-ios .contacts-field span{display:block;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
 .contacts-ios .contacts-save button{display:block;border:0;border-radius:0;background:none;color:#007aff;padding:13px 0;font-size:14px}
+
+/* Contacts typography system: consistent iOS sizing, weight and rhythm */
+.contacts-ios{
+  --contacts-blue:#007aff;
+  --contacts-primary:#1c1c1e;
+  --contacts-secondary:#6e6e73;
+  --contacts-body:14px;
+  --contacts-label:12px;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
+  font-size:var(--contacts-body);
+  font-weight:400;
+  line-height:1.4;
+  letter-spacing:0;
+  -webkit-font-smoothing:antialiased;
+  color:var(--contacts-primary);
+}
+.contacts-ios *, .contacts-ios *::before, .contacts-ios *::after{box-sizing:border-box}
+.contacts-ios .contacts-top strong{font-size:16px;line-height:20px;font-weight:600;letter-spacing:-.2px}
+.contacts-ios .contacts-top button{font-family:inherit;font-size:15px;line-height:20px;font-weight:400}
+.contacts-ios .contacts-identity h1{font-size:25px;line-height:30px;font-weight:700;letter-spacing:-.55px;margin:12px 0 0}
+.contacts-ios .contacts-action{font-family:inherit;font-size:12px;line-height:16px;font-weight:500;letter-spacing:0}
+.contacts-ios .contacts-action-icon{font-size:23px;line-height:25px;font-weight:400}
+.contacts-ios .contacts-field{gap:4px;padding:12px 0}
+.contacts-ios .contacts-field small{font-family:inherit;font-size:var(--contacts-label);line-height:16px;font-weight:400;color:var(--contacts-secondary)}
+.contacts-ios .contacts-field a,.contacts-ios .contacts-field span{font-family:inherit;font-size:var(--contacts-body);line-height:20px;font-weight:400;letter-spacing:0}
+.contacts-ios .contacts-field a,.contacts-ios .contacts-save button{color:var(--contacts-blue)}
+.contacts-ios .contacts-save button{font-family:inherit;font-size:var(--contacts-body);line-height:20px;font-weight:400;padding:13px 0}
+.contacts-ios a,.contacts-ios button{-webkit-tap-highlight-color:transparent}
