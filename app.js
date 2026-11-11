@@ -395,6 +395,39 @@ const spotifyPersistentAudio = document.createElement("audio");
 spotifyPersistentAudio.id = "spotifyAudio";
 spotifyPersistentAudio.preload = "metadata";
 document.body.appendChild(spotifyPersistentAudio);
+// Match each song to its official release artwork from Apple's music catalogue.
+// Artwork is displayed directly from the catalogue; no images are rehosted.
+let spotifyArtworkLookupStarted = false;
+async function spotifyLoadArtwork() {
+  if (spotifyArtworkLookupStarted) return;
+  spotifyArtworkLookupStarted = true;
+  const queries = [
+    "ten Fred again Jozzy",
+    "All Your Love Jai Wolf",
+    "Still Here Skrillex Porter Robinson",
+    "One Shot Jim E Stack bearface",
+    "Sweet Summer Sweat Jim E Stack Dijon",
+    "Clementine Wet",
+    "Slide Calvin Harris Frank Ocean Migos"
+  ];
+  const clean = value => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  await Promise.all(spotifyPlaylist.tracks.map(async (track, index) => {
+    try {
+      const endpoint = "https://itunes.apple.com/search?term=" + encodeURIComponent(queries[index]) + "&entity=song&limit=30";
+      const response = await fetch(endpoint);
+      if (!response.ok) return;
+      const data = await response.json();
+      const matches = (data.results || []).filter(item => clean(item.trackName) === clean(track.title) || clean(item.trackName).startsWith(clean(track.title) + "feat"));
+      const artistTokens = track.artist.toLowerCase().split(/\s*(?:&|,)\s*/).filter(Boolean);
+      const match = matches.find(item => artistTokens.some(token => item.artistName.toLowerCase().includes(token.trim()))) || matches[0];
+      if (!match || !match.artworkUrl100) return;
+      track.artwork = match.artworkUrl100.replace(/100x100bb/, "600x600bb");
+      if (document.querySelector(".spotify-ios")) spotifyRender();
+    } catch (error) {
+      // Keep the placeholder when artwork isn't available.
+    }
+  }));
+}
 function spotifyEscape(value) {
   return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
 }
@@ -456,6 +489,7 @@ function spotifyToggle() {
 }
 function initSpotify() {
   spotifyRender();
+  spotifyLoadArtwork();
   const shell = document.querySelector(".spotify-ios");
   shell.addEventListener("click", event => {
     const el = event.target.closest("[data-sp-track],[data-sp-toggle],[data-sp-expand],[data-sp-collapse],[data-sp-next],[data-sp-previous],[data-sp-back]");
