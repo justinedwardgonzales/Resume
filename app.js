@@ -26,22 +26,16 @@ const profile = {
 const pages = {
   notes: {
     title: "Notes",
-    html: `<div class="notes-toolbar"><span>Folders</span><strong>All Notes</strong><span>•••</span></div>
-      <h1 class="notes-heading">Your professional story.</h1>
-      <p class="notes-intro">A collection of notes on experience, strengths and the way you approach media planning.</p>
-      <div class="notes-search">⌕ <span>Search Notes</span></div>
-      <div class="section-label">Pinned</div>
-      <div class="note-list">
-        <article class="note-paper"><div class="note-date">PROFILE · PINNED</div><h3>About me</h3><p>A short introduction to your background, point of view and what makes your approach to media planning distinct. Replace this prompt with your own story.</p></article>
-        <article class="note-paper"><div class="note-date">CAREER · PINNED</div><h3>Professional experience</h3><p><b>Senior Media Planner · Publicis</b><br>Add your actual dates, client categories, responsibilities and the work you personally led or contributed to.</p></article>
-      </div>
-      <div class="section-label">Career notes</div>
-      <div class="note-list">
-        <article class="note-paper"><div class="note-date">SKILLS</div><h3>What I bring to the table</h3><p>Media strategy · Audience insights · Integrated planning · Campaign management · Measurement and optimization</p><p class="note-hint">Edit this list to include only your verified strengths and platforms.</p></article>
-        <article class="note-paper"><div class="note-date">ACHIEVEMENTS</div><h3>Highlights & wins</h3><p>Add measurable outcomes, recognition, successful launches, process improvements and examples of client or team impact.</p></article>
-        <article class="note-paper"><div class="note-date">MY APPROACH</div><h3>How I think about media</h3><p>Describe how you connect audience understanding, business objectives, channel choices and performance learning.</p></article>
-      </div>
-      <div class="notes-footer">Updated just now</div>`
+    html: `<div class="ios-notes">
+      <section class="ios-notes-list-view" id="notesListView">
+        <header class="ios-notes-top"><button id="notesFolders" type="button">‹ Folders</button><button id="notesMore" type="button" aria-label="More options">•••</button></header>
+        <div class="ios-notes-scroll"><h1 id="notesListTitle">Notes</h1><label class="ios-notes-search"><span>⌕</span><input type="search" id="notesSearchInput" placeholder="Search" aria-label="Search notes"></label>
+        <div id="notesList" class="ios-notes-list"></div><div class="ios-notes-no-results hidden" id="notesNoResults">No Notes</div></div>
+        <footer class="ios-notes-bottom"><span id="notesCount">0 Notes</span><button id="notesCompose" type="button" aria-label="New note">▢✎</button></footer>
+      </section>
+      <section class="ios-notes-folders-view hidden" id="notesFoldersView"><header class="ios-notes-top"><button id="notesFoldersBack" type="button">‹ Notes</button><span></span></header><div class="ios-notes-scroll"><h1>Folders</h1><div class="ios-notes-folder-card"><button id="notesAllFolder" type="button"><span>📁</span><strong>All Notes</strong><span id="notesFolderCount"></span><span>›</span></button><button id="notesPersonalFolder" type="button"><span>📁</span><strong>Personal</strong><span>›</span></button></div></div><footer class="ios-notes-bottom"><span>On My iPhone</span><button id="notesFolderCompose" type="button">▢✎</button></footer></section>
+      <section class="ios-notes-editor-view hidden" id="notesEditorView"><header class="ios-notes-editor-top"><button id="notesEditorBack" type="button">‹ Notes</button><div><button id="notesShare" type="button" aria-label="Share note">↥</button><button id="notesDelete" type="button" aria-label="Delete note">♧</button><button id="notesDone" type="button">Done</button></div></header><div class="ios-notes-editor-scroll"><div class="ios-notes-timestamp" id="notesTimestamp"></div><input id="notesTitleInput" class="ios-notes-title-input" placeholder="Title" aria-label="Note title"><textarea id="notesBodyInput" class="ios-notes-body-input" placeholder="Start writing…" aria-label="Note body"></textarea></div><footer class="ios-notes-editor-bottom"><span>On My iPhone</span><button id="notesNewFromEditor" type="button">▢✎</button></footer></section>
+    </div>`
   },
   photos: {
     title: "Photos",
@@ -707,6 +701,58 @@ function initSpotify() {
     } catch(error) {}
   }
 })();
+function initNotes() {
+  const $ = id => document.getElementById(id);
+  const storageKey = "justin-ios-notes-v1";
+  const seeds = [
+    {id:"about",title:"About Me",body:"I'm Justin Gonzales, a Toronto-based media strategist with experience leading national media planning, building partnerships and bringing ambitious ideas to life. I enjoy connecting audience insights, creativity and commercial thinking.",pinned:true},
+    {id:"highlights",title:"Career Highlights",body:"• Led end-to-end FY26 and FY27 national media planning across my current brand portfolio.\n• Managed approximately $30M in annual media investment.\n• Mentored four junior colleagues.\n• Selected for Publicis Media Canada's inaugural AI training cohort.",pinned:true},
+    {id:"campaigns",title:"Projects & Campaigns",body:"Molson × The Amazing Race Canada — led partnership pitching and execution.\n\nMiller Lite × Blue Jays Territory — led podcast partnership pitching and execution.\n\nCoors Light Home DeCoors — collaborated with the Group Account Director and Media Director on the integrated campaign."},
+    {id:"ai",title:"Ideas & Innovation",body:"Built a custom Microsoft Copilot agent to organize client and planning information, check presentations, challenge media plans and assist with day-to-day work. I've also shown colleagues how to create agents of their own."},
+    {id:"outside",title:"Beyond Work",body:"A space for the interests, places, music and experiences that inspire me.\n\nTap Done to save edits to this note."}
+  ];
+  let notes;
+  try { const stored=JSON.parse(localStorage.getItem(storageKey));notes=Array.isArray(stored)?stored:seeds.map(n=>({...n})); } catch(e) {notes=seeds.map(n=>({...n}));}
+  let current=null, filter="all";
+  const save=()=>{try{localStorage.setItem(storageKey,JSON.stringify(notes));}catch(e){}};
+  const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const show=id=>["notesListView","notesFoldersView","notesEditorView"].forEach(n=>$(n).classList.toggle("hidden",n!==id));
+  function render(){
+    const q=$("notesSearchInput").value.toLowerCase().trim();
+    const matches=notes.filter(n=>(filter!=="personal"||n.id==="outside"||n.personal)&&((n.title+" "+n.body).toLowerCase().includes(q))).sort((a,b)=>Number(!!b.pinned)-Number(!!a.pinned));
+    $("notesListTitle").textContent=filter==="personal"?"Personal":"Notes";
+    $("notesList").innerHTML=matches.map(n=>`<button class="ios-notes-item" type="button" data-note-id="${escapeHTML(n.id)}"><strong>${escapeHTML(n.title||"New Note")}${n.pinned?' <span class="ios-notes-pin">◆</span>':''}</strong><span><small>${n.updated?"Edited": "Note"}</small> ${escapeHTML(n.body.replace(/\\s+/g," ").slice(0,95)||"No additional text")}</span></button>`).join("");
+    $("notesNoResults").classList.toggle("hidden",matches.length!==0);
+    $("notesCount").textContent=matches.length+" "+(matches.length===1?"Note":"Notes");
+    $("notesFolderCount").textContent=notes.length;
+    $("notesList").querySelectorAll("[data-note-id]").forEach(btn=>btn.addEventListener("click",()=>openNote(btn.dataset.noteId)));
+  }
+  function list(){current=null;show("notesListView");render();}
+  function openNote(id){
+    current=notes.find(n=>n.id===id);if(!current)return;
+    $("notesTitleInput").value=current.title;$("notesBodyInput").value=current.body;
+    $("notesTimestamp").textContent="On My iPhone · "+(current.updated?"Edited recently":"Saved note");
+    show("notesEditorView");
+  }
+  function commit(){if(!current)return;current.title=$("notesTitleInput").value;current.body=$("notesBodyInput").value;current.updated=true;save();}
+  function newNote(){commit();const n={id:"note-"+Date.now(),title:"",body:"",personal:filter==="personal"};notes.unshift(n);save();openNote(n.id);$("notesTitleInput").focus();}
+  $("notesFolders").addEventListener("click",()=>show("notesFoldersView"));
+  $("notesFoldersBack").addEventListener("click",list);
+  $("notesAllFolder").addEventListener("click",()=>{filter="all";list();});
+  $("notesPersonalFolder").addEventListener("click",()=>{filter="personal";list();});
+  $("notesCompose").addEventListener("click",newNote);
+  $("notesFolderCompose").addEventListener("click",newNote);
+  $("notesNewFromEditor").addEventListener("click",newNote);
+  $("notesEditorBack").addEventListener("click",()=>{commit();list();});
+  $("notesDone").addEventListener("click",()=>{commit();list();});
+  $("notesTitleInput").addEventListener("input",commit);
+  $("notesBodyInput").addEventListener("input",commit);
+  $("notesDelete").addEventListener("click",()=>{if(!current)return;if(confirm("Delete this note?")){notes=notes.filter(n=>n.id!==current.id);save();list();}});
+  $("notesShare").addEventListener("click",async()=>{commit();const content=(current.title?current.title+"\\n\\n":"")+current.body;if(navigator.share){try{await navigator.share({text:content});}catch(e){}}else if(navigator.clipboard){try{await navigator.clipboard.writeText(content);}catch(e){}}});
+  $("notesSearchInput").addEventListener("input",render);
+  $("notesMore").addEventListener("click",()=>{filter="all";$("notesSearchInput").value="";render();});
+  render();
+}
 function initFiles() {
   const $ = id => document.getElementById(id);
   const browser = $("filesBrowser"), preview = $("filesPreview"), locations = $("filesLocations"), folder = $("filesFolder"), recents = $("filesRecents");
@@ -880,6 +926,7 @@ function openApp(key, sourceButton) {
   appScreen.classList.toggle("contacts-active", key === "contact");
   appScreen.classList.toggle("spotify-active", key === "spotify");
   appScreen.classList.toggle("files-active", key === "files");
+  appScreen.classList.toggle("notes-active", key === "notes");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -904,6 +951,7 @@ function openApp(key, sourceButton) {
   if (key === "contact") initContacts();
   if (key === "spotify") initSpotify();
   if (key === "files") initFiles();
+  if (key === "notes") initNotes();
   updateAssistiveTouch();
 }
 
