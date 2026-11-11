@@ -55,10 +55,11 @@ const pages = {
   },
   files: {
     title: "Files",
-    html: `<div class="files-location">Browse <span>•••</span></div><h1>Resume</h1><p>Your resume is ready to download.</p>
+    html: `<div class="files-location">Browse <span>•••</span></div><h1>Resume</h1><p>Your updated resume is ready to view or download.</p>
       <div class="ios-card file-list">
-        <a class="file-row resume-download" href="resume.pdf" download><span class="file-symbol pdf-symbol">PDF</span><span><b>Resume.pdf</b><small>PDF document</small></span><span class="arrow">↓</span></a>
-      </div>`
+        <a class="file-row resume-download" href="Justin_Gonzales_Resume.pdf" target="_blank" rel="noopener"><span class="file-symbol pdf-symbol">PDF</span><span><b>Justin_Gonzales_Resume.pdf</b><small>PDF document · Tap to preview</small></span><span class="arrow">›</span></a>
+      </div>
+      <a class="files-resume-download" href="Justin_Gonzales_Resume.pdf" download="Justin_Gonzales_Resume.pdf">↓ Download resume</a>`
   },
   safari: {
     title: "Safari",
@@ -121,7 +122,7 @@ const pages = {
   },
   resume: {
     title: "Resume",
-    html: `<h1>Resume</h1><p>Your PDF resume is in Files.</p><a href="resume.pdf" download>Download resume.pdf</a>`
+    html: `<h1>Resume</h1><p>Your PDF resume is in Files.</p><a href="Justin_Gonzales_Resume.pdf" download>Download resume.pdf</a>`
   },
   contact: {
     title: "Contacts",
