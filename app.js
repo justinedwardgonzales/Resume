@@ -55,11 +55,41 @@ const pages = {
   },
   files: {
     title: "Files",
-    html: `<div class="files-location">Browse <span>•••</span></div><h1>Resume</h1><p>Your updated resume is ready to view or download.</p>
-      <div class="ios-card file-list">
-        <a class="file-row resume-download" href="Justin_Gonzales_Resume.pdf" target="_blank" rel="noopener"><span class="file-symbol pdf-symbol">PDF</span><span><b>Justin_Gonzales_Resume.pdf</b><small>PDF document · Tap to preview</small></span><span class="arrow">›</span></a>
+    html: `<div class="ios-files-shell">
+      <div class="ios-files-browser" id="filesBrowser">
+        <div class="ios-files-nav"><button type="button" id="filesHome" aria-label="Back to Home Screen">‹ Home</button><button type="button" id="filesOptions" aria-label="More options">•••</button></div>
+        <div class="ios-files-body">
+          <h1 id="filesHeading">Browse</h1>
+          <label class="ios-files-search"><span aria-hidden="true">⌕</span><input id="filesSearch" type="search" placeholder="Search" aria-label="Search files"></label>
+          <div id="filesLocations" class="ios-files-locations">
+            <div class="ios-files-section-title">Locations</div>
+            <button class="ios-files-location-row" id="filesOnPhone" type="button"><span class="ios-files-folder-icon">▰</span><strong>On My iPhone</strong><span class="ios-files-chevron">›</span></button>
+            <div class="ios-files-section-title">Favourites</div>
+            <button class="ios-files-location-row" id="filesResumeFolder" type="button"><span class="ios-files-fav-icon">★</span><strong>Resumes</strong><span class="ios-files-chevron">›</span></button>
+          </div>
+          <div id="filesFolder" class="ios-files-folder hidden">
+            <div class="ios-files-folder-heading"><button id="filesFolderBack" type="button">‹ Browse</button><span id="filesFolderPath">On My iPhone</span></div>
+            <h2 id="filesFolderTitle">Resumes</h2>
+            <div class="ios-files-file-list" id="filesList">
+              <button type="button" class="ios-files-document" id="filesOpenResume">
+                <span class="ios-files-pdf-icon"><span>PDF</span><i></i><i></i><i></i></span>
+                <span class="ios-files-file-details"><strong>Justin_Gonzales_Resume</strong><small>PDF Document</small></span>
+                <span class="ios-files-file-more" aria-hidden="true">›</span>
+              </button>
+            </div>
+            <div class="ios-files-empty hidden" id="filesNoResults">No Results</div>
+          </div>
+          <div id="filesRecents" class="ios-files-recents hidden"><div class="ios-files-section-title">Recently Opened</div><button class="ios-files-document" type="button" id="filesRecentResume"><span class="ios-files-pdf-icon"><span>PDF</span><i></i><i></i><i></i></span><span class="ios-files-file-details"><strong>Justin_Gonzales_Resume</strong><small>PDF Document · On My iPhone</small></span><span class="ios-files-file-more">›</span></button></div>
+        </div>
+        <nav class="ios-files-tabbar" aria-label="Files navigation"><button type="button" id="filesTabRecents"><span class="ios-files-tab-symbol">◷</span>Recents</button><button type="button" id="filesTabBrowse" class="selected"><span class="ios-files-tab-symbol">▰</span>Browse</button></nav>
       </div>
-      <a class="files-resume-download" href="Justin_Gonzales_Resume.pdf" download="Justin_Gonzales_Resume.pdf">↓ Download resume</a>`
+      <div class="ios-files-preview hidden" id="filesPreview">
+        <div class="ios-files-preview-nav"><button type="button" id="filesPreviewBack">‹ Resumes</button><strong>Preview</strong><button type="button" id="filesPreviewMore" aria-label="Download PDF">•••</button></div>
+        <div class="ios-files-preview-title">Justin_Gonzales_Resume.pdf</div>
+        <div class="ios-files-preview-document"><iframe id="filesPdfFrame" title="Justin Gonzales resume PDF preview" loading="lazy"></iframe><div class="ios-files-preview-fallback"><a href="Justin_Gonzales_Resume.pdf" target="_blank" rel="noopener">Open PDF in browser ↗</a></div></div>
+        <div class="ios-files-preview-toolbar"><button type="button" id="filesShare" aria-label="Share resume">↥ <span>Share</span></button><a href="Justin_Gonzales_Resume.pdf" download="Justin_Gonzales_Resume.pdf">↓ <span>Download</span></a><a href="Justin_Gonzales_Resume.pdf" target="_blank" rel="noopener">↗ <span>Open</span></a></div>
+      </div>
+    </div>`
   },
   safari: {
     title: "Safari",
@@ -677,6 +707,57 @@ function initSpotify() {
     } catch(error) {}
   }
 })();
+function initFiles() {
+  const $ = id => document.getElementById(id);
+  const browser = $("filesBrowser"), preview = $("filesPreview"), locations = $("filesLocations"), folder = $("filesFolder"), recents = $("filesRecents");
+  const search = $("filesSearch");
+  let tab = "browse";
+  function showTab(next) {
+    tab = next; browser.classList.remove("hidden"); preview.classList.add("hidden");
+    $("filesTabBrowse").classList.toggle("selected", next === "browse");
+    $("filesTabRecents").classList.toggle("selected", next === "recents");
+    $("filesHeading").textContent = next === "browse" ? "Browse" : "Recents";
+    recents.classList.toggle("hidden", next !== "recents");
+    locations.classList.toggle("hidden", next !== "browse");
+    folder.classList.add("hidden");
+    search.value = "";
+  }
+  function openFolder(name) {
+    locations.classList.add("hidden"); folder.classList.remove("hidden");
+    $("filesFolderTitle").textContent = name;
+    $("filesFolderPath").textContent = "On My iPhone";
+    $("filesHeading").textContent = name;
+    search.value = ""; $("filesList").classList.remove("hidden"); $("filesNoResults").classList.add("hidden");
+  }
+  function openPreview() {
+    browser.classList.add("hidden"); preview.classList.remove("hidden");
+    if (!$("filesPdfFrame").src) $("filesPdfFrame").src = "Justin_Gonzales_Resume.pdf#toolbar=0&navpanes=0";
+  }
+  $("filesHome").addEventListener("click", goHome);
+  $("filesOptions").addEventListener("click", () => openFolder("Resumes"));
+  $("filesOnPhone").addEventListener("click", () => openFolder("On My iPhone"));
+  $("filesResumeFolder").addEventListener("click", () => openFolder("Resumes"));
+  $("filesFolderBack").addEventListener("click", () => showTab("browse"));
+  $("filesTabBrowse").addEventListener("click", () => showTab("browse"));
+  $("filesTabRecents").addEventListener("click", () => showTab("recents"));
+  $("filesOpenResume").addEventListener("click", openPreview);
+  $("filesRecentResume").addEventListener("click", openPreview);
+  $("filesPreviewBack").addEventListener("click", () => {preview.classList.add("hidden");browser.classList.remove("hidden");if(tab === "browse") openFolder("Resumes");});
+  $("filesPreviewMore").addEventListener("click", () => { const a=document.createElement("a");a.href="Justin_Gonzales_Resume.pdf";a.download="Justin_Gonzales_Resume.pdf";a.click(); });
+  $("filesShare").addEventListener("click", async () => {
+    const url = new URL("Justin_Gonzales_Resume.pdf", window.location.href).href;
+    if (navigator.share) { try { await navigator.share({title:"Justin Gonzales — Resume",url}); } catch(e) {} }
+    else if (navigator.clipboard) { try { await navigator.clipboard.writeText(url); $("filesShare").querySelector("span").textContent="Copied!"; } catch(e) { window.open(url,"_blank","noopener"); } }
+    else window.open(url,"_blank","noopener");
+  });
+  search.addEventListener("input", () => {
+    const q=search.value.trim().toLowerCase();
+    if (tab === "browse" && q && folder.classList.contains("hidden")) openFolder("Search Results");
+    const matches = "justin_gonzales_resume.pdf".includes(q) || "resume".includes(q);
+    $("filesList").classList.toggle("hidden",!matches);
+    $("filesNoResults").classList.toggle("hidden",matches);
+  });
+}
 function initContacts() {
   document.getElementById("contactsBack")?.addEventListener("click", goHome);
   const button = document.getElementById("contactsSave");
@@ -798,6 +879,7 @@ function openApp(key, sourceButton) {
   appScreen.classList.toggle("linkedin-active", key === "linkedin");
   appScreen.classList.toggle("contacts-active", key === "contact");
   appScreen.classList.toggle("spotify-active", key === "spotify");
+  appScreen.classList.toggle("files-active", key === "files");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -821,6 +903,7 @@ function openApp(key, sourceButton) {
   if (key === "linkedin") initLinkedIn();
   if (key === "contact") initContacts();
   if (key === "spotify") initSpotify();
+  if (key === "files") initFiles();
   updateAssistiveTouch();
 }
 
