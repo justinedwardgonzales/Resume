@@ -1972,3 +1972,37 @@ body {
   .spotify-ios .spotify-full-controls{margin-top:10px}
   .spotify-ios .spotify-full-controls .spotify-full-play{width:48px;height:48px;min-height:48px}
 }
+
+/* Now Playing vertical balance: fill tall phone screens without crowding short ones */
+.spotify-ios .spotify-now-playing{
+  padding-bottom:clamp(24px,5vh,55px);
+}
+.spotify-ios .spotify-full-top{
+  margin-bottom:clamp(14px,3vh,26px);
+}
+.spotify-ios .spotify-full-art{
+  width:min(100%,340px,43vh);
+  max-height:43vh;
+}
+.spotify-ios .spotify-full-track{
+  margin-top:clamp(20px,4vh,38px);
+}
+.spotify-ios .spotify-now-playing input[type=range]{
+  margin-top:clamp(22px,4vh,38px);
+}
+.spotify-ios .spotify-full-controls{
+  margin-top:clamp(25px,5vh,48px);
+  margin-bottom:auto;
+}
+@media(min-height:760px){
+  .spotify-ios .spotify-full-controls{
+    margin-top:clamp(30px,6vh,60px);
+  }
+}
+@media(max-height:650px){
+  .spotify-ios .spotify-now-playing{padding-bottom:14px}
+  .spotify-ios .spotify-full-art{width:min(100%,230px,32vh);max-height:32vh}
+  .spotify-ios .spotify-full-track{margin-top:12px}
+  .spotify-ios .spotify-now-playing input[type=range]{margin-top:12px}
+  .spotify-ios .spotify-full-controls{margin-top:10px}
+}
