@@ -731,7 +731,7 @@ function initFiles() {
   }
   function openPreview() {
     browser.classList.add("hidden"); preview.classList.remove("hidden");
-    if (!$("filesPdfFrame").src) $("filesPdfFrame").src = "Justin_Gonzales_Resume.pdf#toolbar=0&navpanes=0";
+    if (!$("filesPdfFrame").getAttribute("src")) $("filesPdfFrame").src = "Justin_Gonzales_Resume.pdf#toolbar=0&navpanes=0";
   }
   $("filesHome").addEventListener("click", goHome);
   $("filesOptions").addEventListener("click", () => openFolder("Resumes"));
@@ -752,7 +752,7 @@ function initFiles() {
   });
   search.addEventListener("input", () => {
     const q=search.value.trim().toLowerCase();
-    if (tab === "browse" && q && folder.classList.contains("hidden")) openFolder("Search Results");
+    if (tab === "browse" && q && folder.classList.contains("hidden")) { openFolder("Search Results"); search.value=q; }
     const matches = "justin_gonzales_resume.pdf".includes(q) || "resume".includes(q);
     $("filesList").classList.toggle("hidden",!matches);
     $("filesNoResults").classList.toggle("hidden",matches);
