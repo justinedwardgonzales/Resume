@@ -2167,3 +2167,16 @@ body {
 .ios-notes-title-input{font-size:24px;font-weight:700;border:0;outline:0;background:none;width:100%;color:#1c1c1e;margin-bottom:12px}
 .ios-notes-body-input{border:0;outline:0;background:none;resize:none;flex:1;min-height:220px;width:100%;font-size:16px;line-height:1.5;color:#1c1c1e}
 .ios-notes-editor-bottom{background:#f9f9fb}
+
+/* Notes: compact, date-grouped iOS list inspired by the reference */
+.ios-notes-list-view .ios-notes-scroll{padding-left:18px;padding-right:18px}
+.ios-notes-date-group{margin:0 0 28px}
+.ios-notes-date-group h2{font-size:21px;letter-spacing:-.55px;font-weight:750;line-height:1.2;margin:0 0 12px;color:#101013}
+.ios-notes-date-card{background:#fff;border-radius:15px;overflow:hidden}
+.ios-notes-date-card .ios-notes-item{padding:12px 15px 13px;min-height:65px}
+.ios-notes-date-card .ios-notes-item+.ios-notes-item{position:relative;border-top:0}
+.ios-notes-date-card .ios-notes-item+.ios-notes-item:before{content:"";position:absolute;top:0;left:15px;right:0;height:1px;background:#dedee1}
+.ios-notes-date-card .ios-notes-item strong{font-size:17px;font-weight:650;letter-spacing:-.2px}
+.ios-notes-date-card .ios-notes-item>span{font-size:15px;margin-top:2px;color:#89898f}
+.ios-notes-list-view .ios-notes-top button:last-child{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#eee8df;color:#c48b00;font-size:18px}
+.ios-notes-list-view .ios-notes-search{margin-bottom:24px}
