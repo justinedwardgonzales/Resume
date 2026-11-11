@@ -402,29 +402,54 @@ async function spotifyLoadArtwork() {
   if (spotifyArtworkLookupStarted) return;
   spotifyArtworkLookupStarted = true;
   const queries = [
-    "ten Fred again Jozzy",
-    "All Your Love Jai Wolf",
-    "Still Here Skrillex Porter Robinson",
-    "One Shot Jim E Stack bearface",
-    "Sweet Summer Sweat Jim E Stack Dijon",
-    "Clementine Wet",
-    "Slide Calvin Harris Frank Ocean Migos"
+    ["ten Fred again Jozzy", "ten Fred again"],
+    ["All Your Love Jai Wolf", "All Your Love"],
+    ["Still Here Skrillex Porter Robinson", "Still Here Skrillex"],
+    ["One Shot Jim-E Stack", "EPHEMERA Jim-E Stack"],
+    ["Sweet Summer Sweat Jim-E Stack", "EPHEMERA Jim-E Stack"],
+    ["Clementine Wet", "Clementine Wet band"],
+    ["Slide Calvin Harris Frank Ocean", "Slide Calvin Harris"]
   ];
   const clean = value => String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const findArtwork = async (term, track) => {
+    const endpoint = "https://itunes.apple.com/search?term=" + encodeURIComponent(term) + "&entity=song&limit=100";
+    const response = await fetch(endpoint);
+    if (!response.ok) return "";
+    const data = await response.json();
+    const results = data.results || [];
+    const title = clean(track.title);
+    const exact = results.filter(item => {
+      const name = clean(item.trackName);
+      return name === title || name.startsWith(title + "feat") || name.startsWith(title + "with");
+    });
+    const artist = clean(track.artist.split(",")[0]);
+    const match = exact.find(item => clean(item.artistName).includes(artist)) ||
+      exact[0] ||
+      (term.startsWith("EPHEMERA") ? results.find(item => clean(item.collectionName) === "ephemera" && clean(item.artistName).includes("jimestack")) : null);
+    return match?.artworkUrl100?.replace(/100x100bb/, "600x600bb") || "";
+  };
   await Promise.all(spotifyPlaylist.tracks.map(async (track, index) => {
-    try {
-      const endpoint = "https://itunes.apple.com/search?term=" + encodeURIComponent(queries[index]) + "&entity=song&limit=30";
-      const response = await fetch(endpoint);
-      if (!response.ok) return;
-      const data = await response.json();
-      const matches = (data.results || []).filter(item => clean(item.trackName) === clean(track.title) || clean(item.trackName).startsWith(clean(track.title) + "feat"));
-      const artistTokens = track.artist.toLowerCase().split(/\s*(?:&|,)\s*/).filter(Boolean);
-      const match = matches.find(item => artistTokens.some(token => item.artistName.toLowerCase().includes(token.trim()))) || matches[0];
-      if (!match || !match.artworkUrl100) return;
-      track.artwork = match.artworkUrl100.replace(/100x100bb/, "600x600bb");
-      if (document.querySelector(".spotify-ios")) spotifyRender();
-    } catch (error) {
-      // Keep the placeholder when artwork isn't available.
+    for (const term of queries[index]) {
+      try {
+        const artwork = await findArtwork(term, track);
+        if (!artwork) continue;
+        track.artwork = artwork;
+        const shell = document.querySelector(".spotify-ios");
+        if (shell) {
+          const view = document.getElementById("spotifyContent");
+          const scrollTop = view?.scrollTop || 0;
+          const expanded = document.getElementById("spotifyNowPlaying")?.classList.contains("open");
+          spotifyRender();
+          if (view) view.scrollTop = scrollTop;
+          if (expanded) {
+            document.getElementById("spotifyNowPlaying")?.classList.add("open");
+            document.getElementById("spotifyNowPlaying")?.setAttribute("aria-hidden", "false");
+          }
+        }
+        break;
+      } catch (error) {
+        // Try the next catalogue search; retain placeholder if unavailable.
+      }
     }
   }));
 }
