@@ -378,7 +378,7 @@ function initLinkedIn() {
 const spotifyPlaylist = {
   title: "My Playlist",
   creator: "Justin Gonzales",
-  cover: "",
+  cover: "assets/spotify-playlist-cover.jpg",
   tracks: [
     {"title":"ten","artist":"Fred again.., Jozzy","artwork":"","audio":"assets/music/Fred again.., Jozzy - ten.mp3"},
     {"title":"All Your Love","artist":"Jai Wolf","artwork":"","audio":"assets/music/Jai Wolf - All Your Love.mp3"},
