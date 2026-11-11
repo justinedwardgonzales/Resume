@@ -2066,3 +2066,7 @@ body {
   width:42px;height:42px;min-width:42px;min-height:42px;
 }
 .spotify-sunset-theme .spotify-playlist-count{margin:2px 0 8px}
+
+/* Files app resume download action */
+.files-resume-download{display:block;margin:16px 2px 0;padding:12px 14px;background:#f2f2f7;border-radius:12px;color:#007aff;font-size:14px;font-weight:600;text-align:center;text-decoration:none}
+.files-resume-download:active{background:#e5e5ea}
