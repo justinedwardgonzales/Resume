@@ -380,13 +380,13 @@ const spotifyPlaylist = {
   creator: "Justin Gonzales",
   cover: "",
   tracks: [
-    {"title":"ten","artist":"Fred again..","artwork":"","audio":"assets/music/Fred again.., Jozzy - ten.mp3"},
+    {"title":"ten","artist":"Fred again.., Jozzy","artwork":"","audio":"assets/music/Fred again.., Jozzy - ten.mp3"},
     {"title":"All Your Love","artist":"Jai Wolf","artwork":"","audio":"assets/music/Jai Wolf - All Your Love.mp3"},
-    {"title":"Still Here","artist":"Skrillex & Porter Robinson","artwork":"","audio":"assets/music/Skrillex, Porter Robinson, Bibi Bourelly - Still Here (with the ones that I came with).mp3"},
-    {"title":"One Shot","artist":"Jim-E Stack & bearface","artwork":"","audio":"assets/music/Jim-E Stack, Bearface - One Shot (feat. Bearface).mp3"},
-    {"title":"Sweet Summer Sweat","artist":"Jim-E Stack","artwork":"","audio":"assets/music/Jim-E Stack, Dijon - Sweet Summer Sweat.mp3"},
+    {"title":"Still Here","artist":"Skrillex, Porter Robinson, Bibi Bourelly","artwork":"","audio":"assets/music/Skrillex, Porter Robinson, Bibi Bourelly - Still Here (with the ones that I came with).mp3"},
+    {"title":"One Shot","artist":"Jim-E Stack, bearface","artwork":"","audio":"assets/music/Jim-E Stack, Bearface - One Shot (feat. Bearface).mp3"},
+    {"title":"Sweet Summer Sweat","artist":"Jim-E Stack, Dijon","artwork":"","audio":"assets/music/Jim-E Stack, Dijon - Sweet Summer Sweat.mp3"},
     {"title":"Clementine","artist":"Wet","artwork":"","audio":"assets/music/Wet - Clementine.mp3"},
-    {"title":"Slide","artist":"Calvin Harris & Frank Ocean","artwork":"","audio":"assets/music/Calvin Harris, Frank Ocean, Migos - Slide (feat. Frank Ocean & Migos).mp3"}
+    {"title":"Slide","artist":"Calvin Harris, Frank Ocean, Migos","artwork":"","audio":"assets/music/Calvin Harris, Frank Ocean, Migos - Slide (feat. Frank Ocean & Migos).mp3"}
   ] // Add authorised audio and album art as available.
 };
 let spotifyCurrentIndex = -1;
