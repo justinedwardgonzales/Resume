@@ -478,8 +478,6 @@ function spotifySelect(index) {
     audio.play().then(() => { spotifyIsPlaying = true; spotifyRenderPlayer(); }).catch(() => { spotifyIsPlaying = false; spotifyRenderPlayer(); });
   }
   spotifyRenderPlayer();
-  document.getElementById("spotifyNowPlaying").classList.add("open");
-  document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","false");
 }
 function spotifyToggle() {
   const audio = spotifyPersistentAudio;
