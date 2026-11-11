@@ -391,6 +391,13 @@ const spotifyPlaylist = {
 };
 let spotifyCurrentIndex = -1;
 let spotifyIsPlaying = false;
+let spotifyShuffle = false;
+let spotifyRepeat = "off";
+let spotifyHistory = [];
+let spotifyLastIndex = -1;
+let spotifySeekDragging = false;
+const spotifySavedSession = { index: -1, position: 0 };
+
 const spotifyPersistentAudio = document.createElement("audio");
 spotifyPersistentAudio.id = "spotifyAudio";
 spotifyPersistentAudio.preload = "metadata";
@@ -473,77 +480,199 @@ function spotifyRender() {
     <h1>${spotifyEscape(spotifyPlaylist.title)}</h1>
     <div class="spotify-playlist-owner"><span class="spotify-ios-avatar">JG</span><strong>${spotifyEscape(spotifyPlaylist.creator)}</strong></div>
     <p class="spotify-playlist-count">♫ ${tracks.length} ${tracks.length === 1 ? "song" : "songs"}</p>
+    <div class="spotify-playlist-actions"><button type="button" data-sp-shuffle aria-label="Shuffle playlist" aria-pressed="${spotifyShuffle}">⤨</button><button type="button" class="spotify-playlist-play" data-sp-playlist-play aria-label="Play playlist">▶</button><button type="button" data-sp-menu aria-label="Playlist options">•••</button></div>
   </div>
-  <div class="spotify-track-list">${tracks.length ? tracks.map((track,i) => `<button class="spotify-track" type="button" data-sp-track="${i}">${spotifyArtwork(track.artwork,"spotify-track-cover")}<span class="spotify-track-copy"><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span><span class="spotify-track-more">•••</span></button>`).join("") : '<div class="spotify-playlist-empty"><strong>Your playlist goes here</strong><p>Share your playlist link to add its real songs and artwork.</p></div>'}</div>`;
+  <div class="spotify-track-list">${tracks.length ? tracks.map((track,i) => `<button class="spotify-track" type="button" data-sp-track="${i}">${spotifyArtwork(track.artwork,"spotify-track-cover")}<span class="spotify-track-copy"><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span><span class="spotify-track-equaliser" aria-hidden="true"><i></i><i></i><i></i></span><span class="spotify-track-more">•••</span></button>`).join("") : '<div class="spotify-playlist-empty"><strong>Your playlist goes here</strong><p>Share your playlist link to add its real songs and artwork.</p></div>'}</div>`;
   spotifyRenderPlayer();
+  spotifyUpdatePlaylistState();
 }
 function spotifyRenderPlayer() {
   const track = spotifyPlaylist.tracks[spotifyCurrentIndex];
   const mini = document.getElementById("spotifyMiniHost");
   const full = document.getElementById("spotifyNowPlaying");
   if (!mini || !full) return;
-  mini.innerHTML = track ? `<div class="spotify-mini"><button type="button" class="spotify-mini-open" data-sp-expand>${spotifyArtwork(track.artwork,"spotify-mini-art")}<span><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span></button><button class="spotify-mini-play" type="button" data-sp-toggle aria-label="${spotifyIsPlaying ? "Pause" : "Play"}">${spotifyIsPlaying ? "❚❚" : "▶"}</button></div>` : "";
+  mini.innerHTML = track ? `<div class="spotify-mini"><button type="button" class="spotify-mini-open" data-sp-expand>${spotifyArtwork(track.artwork,"spotify-mini-art")}<span><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span></button><button class="spotify-mini-play" type="button" data-sp-toggle aria-label="${spotifyIsPlaying ? "Pause" : "Play"}">${spotifyIsPlaying ? "❚❚" : "▶"}</button><div class="spotify-mini-progress"><span id="spotifyMiniProgress"></span></div></div>` : "";
   full.innerHTML = track ? `<div class="spotify-full-top"><button type="button" data-sp-collapse aria-label="Close Now Playing">⌄</button><span>PLAYING FROM PLAYLIST<br><strong>${spotifyEscape(spotifyPlaylist.title)}</strong></span><span>•••</span></div>
     ${spotifyArtwork(track.artwork,"spotify-full-art")}
     <div class="spotify-full-track"><div><h2>${spotifyEscape(track.title)}</h2><p>${spotifyEscape(track.artist)}</p></div><span>♡</span></div>
     <input type="range" id="spotifySeek" min="0" max="100" value="0" aria-label="Seek track" />
     <div class="spotify-full-times"><span id="spotifyElapsed">0:00</span><span id="spotifyDuration">0:00</span></div>
-    <div class="spotify-full-controls"><button type="button" data-sp-previous aria-label="Previous track">|◀</button><button type="button" class="spotify-full-play" data-sp-toggle aria-label="${spotifyIsPlaying ? "Pause" : "Play"}">${spotifyIsPlaying ? "❚❚" : "▶"}</button><button type="button" data-sp-next aria-label="Next track">▶|</button></div>` : "";
+    <div class="spotify-full-controls"><button type="button" data-sp-shuffle aria-label="Shuffle" aria-pressed="${spotifyShuffle}" class="${spotifyShuffle ? "sp-active" : ""}">⤨</button><button type="button" data-sp-previous aria-label="Previous track">|◀</button><button type="button" class="spotify-full-play" data-sp-toggle aria-label="${spotifyIsPlaying ? "Pause" : "Play"}">${spotifyIsPlaying ? "❚❚" : "▶"}</button><button type="button" data-sp-next aria-label="Next track">▶|</button><button type="button" data-sp-repeat aria-label="Repeat" aria-pressed="${spotifyRepeat !== "off"}" class="${spotifyRepeat !== "off" ? "sp-active" : ""}">${spotifyRepeat === "one" ? "↻₁" : "↻"}</button></div>` : "";
 }
-function spotifySelect(index) {
+function spotifyUpdatePlaylistState() {
+  const shell = document.querySelector(".spotify-ios");
+  if (!shell) return;
+  shell.classList.toggle("spotify-is-playing", spotifyIsPlaying);
+  shell.querySelectorAll("[data-sp-track]").forEach(button => {
+    const active = Number(button.dataset.spTrack) === spotifyCurrentIndex;
+    button.classList.toggle("spotify-track-current", active);
+    button.setAttribute("aria-current", active ? "true" : "false");
+  });
+  shell.querySelectorAll("[data-sp-shuffle]").forEach(button => {
+    button.classList.toggle("sp-active", spotifyShuffle);
+    button.setAttribute("aria-pressed", String(spotifyShuffle));
+  });
+}
+function spotifyUpdateMediaSession() {
+  if (!("mediaSession" in navigator)) return;
+  const track = spotifyPlaylist.tracks[spotifyCurrentIndex];
+  if (!track) return;
+  try {
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: track.title, artist: track.artist, album: spotifyPlaylist.title,
+      artwork: track.artwork ? [{src: new URL(track.artwork, location.href).href, sizes: "512x512"}] : []
+    });
+    navigator.mediaSession.playbackState = spotifyIsPlaying ? "playing" : "paused";
+  } catch (error) {}
+}
+function spotifySyncProgress() {
+  const audio = spotifyPersistentAudio;
+  const percent = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.currentTime / audio.duration * 100 : 0;
+  const seek = document.getElementById("spotifySeek");
+  if (seek && !spotifySeekDragging) seek.value = String(percent);
+  const mini = document.getElementById("spotifyMiniProgress");
+  if (mini) mini.style.width = percent + "%";
+  const elapsed = document.getElementById("spotifyElapsed");
+  if (elapsed) elapsed.textContent = spotifyTime(audio.currentTime);
+  const duration = document.getElementById("spotifyDuration");
+  if (duration) duration.textContent = spotifyTime(audio.duration);
+  if (Number.isFinite(audio.currentTime)) spotifySavedSession.position = audio.currentTime;
+}
+function spotifySelect(index, options = {}) {
   const track = spotifyPlaylist.tracks[index];
   if (!track) return;
+  if (spotifyCurrentIndex !== -1 && spotifyCurrentIndex !== index && !options.fromHistory) spotifyHistory.push(spotifyCurrentIndex);
+  spotifyLastIndex = spotifyCurrentIndex;
   spotifyCurrentIndex = index;
   const audio = spotifyPersistentAudio;
   audio.pause();
   audio.removeAttribute("src");
   spotifyIsPlaying = false;
+  spotifySavedSession.index = index;
+  spotifySavedSession.position = 0;
   if (track.audio) {
     audio.src = track.audio;
-    audio.play().then(() => { spotifyIsPlaying = true; spotifyRenderPlayer(); }).catch(() => { spotifyIsPlaying = false; spotifyRenderPlayer(); });
+    audio.load();
+    if (options.position) audio.addEventListener("loadedmetadata", function restorePosition() {
+      audio.removeEventListener("loadedmetadata", restorePosition);
+      audio.currentTime = Math.min(options.position, Math.max(0, (audio.duration || 0) - 0.5));
+      spotifySyncProgress();
+    });
+    if (!options.paused) audio.play().catch(() => {});
   }
   spotifyRenderPlayer();
+  spotifyUpdatePlaylistState();
+  spotifyUpdateMediaSession();
 }
 function spotifyToggle() {
   const audio = spotifyPersistentAudio;
-  if (!audio.src) return;
-  if (audio.paused) audio.play().then(() => {spotifyIsPlaying=true;spotifyRenderPlayer();}).catch(() => {});
-  else {audio.pause();spotifyIsPlaying=false;spotifyRenderPlayer();}
+  if (!audio.getAttribute("src")) {
+    spotifySelect(spotifyCurrentIndex < 0 ? 0 : spotifyCurrentIndex);
+    return;
+  }
+  if (audio.paused) audio.play().catch(() => {});
+  else audio.pause();
+}
+function spotifyNext(manual = false) {
+  const n = spotifyPlaylist.tracks.length;
+  if (!n) return;
+  if (!manual && spotifyRepeat === "one") {
+    spotifyPersistentAudio.currentTime = 0;
+    spotifyPersistentAudio.play().catch(() => {});
+    return;
+  }
+  if (spotifyShuffle && n > 1) {
+    const choices = Array.from({length:n}, (_,i)=>i).filter(i=>i!==spotifyCurrentIndex);
+    spotifySelect(choices[Math.floor(Math.random()*choices.length)]);
+  } else if (spotifyCurrentIndex < n-1) spotifySelect(spotifyCurrentIndex+1);
+  else if (spotifyRepeat === "all") spotifySelect(0);
+  else if (!manual) { spotifyIsPlaying = false; spotifyRenderPlayer(); spotifyUpdatePlaylistState(); }
+  else spotifySelect(0);
+}
+function spotifyPrevious() {
+  if (spotifyPersistentAudio.currentTime > 3) { spotifyPersistentAudio.currentTime = 0; return; }
+  if (spotifyShuffle && spotifyHistory.length) spotifySelect(spotifyHistory.pop(), {fromHistory:true});
+  else spotifySelect((spotifyCurrentIndex - 1 + spotifyPlaylist.tracks.length) % spotifyPlaylist.tracks.length);
+}
+function spotifySetPlayingState(playing) {
+  spotifyIsPlaying = playing;
+  spotifyRenderPlayer();
+  spotifyUpdatePlaylistState();
+  spotifySyncProgress();
+  spotifyUpdateMediaSession();
 }
 function initSpotify() {
   spotifyRender();
   spotifyLoadArtwork();
   const shell = document.querySelector(".spotify-ios");
+  if (!shell) return;
+  shell.classList.add("spotify-sunset-theme");
+  spotifyUpdatePlaylistState();
+  spotifySyncProgress();
+  if (spotifyCurrentIndex < 0 && spotifySavedSession.index >= 0) spotifySelect(spotifySavedSession.index, {paused:true, position:spotifySavedSession.position});
   shell.addEventListener("click", event => {
-    const el = event.target.closest("[data-sp-track],[data-sp-toggle],[data-sp-expand],[data-sp-collapse],[data-sp-next],[data-sp-previous],[data-sp-back]");
+    const el = event.target.closest("[data-sp-track],[data-sp-toggle],[data-sp-expand],[data-sp-collapse],[data-sp-next],[data-sp-previous],[data-sp-back],[data-sp-shuffle],[data-sp-repeat],[data-sp-playlist-play],[data-sp-menu]");
     if (!el) return;
     if (el.hasAttribute("data-sp-track")) spotifySelect(Number(el.dataset.spTrack));
     else if (el.hasAttribute("data-sp-toggle")) spotifyToggle();
-    else if (el.hasAttribute("data-sp-expand")) {document.getElementById("spotifyNowPlaying").classList.add("open");document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","false");}
-    else if (el.hasAttribute("data-sp-collapse")) {document.getElementById("spotifyNowPlaying").classList.remove("open");document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","true");}
-    else if (el.hasAttribute("data-sp-next")) spotifySelect((spotifyCurrentIndex + 1) % spotifyPlaylist.tracks.length);
-    else if (el.hasAttribute("data-sp-previous")) spotifySelect((spotifyCurrentIndex - 1 + spotifyPlaylist.tracks.length) % spotifyPlaylist.tracks.length);
+    else if (el.hasAttribute("data-sp-expand")) { document.getElementById("spotifyNowPlaying").classList.add("open"); document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","false"); }
+    else if (el.hasAttribute("data-sp-collapse")) { document.getElementById("spotifyNowPlaying").classList.remove("open"); document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","true"); }
+    else if (el.hasAttribute("data-sp-next")) spotifyNext(true);
+    else if (el.hasAttribute("data-sp-previous")) spotifyPrevious();
+    else if (el.hasAttribute("data-sp-shuffle")) { spotifyShuffle = !spotifyShuffle; spotifyRenderPlayer(); spotifyUpdatePlaylistState(); }
+    else if (el.hasAttribute("data-sp-repeat")) { spotifyRepeat = spotifyRepeat === "off" ? "all" : spotifyRepeat === "all" ? "one" : "off"; spotifyRenderPlayer(); }
+    else if (el.hasAttribute("data-sp-playlist-play")) { if (spotifyCurrentIndex < 0) spotifySelect(spotifyShuffle ? Math.floor(Math.random()*spotifyPlaylist.tracks.length) : 0); else spotifyToggle(); }
+    else if (el.hasAttribute("data-sp-menu")) { const menu = document.getElementById("spotifyPlaylistMenu"); if (menu) menu.remove(); else { const menu = document.createElement("div"); menu.id = "spotifyPlaylistMenu"; menu.className="spotify-playlist-menu"; menu.textContent="🌇 · 7 songs · Justin Gonzales"; el.parentElement.appendChild(menu); } }
     else if (el.hasAttribute("data-sp-back")) goHome();
   });
   shell.addEventListener("input", event => {
-    if (event.target.id === "spotifySeek" && audio.duration) audio.currentTime = Number(event.target.value) / 100 * audio.duration;
+    if (event.target.id === "spotifySeek" && Number.isFinite(spotifyPersistentAudio.duration)) {
+      spotifySeekDragging = true;
+      spotifyPersistentAudio.currentTime = Number(event.target.value) / 100 * spotifyPersistentAudio.duration;
+      spotifySyncProgress();
+    }
   });
+  shell.addEventListener("change", event => { if (event.target.id === "spotifySeek") spotifySeekDragging = false; });
+  let touchStart = null;
+  shell.addEventListener("touchstart", event => {
+    if (event.touches.length !== 1) return;
+    const target = event.target;
+    if (target.closest("button,input")) return;
+    touchStart = {y:event.touches[0].clientY,x:event.touches[0].clientX, expanded: !!target.closest(".spotify-now-playing"), mini:!!target.closest(".spotify-mini")};
+  }, {passive:true});
+  shell.addEventListener("touchend", event => {
+    if (!touchStart || !event.changedTouches.length) return;
+    const dy = event.changedTouches[0].clientY - touchStart.y;
+    const dx = Math.abs(event.changedTouches[0].clientX - touchStart.x);
+    if (dx < 85 && touchStart.expanded && dy > 95) {
+      document.getElementById("spotifyNowPlaying").classList.remove("open");
+      document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","true");
+    } else if (dx < 85 && touchStart.mini && dy < -45) {
+      document.getElementById("spotifyNowPlaying").classList.add("open");
+      document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","false");
+    }
+    touchStart = null;
+  }, {passive:true});
 }
-// Persistent audio listeners survive navigation between apps.
+// Audio lives outside app screens, preserving playback across app switches.
 (function initialisePersistentSpotifyAudio() {
   const audio = spotifyPersistentAudio;
-  audio.addEventListener("timeupdate", () => {
-    const seek = document.getElementById("spotifySeek");
-    if (seek && audio.duration) seek.value = String(audio.currentTime / audio.duration * 100);
-    const elapsed = document.getElementById("spotifyElapsed");
-    if (elapsed) elapsed.textContent = spotifyTime(audio.currentTime);
-    const duration = document.getElementById("spotifyDuration");
-    if (duration) duration.textContent = spotifyTime(audio.duration);
-  });
-  audio.addEventListener("ended", () => {
-    if (spotifyCurrentIndex + 1 < spotifyPlaylist.tracks.length) spotifySelect(spotifyCurrentIndex + 1);
-    else {spotifyIsPlaying=false;spotifyRenderPlayer();}
-  });
+  audio.addEventListener("timeupdate", spotifySyncProgress);
+  audio.addEventListener("durationchange", spotifySyncProgress);
+  audio.addEventListener("play", () => spotifySetPlayingState(true));
+  audio.addEventListener("pause", () => spotifySetPlayingState(false));
+  audio.addEventListener("ended", () => spotifyNext());
+  if ("mediaSession" in navigator) {
+    try {
+      navigator.mediaSession.setActionHandler("play", () => audio.play().catch(() => {}));
+      navigator.mediaSession.setActionHandler("pause", () => audio.pause());
+      navigator.mediaSession.setActionHandler("previoustrack", spotifyPrevious);
+      navigator.mediaSession.setActionHandler("nexttrack", () => spotifyNext(true));
+      navigator.mediaSession.setActionHandler("seekto", details => { if (Number.isFinite(details.seekTime)) audio.currentTime = details.seekTime; });
+      navigator.mediaSession.setActionHandler("seekbackward", details => { audio.currentTime = Math.max(0,audio.currentTime-(details.seekOffset||10)); });
+      navigator.mediaSession.setActionHandler("seekforward", details => { audio.currentTime = Math.min(audio.duration||Infinity,audio.currentTime+(details.seekOffset||10)); });
+    } catch(error) {}
+  }
 })();
 function initContacts() {
   document.getElementById("contactsBack")?.addEventListener("click", goHome);
