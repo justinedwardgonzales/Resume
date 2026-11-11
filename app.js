@@ -376,7 +376,7 @@ function initLinkedIn() {
   });
 }
 const spotifyPlaylist = {
-  title: "My Playlist",
+  title: "🌇",
   creator: "Justin Gonzales",
   cover: "assets/spotify-playlist-cover.jpg",
   tracks: [
