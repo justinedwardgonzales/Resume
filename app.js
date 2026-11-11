@@ -85,7 +85,14 @@ const pages = {
   },
   spotify: {
     title: "Spotify",
-    html: `<div class="spotify-card"><div class="spotify-disc">≋</div><div class="spotify-eyebrow">A LITTLE PERSONALITY</div><h1>Soundtrack to the work.</h1><p>A playlist for focus, creative thinking and the in-between moments.</p><div class="spotify-link-placeholder">Add your Spotify playlist link to feature your soundtrack here.</div></div>`
+    html: `<div class="spotify-ios">
+      <div class="spotify-ios-content" id="spotifyContent"></div>
+      <nav class="spotify-ios-nav" aria-label="Spotify navigation">
+        <button type="button" data-sp-tab="home" class="active"><span class="spotify-nav-icon">⌂</span>Home</button>
+        <button type="button" data-sp-tab="search"><span class="spotify-nav-icon">⌕</span>Search</button>
+        <button type="button" data-sp-tab="library"><span class="spotify-nav-icon">▥</span>Your Library</button>
+      </nav>
+    </div>`
   },
   about: {
     title: "About",
@@ -363,6 +370,47 @@ function initLinkedIn() {
     else if (navigator.clipboard) navigator.clipboard.writeText(linkedInUrl).then(()=>alert("Profile link copied")).catch(()=>{});
   });
 }
+let spotifyActiveTab = "home";
+const spotifyOpen = "https://open.spotify.com/";
+function spotifyRender() {
+  const view = document.getElementById("spotifyContent");
+  if (!view) return;
+  document.querySelectorAll(".spotify-ios-nav [data-sp-tab]").forEach(button => {
+    const active = button.dataset.spTab === spotifyActiveTab;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-current", active ? "page" : "false");
+  });
+  if (spotifyActiveTab === "home") {
+    view.innerHTML = `<div class="spotify-ios-head"><span class="spotify-ios-avatar">JG</span><button class="spotify-filter active" type="button">All</button><button class="spotify-filter" type="button" data-sp-tab="library">Music</button></div>
+      <h1 class="spotify-ios-heading">Good to see you.</h1>
+      <div class="spotify-hero"><div class="spotify-hero-art"><span>♫</span></div><div class="spotify-hero-text"><small>YOUR SOUNDTRACK</small><h2>Music, made personal.</h2><p>Explore the music behind the person.</p><a href="${spotifyOpen}" target="_blank" rel="noopener noreferrer">Open Spotify ↗</a></div></div>
+      <h2 class="spotify-section-heading">Made for listening</h2>
+      <div class="spotify-feature-row"><button type="button" class="spotify-feature" data-sp-tab="search"><div class="spotify-feature-art spotify-feature-art-one">⌕</div><strong>Find a favourite</strong><small>Search for music</small></button><button type="button" class="spotify-feature" data-sp-tab="library"><div class="spotify-feature-art spotify-feature-art-two">▥</div><strong>Your Library</strong><small>Playlists and artists</small></button></div>
+      <p class="spotify-disclaimer">This is a Spotify-inspired portfolio app. Personal listening data isn't connected.</p>`;
+  } else if (spotifyActiveTab === "search") {
+    view.innerHTML = `<div class="spotify-search-screen"><h1>Search</h1><form id="spotifySearchForm" class="spotify-search-form"><span>⌕</span><input id="spotifySearchInput" placeholder="What do you want to listen to?" aria-label="Search Spotify" required autocomplete="off"><button type="submit">Go</button></form><h2>Browse all</h2><div class="spotify-browse-grid"><button data-sp-query="pop">Pop <span>♫</span></button><button data-sp-query="indie">Indie <span>✦</span></button><button data-sp-query="jazz">Jazz <span>♬</span></button><button data-sp-query="electronic">Electronic <span>◈</span></button></div><p class="spotify-disclaimer">Searches open results in Spotify.</p></div>`;
+  } else {
+    view.innerHTML = `<div class="spotify-library-screen"><div class="spotify-library-title"><span class="spotify-ios-avatar">JG</span><h1>Your Library</h1><span class="spotify-library-plus">＋</span></div><div class="spotify-library-filter">Playlists <span>Artists</span></div><div class="spotify-library-empty"><div class="spotify-library-empty-icon">♫</div><h2>Make it yours</h2><p>Add your favourite playlists and artists to feature them here.</p><a href="${spotifyOpen}" target="_blank" rel="noopener noreferrer">Explore Spotify ↗</a></div></div>`;
+  }
+  view.scrollTop = 0;
+}
+function initSpotify() {
+  spotifyActiveTab = "home";
+  spotifyRender();
+  const shell = document.querySelector(".spotify-ios");
+  shell.addEventListener("click", event => {
+    const tab = event.target.closest("[data-sp-tab]");
+    const genre = event.target.closest("[data-sp-query]");
+    if (tab) { spotifyActiveTab = tab.dataset.spTab; spotifyRender(); }
+    if (genre) window.open("https://open.spotify.com/search/" + encodeURIComponent(genre.dataset.spQuery), "_blank", "noopener,noreferrer");
+  });
+  shell.addEventListener("submit", event => {
+    if (event.target.id !== "spotifySearchForm") return;
+    event.preventDefault();
+    const query = document.getElementById("spotifySearchInput").value.trim();
+    if (query) window.open("https://open.spotify.com/search/" + encodeURIComponent(query), "_blank", "noopener,noreferrer");
+  });
+}
 function initContacts() {
   document.getElementById("contactsBack")?.addEventListener("click", goHome);
   const button = document.getElementById("contactsSave");
@@ -483,6 +531,7 @@ function openApp(key, sourceButton) {
   appScreen.classList.toggle("safari-active", key === "safari");
   appScreen.classList.toggle("linkedin-active", key === "linkedin");
   appScreen.classList.toggle("contacts-active", key === "contact");
+  appScreen.classList.toggle("spotify-active", key === "spotify");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -505,6 +554,7 @@ function openApp(key, sourceButton) {
   if (key === "safari") initSafari();
   if (key === "linkedin") initLinkedIn();
   if (key === "contact") initContacts();
+  if (key === "spotify") initSpotify();
   updateAssistiveTouch();
 }
 
