@@ -705,14 +705,27 @@ function initNotes() {
   const $ = id => document.getElementById(id);
   const storageKey = "justin-ios-notes-v1";
   const seeds = [
-    {id:"about",title:"About Me",body:"I'm Justin Gonzales, a Toronto-based media strategist with experience leading national media planning, building partnerships and bringing ambitious ideas to life. I enjoy connecting audience insights, creativity and commercial thinking.",pinned:true},
-    {id:"highlights",title:"Career Highlights",body:"• Led end-to-end FY26 and FY27 national media planning across my current brand portfolio.\n• Managed approximately $30M in annual media investment.\n• Mentored four junior colleagues.\n• Selected for Publicis Media Canada's inaugural AI training cohort.",pinned:true},
-    {id:"campaigns",title:"Projects & Campaigns",body:"Molson × The Amazing Race Canada — led partnership pitching and execution.\n\nMiller Lite × Blue Jays Territory — led podcast partnership pitching and execution.\n\nCoors Light Home DeCoors — collaborated with the Group Account Director and Media Director on the integrated campaign."},
-    {id:"ai",title:"Ideas & Innovation",body:"Built a custom Microsoft Copilot agent to organize client and planning information, check presentations, challenge media plans and assist with day-to-day work. I've also shown colleagues how to create agents of their own."},
-    {id:"outside",title:"Beyond Work",body:"A space for the interests, places, music and experiences that inspire me.\n\nTap Done to save edits to this note."}
+    {id:"travel",title:"Places to explore ✈️",body:"Japan is always worth thinking about.\n\nMore places to visit, neighbourhoods to wander and spots to photograph.\n\nAdd the destinations on your list here.",personal:true},
+    {id:"music",title:"On repeat 🎧",body:"A few tracks for a sunset kind of mood.\n\nCurrent playlist: 🌇\n\nOpen Spotify on the Home Screen to listen.\n\nAdd your latest discoveries here.",personal:true},
+    {id:"ideas",title:"Random ideas 💡",body:"The best ideas can come from anywhere — a song, a place, a conversation or something unexpected.\n\nA running list of things worth exploring.",personal:true},
+    {id:"learning",title:"Things I'm learning",body:"Experimenting with AI and ways to make everyday work more thoughtful and efficient.\n\nI built a Microsoft Copilot agent to help check presentations, revisit planning information and challenge ideas. I've also helped colleagues build their own.",personal:true},
+    {id:"campaign-notes",title:"Ideas worth pitching",body:"What makes a brand partnership feel like part of culture instead of just another ad?\n\nA couple of projects I've helped pitch and execute:\n• Molson × The Amazing Race Canada\n• Miller Lite × Blue Jays Territory\n\nAlways interested in unexpected connections between brands and audiences."},
+    {id:"little-things",title:"Little things to remember",body:"Good music. Interesting places. Creative people. Ideas that deserve a second look.\n\nA place to collect small moments and thoughts as they happen.",personal:true}
   ];
   let notes;
-  try { const stored=JSON.parse(localStorage.getItem(storageKey));notes=Array.isArray(stored)?stored:seeds.map(n=>({...n})); } catch(e) {notes=seeds.map(n=>({...n}));}
+  try {
+    const stored=JSON.parse(localStorage.getItem(storageKey));
+    notes=Array.isArray(stored)?stored:seeds.map(n=>({...n}));
+    const migrationKey="justin-ios-notes-mixed-v1";
+    if(!localStorage.getItem(migrationKey)){
+      const legacyIds=new Set(["about","highlights","campaigns","ai","outside"]);
+      notes=notes.filter(n=>!legacyIds.has(n.id)||n.updated||n.updatedAt);
+      const existingIds=new Set(notes.map(n=>n.id));
+      notes=[...seeds.filter(n=>!existingIds.has(n.id)).map(n=>({...n})),...notes];
+      localStorage.setItem(storageKey,JSON.stringify(notes));
+      localStorage.setItem(migrationKey,"1");
+    }
+  } catch(e) {notes=seeds.map(n=>({...n}));}
   let current=null, filter="all";
   const save=()=>{try{localStorage.setItem(storageKey,JSON.stringify(notes));}catch(e){}};
   const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
