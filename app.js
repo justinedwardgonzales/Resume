@@ -85,13 +85,18 @@ const pages = {
   },
   spotify: {
     title: "Spotify",
-    html: `<div class="spotify-ios">
+    html: `<div class="spotify-ios spotify-playlist-app">
       <div class="spotify-ios-content" id="spotifyContent"></div>
+      <div id="spotifyMiniHost"></div>
       <nav class="spotify-ios-nav" aria-label="Spotify navigation">
-        <button type="button" data-sp-tab="home" class="active"><span class="spotify-nav-icon">⌂</span>Home</button>
+        <button type="button" data-sp-tab="home"><span class="spotify-nav-icon">⌂</span>Home</button>
         <button type="button" data-sp-tab="search"><span class="spotify-nav-icon">⌕</span>Search</button>
-        <button type="button" data-sp-tab="library"><span class="spotify-nav-icon">▥</span>Your Library</button>
+        <button type="button" data-sp-tab="library" class="active"><span class="spotify-nav-icon">▥</span>Your Library</button>
+        <button type="button" data-sp-tab="premium"><span class="spotify-nav-icon">◉</span>Premium</button>
+        <button type="button" data-sp-tab="create"><span class="spotify-nav-icon">＋</span>Create</button>
       </nav>
+      <div id="spotifyNowPlaying" class="spotify-now-playing" aria-hidden="true"></div>
+      <audio id="spotifyAudio" preload="metadata"></audio>
     </div>`
   },
   about: {
@@ -370,45 +375,104 @@ function initLinkedIn() {
     else if (navigator.clipboard) navigator.clipboard.writeText(linkedInUrl).then(()=>alert("Profile link copied")).catch(()=>{});
   });
 }
-let spotifyActiveTab = "home";
-const spotifyOpen = "https://open.spotify.com/";
+const spotifyPlaylist = {
+  title: "My Playlist",
+  creator: "Justin Gonzales",
+  cover: "",
+  tracks: [] // Add tracks with title, artist, artwork and licensed audio URL.
+};
+let spotifyCurrentIndex = -1;
+let spotifyIsPlaying = false;
+function spotifyEscape(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+}
+function spotifyArtwork(url, className) {
+  return url ? '<img class="' + className + '" src="' + spotifyEscape(url) + '" alt="Album artwork">' : '<div class="' + className + ' spotify-art-placeholder">♫</div>';
+}
+function spotifyTime(seconds) {
+  if (!Number.isFinite(seconds)) return "0:00";
+  return Math.floor(seconds / 60) + ":" + String(Math.floor(seconds % 60)).padStart(2, "0");
+}
 function spotifyRender() {
   const view = document.getElementById("spotifyContent");
   if (!view) return;
-  document.querySelectorAll(".spotify-ios-nav [data-sp-tab]").forEach(button => {
-    const active = button.dataset.spTab === spotifyActiveTab;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-current", active ? "page" : "false");
-  });
-  if (spotifyActiveTab === "home") {
-    view.innerHTML = `<div class="spotify-ios-head"><span class="spotify-ios-avatar">JG</span><button class="spotify-filter active" type="button">All</button><button class="spotify-filter" type="button" data-sp-tab="library">Music</button></div>
-      <h1 class="spotify-ios-heading">Good to see you.</h1>
-      <div class="spotify-hero"><div class="spotify-hero-art"><span>♫</span></div><div class="spotify-hero-text"><small>YOUR SOUNDTRACK</small><h2>Music, made personal.</h2><p>Explore the music behind the person.</p><a href="${spotifyOpen}" target="_blank" rel="noopener noreferrer">Open Spotify ↗</a></div></div>
-      <h2 class="spotify-section-heading">Made for listening</h2>
-      <div class="spotify-feature-row"><button type="button" class="spotify-feature" data-sp-tab="search"><div class="spotify-feature-art spotify-feature-art-one">⌕</div><strong>Find a favourite</strong><small>Search for music</small></button><button type="button" class="spotify-feature" data-sp-tab="library"><div class="spotify-feature-art spotify-feature-art-two">▥</div><strong>Your Library</strong><small>Playlists and artists</small></button></div>
-      <p class="spotify-disclaimer">This is a Spotify-inspired portfolio app. Personal listening data isn't connected.</p>`;
-  } else if (spotifyActiveTab === "search") {
-    view.innerHTML = `<div class="spotify-search-screen"><h1>Search</h1><form id="spotifySearchForm" class="spotify-search-form"><span>⌕</span><input id="spotifySearchInput" placeholder="What do you want to listen to?" aria-label="Search Spotify" required autocomplete="off"><button type="submit">Go</button></form><h2>Browse all</h2><div class="spotify-browse-grid"><button data-sp-query="pop">Pop <span>♫</span></button><button data-sp-query="indie">Indie <span>✦</span></button><button data-sp-query="jazz">Jazz <span>♬</span></button><button data-sp-query="electronic">Electronic <span>◈</span></button></div><p class="spotify-disclaimer">Searches open results in Spotify.</p></div>`;
-  } else {
-    view.innerHTML = `<div class="spotify-library-screen"><div class="spotify-library-title"><span class="spotify-ios-avatar">JG</span><h1>Your Library</h1><span class="spotify-library-plus">＋</span></div><div class="spotify-library-filter">Playlists <span>Artists</span></div><div class="spotify-library-empty"><div class="spotify-library-empty-icon">♫</div><h2>Make it yours</h2><p>Add your favourite playlists and artists to feature them here.</p><a href="${spotifyOpen}" target="_blank" rel="noopener noreferrer">Explore Spotify ↗</a></div></div>`;
+  const tracks = spotifyPlaylist.tracks;
+  view.innerHTML = `<div class="spotify-playlist-header">
+    <button type="button" class="spotify-playlist-back" data-sp-back aria-label="Back to Home Screen">‹</button>
+    ${spotifyArtwork(spotifyPlaylist.cover, "spotify-playlist-cover")}
+    <h1>${spotifyEscape(spotifyPlaylist.title)}</h1>
+    <div class="spotify-playlist-owner"><span class="spotify-ios-avatar">JG</span><strong>${spotifyEscape(spotifyPlaylist.creator)}</strong></div>
+    <p class="spotify-playlist-count">♫ ${tracks.length} ${tracks.length === 1 ? "song" : "songs"}</p>
+  </div>
+  <div class="spotify-track-list">${tracks.length ? tracks.map((track,i) => `<button class="spotify-track" type="button" data-sp-track="${i}">${spotifyArtwork(track.artwork,"spotify-track-cover")}<span class="spotify-track-copy"><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span><span class="spotify-track-more">•••</span></button>`).join("") : '<div class="spotify-playlist-empty"><strong>Your playlist goes here</strong><p>Share your playlist link to add its real songs and artwork.</p></div>'}</div>`;
+  spotifyRenderPlayer();
+}
+function spotifyRenderPlayer() {
+  const track = spotifyPlaylist.tracks[spotifyCurrentIndex];
+  const mini = document.getElementById("spotifyMiniHost");
+  const full = document.getElementById("spotifyNowPlaying");
+  if (!mini || !full) return;
+  mini.innerHTML = track ? `<div class="spotify-mini"><button type="button" class="spotify-mini-open" data-sp-expand>${spotifyArtwork(track.artwork,"spotify-mini-art")}<span><strong>${spotifyEscape(track.title)}</strong><small>${spotifyEscape(track.artist)}</small></span></button><button class="spotify-mini-play" type="button" data-sp-toggle aria-label="${spotifyIsPlaying ? "Pause" : "Play"}">${spotifyIsPlaying ? "❚❚" : "▶"}</button></div>` : "";
+  full.innerHTML = track ? `<div class="spotify-full-top"><button type="button" data-sp-collapse aria-label="Close Now Playing">⌄</button><span>PLAYING FROM PLAYLIST<br><strong>${spotifyEscape(spotifyPlaylist.title)}</strong></span><span>•••</span></div>
+    ${spotifyArtwork(track.artwork,"spotify-full-art")}
+    <div class="spotify-full-track"><div><h2>${spotifyEscape(track.title)}</h2><p>${spotifyEscape(track.artist)}</p></div><span>♡</span></div>
+    <input type="range" id="spotifySeek" min="0" max="100" value="0" aria-label="Seek track" />
+    <div class="spotify-full-times"><span id="spotifyElapsed">0:00</span><span id="spotifyDuration">0:00</span></div>
+    <div class="spotify-full-controls"><button type="button" data-sp-previous aria-label="Previous track">|◀</button><button type="button" class="spotify-full-play" data-sp-toggle aria-label="${spotifyIsPlaying ? "Pause" : "Play"}">${spotifyIsPlaying ? "❚❚" : "▶"}</button><button type="button" data-sp-next aria-label="Next track">▶|</button></div>` : "";
+}
+function spotifySelect(index) {
+  const track = spotifyPlaylist.tracks[index];
+  if (!track) return;
+  spotifyCurrentIndex = index;
+  const audio = document.getElementById("spotifyAudio");
+  audio.pause();
+  audio.removeAttribute("src");
+  spotifyIsPlaying = false;
+  if (track.audio) {
+    audio.src = track.audio;
+    audio.play().then(() => { spotifyIsPlaying = true; spotifyRenderPlayer(); }).catch(() => { spotifyIsPlaying = false; spotifyRenderPlayer(); });
   }
-  view.scrollTop = 0;
+  spotifyRenderPlayer();
+  document.getElementById("spotifyNowPlaying").classList.add("open");
+  document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","false");
+}
+function spotifyToggle() {
+  const audio = document.getElementById("spotifyAudio");
+  if (!audio.src) return;
+  if (audio.paused) audio.play().then(() => {spotifyIsPlaying=true;spotifyRenderPlayer();}).catch(() => {});
+  else {audio.pause();spotifyIsPlaying=false;spotifyRenderPlayer();}
 }
 function initSpotify() {
-  spotifyActiveTab = "home";
+  spotifyCurrentIndex = -1;
+  spotifyIsPlaying = false;
   spotifyRender();
   const shell = document.querySelector(".spotify-ios");
   shell.addEventListener("click", event => {
-    const tab = event.target.closest("[data-sp-tab]");
-    const genre = event.target.closest("[data-sp-query]");
-    if (tab) { spotifyActiveTab = tab.dataset.spTab; spotifyRender(); }
-    if (genre) window.open("https://open.spotify.com/search/" + encodeURIComponent(genre.dataset.spQuery), "_blank", "noopener,noreferrer");
+    const el = event.target.closest("[data-sp-track],[data-sp-toggle],[data-sp-expand],[data-sp-collapse],[data-sp-next],[data-sp-previous],[data-sp-back]");
+    if (!el) return;
+    if (el.hasAttribute("data-sp-track")) spotifySelect(Number(el.dataset.spTrack));
+    else if (el.hasAttribute("data-sp-toggle")) spotifyToggle();
+    else if (el.hasAttribute("data-sp-expand")) {document.getElementById("spotifyNowPlaying").classList.add("open");document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","false");}
+    else if (el.hasAttribute("data-sp-collapse")) {document.getElementById("spotifyNowPlaying").classList.remove("open");document.getElementById("spotifyNowPlaying").setAttribute("aria-hidden","true");}
+    else if (el.hasAttribute("data-sp-next")) spotifySelect((spotifyCurrentIndex + 1) % spotifyPlaylist.tracks.length);
+    else if (el.hasAttribute("data-sp-previous")) spotifySelect((spotifyCurrentIndex - 1 + spotifyPlaylist.tracks.length) % spotifyPlaylist.tracks.length);
+    else if (el.hasAttribute("data-sp-back")) goHome();
   });
-  shell.addEventListener("submit", event => {
-    if (event.target.id !== "spotifySearchForm") return;
-    event.preventDefault();
-    const query = document.getElementById("spotifySearchInput").value.trim();
-    if (query) window.open("https://open.spotify.com/search/" + encodeURIComponent(query), "_blank", "noopener,noreferrer");
+  const audio = document.getElementById("spotifyAudio");
+  audio.addEventListener("timeupdate", () => {
+    const seek = document.getElementById("spotifySeek");
+    if (seek && audio.duration) seek.value = String(audio.currentTime / audio.duration * 100);
+    const elapsed = document.getElementById("spotifyElapsed");
+    if (elapsed) elapsed.textContent = spotifyTime(audio.currentTime);
+    const duration = document.getElementById("spotifyDuration");
+    if (duration) duration.textContent = spotifyTime(audio.duration);
+  });
+  audio.addEventListener("ended", () => {
+    if (spotifyCurrentIndex + 1 < spotifyPlaylist.tracks.length) spotifySelect(spotifyCurrentIndex + 1);
+    else {spotifyIsPlaying=false;spotifyRenderPlayer();}
+  });
+  shell.addEventListener("input", event => {
+    if (event.target.id === "spotifySeek" && audio.duration) audio.currentTime = Number(event.target.value) / 100 * audio.duration;
   });
 }
 function initContacts() {
