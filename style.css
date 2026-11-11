@@ -2045,3 +2045,24 @@ body {
   .spotify-sunset-theme .spotify-playlist-cover{width:min(55%,165px);max-width:165px;margin-bottom:10px}
   .spotify-sunset-theme .spotify-playlist-actions{min-height:44px}
 }
+
+/* Align playlist actions horizontally with the creator's name */
+.spotify-sunset-theme .spotify-playlist-owner-actions{
+  display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;
+}
+.spotify-sunset-theme .spotify-playlist-owner-actions .spotify-playlist-owner{
+  min-width:0;flex:1;gap:7px;
+}
+.spotify-sunset-theme .spotify-playlist-owner-actions .spotify-playlist-owner strong{
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.spotify-sunset-theme .spotify-playlist-owner-actions .spotify-playlist-actions{
+  flex:0 0 auto;gap:7px;min-height:44px;
+}
+.spotify-sunset-theme .spotify-playlist-owner-actions .spotify-playlist-actions button:not(.spotify-playlist-play){
+  min-width:25px;min-height:40px;padding:0;font-size:19px;
+}
+.spotify-sunset-theme .spotify-playlist-owner-actions .spotify-playlist-play{
+  width:42px;height:42px;min-width:42px;min-height:42px;
+}
+.spotify-sunset-theme .spotify-playlist-count{margin:2px 0 8px}
