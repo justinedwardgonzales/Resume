@@ -1860,3 +1860,36 @@ body {
 .spotify-full-controls button{background:none;border:0;color:#fff;font-size:23px}
 .spotify-full-controls .spotify-full-play{display:grid;place-items:center;width:62px;height:62px;background:#fff;color:#111;border-radius:50%;font-size:26px}
 @media(max-height:700px){.spotify-now-playing{padding-top:12px}.spotify-full-top{min-height:44px}.spotify-full-art{max-width:220px}.spotify-full-track{margin-top:20px}.spotify-full-controls{margin-top:12px}}
+
+/* Spotify polish: sunset playlist, playing-track equaliser and mini-player progress */
+.spotify-playlist-app.spotify-sunset-theme{background:#121212}
+.spotify-sunset-theme .spotify-playlist-header{background:linear-gradient(180deg,#b37a65 0%,#77584e 32%,#3b3030 69%,#121212 100%);padding-bottom:5px}
+.spotify-sunset-theme .spotify-playlist-header h1{font-size:27px;line-height:1.2}
+.spotify-playlist-actions{display:flex;align-items:center;gap:14px;justify-content:flex-end;min-height:56px;position:relative}
+.spotify-playlist-actions button{border:0;background:transparent;color:#bdbdbd;font-size:22px;min-width:32px;min-height:42px;cursor:pointer}
+.spotify-playlist-actions button.sp-active,.spotify-full-controls button.sp-active{color:#1ed760}
+.spotify-playlist-actions .spotify-playlist-play{width:48px;height:48px;min-width:48px;min-height:48px;border-radius:50%;background:#1ed760;color:#111;font-size:23px;display:grid;place-items:center}
+.spotify-playlist-menu{position:absolute;right:0;top:56px;z-index:5;background:#2d2d2d;border:1px solid #454545;border-radius:9px;padding:12px;color:#fff;font-size:12px;box-shadow:0 8px 20px #0008}
+.spotify-track-current .spotify-track-copy strong{color:#1ed760}
+.spotify-track-equaliser{display:none;align-items:flex-end;gap:2px;height:17px;width:17px;flex:none}
+.spotify-track-current .spotify-track-equaliser{display:flex}
+.spotify-track-current .spotify-track-more{display:none}
+.spotify-track-equaliser i{width:3px;height:6px;background:#1ed760;border-radius:1px}
+.spotify-is-playing .spotify-track-current .spotify-track-equaliser i{animation:spotify-eq .8s ease-in-out infinite alternate}
+.spotify-is-playing .spotify-track-current .spotify-track-equaliser i:nth-child(2){animation-delay:-.35s}
+.spotify-is-playing .spotify-track-current .spotify-track-equaliser i:nth-child(3){animation-delay:-.6s}
+@keyframes spotify-eq{0%{height:4px}50%{height:16px}100%{height:8px}}
+.spotify-mini{position:relative;overflow:hidden}
+.spotify-mini-progress{position:absolute;left:7px;right:7px;bottom:0;height:2px;border-radius:4px;background:#ffffff35;pointer-events:none}
+.spotify-mini-progress span{display:block;width:0;height:100%;background:#fff;border-radius:4px;transition:width .15s linear}
+.spotify-now-playing{background:linear-gradient(165deg,#88645c 0%,#483d40 47%,#171719 100%);transition:transform .28s cubic-bezier(.22,.8,.28,1),visibility .28s}
+.spotify-full-art{transition:opacity .2s ease,transform .25s ease}
+.spotify-full-controls{gap:6px}
+.spotify-full-controls button{font-size:20px;min-width:28px}
+.spotify-full-controls button.sp-active{color:#1ed760}
+.spotify-full-controls .spotify-full-play{flex:none}
+.spotify-full-track h2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spotify-full-track>div{min-width:0}
+.spotify-full-track p{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.spotify-now-playing input[type=range]{cursor:pointer}
+@media(prefers-reduced-motion:reduce){.spotify-track-equaliser i{animation:none!important}.spotify-now-playing,.spotify-full-art{transition:none}}
