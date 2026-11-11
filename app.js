@@ -706,9 +706,7 @@ function initNotes() {
   const storageKey = "justin-ios-notes-v1";
   const seeds = [
     {id:"travel",title:"Places to explore ✈️",body:"Japan is always worth thinking about.\n\nMore places to visit, neighbourhoods to wander and spots to photograph.\n\nAdd the destinations on your list here.",personal:true},
-    {id:"music",title:"On repeat 🎧",body:"A few tracks for a sunset kind of mood.\n\nCurrent playlist: 🌇\n\nOpen Spotify on the Home Screen to listen.\n\nAdd your latest discoveries here.",personal:true},
     {id:"ideas",title:"Random ideas 💡",body:"The best ideas can come from anywhere — a song, a place, a conversation or something unexpected.\n\nA running list of things worth exploring.",personal:true},
-    {id:"learning",title:"Things I'm learning",body:"Experimenting with AI and ways to make everyday work more thoughtful and efficient.\n\nI built a Microsoft Copilot agent to help check presentations, revisit planning information and challenge ideas. I've also helped colleagues build their own.",personal:true},
     {id:"campaign-notes",title:"Ideas worth pitching",body:"What makes a brand partnership feel like part of culture instead of just another ad?\n\nA couple of projects I've helped pitch and execute:\n• Molson × The Amazing Race Canada\n• Miller Lite × Blue Jays Territory\n\nAlways interested in unexpected connections between brands and audiences."},
     {id:"little-things",title:"Little things to remember",body:"Good music. Interesting places. Creative people. Ideas that deserve a second look.\n\nA place to collect small moments and thoughts as they happen.",personal:true}
   ];
@@ -726,6 +724,15 @@ function initNotes() {
       localStorage.setItem(migrationKey,"1");
     }
   } catch(e) {notes=seeds.map(n=>({...n}));}
+  // Retire the two starter notes on existing devices without deleting visitor edits.
+  try {
+    const retirementKey="justin-ios-notes-prune-v1";
+    if(!localStorage.getItem(retirementKey)){
+      notes=notes.filter(n=>!["music","learning"].includes(n.id)||n.updated||n.updatedAt);
+      localStorage.setItem(storageKey,JSON.stringify(notes));
+      localStorage.setItem(retirementKey,"1");
+    }
+  } catch(e) {}
   let current=null, filter="all";
   const save=()=>{try{localStorage.setItem(storageKey,JSON.stringify(notes));}catch(e){}};
   const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
