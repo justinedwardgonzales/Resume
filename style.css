@@ -2283,22 +2283,18 @@ body {
 
 
 
-/* Experimental typography playground: isolated from phone gestures */
+
+/* Self-contained soft-body experiment; no phone-wide touch handlers */
 .calendar-widget{cursor:pointer;text-align:left;font:inherit;border:0}
-.calendar-widget:focus-visible{outline:3px solid #0a84ff;outline-offset:3px}
-.pitch-lab-overlay{position:absolute;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:13px;background:#111827bf;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.pitch-lab-overlay{position:absolute;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:12px;background:#111827ce;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pitch-lab-overlay.hidden{display:none!important;pointer-events:none!important}
-.playground-shell{width:100%;max-width:350px;border-radius:22px;padding:15px;background:#f9f8f4;color:#101010;box-shadow:0 20px 60px #0009}
-.playground-top{display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:.09em;font-weight:800}
-.playground-top button{border:0;background:#e7e6e2;border-radius:50%;width:31px;height:31px;font-size:23px;cursor:pointer}
-.playground-shell h2{font-size:25px;letter-spacing:-.055em;margin:9px 0 3px}
-.playground-hint{font-size:11px;color:#555;margin:0 0 12px}
-.playground-canvas{position:relative;width:100%;height:330px;overflow:hidden;border-radius:13px;background:#00c9ed;touch-action:none;user-select:none;-webkit-user-select:none;transition:background .35s}
-.playground-orbit{position:absolute;top:50%;left:50%;width:280px;height:280px;transform:translate(-50%,-50%);pointer-events:none;transition:transform .7s}
-.playground-orbit text{font-family:Arial,sans-serif;font-size:19px;fill:#101010;letter-spacing:.4px}
-.playground-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border:0;background:#111;color:#fff;width:68px;height:68px;border-radius:50%;font-size:38px;cursor:pointer;box-shadow:0 5px 0 #0003}
-.playground-core:active{transform:translate(-50%,-50%) scale(.93)}
-.playground-piece{position:absolute;display:inline-block;padding:7px 10px;border-radius:3px;background:#fff;color:#101010;font-size:12px;font-weight:900;letter-spacing:-.03em;white-space:nowrap;cursor:grab;touch-action:none;box-shadow:3px 4px 0 #0003}
-.playground-piece.dragging{cursor:grabbing;z-index:3}
-.playground-piece:focus-visible{outline:3px solid #111}
-.playground-remix{display:block;width:100%;margin-top:12px;padding:12px;border:1px solid #111;border-radius:11px;background:#111;color:#fff;font-size:13px;font-weight:800;cursor:pointer}
+.physics-shell{width:100%;max-width:350px;background:#f8f8f5;border-radius:19px;padding:12px;color:#101010;box-shadow:0 20px 60px #0008}
+.physics-top,.physics-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:10px;font-weight:800;letter-spacing:.07em}
+.physics-top{margin-bottom:10px}
+.physics-top button{width:30px;height:30px;border:0;border-radius:50%;font-size:23px;background:#e7e7e4;cursor:pointer}
+.physics-field{height:min(460px,62vh);min-height:270px;position:relative;overflow:hidden;background:#111;touch-action:none;user-select:none;-webkit-user-select:none;border-radius:10px;cursor:grab}
+.physics-field:active{cursor:grabbing}
+.physics-field canvas{display:block;width:100%;height:100%;pointer-events:none}
+.physics-instruction{position:absolute;left:0;right:0;bottom:17px;text-align:center;color:#ffffffb8;font-size:11px;letter-spacing:.06em;pointer-events:none}
+.physics-bottom{margin-top:11px;font-size:9px}
+.physics-bottom button{border:1px solid #222;border-radius:20px;background:transparent;padding:7px 12px;font-weight:700;cursor:pointer}
