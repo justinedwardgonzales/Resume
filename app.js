@@ -24,6 +24,14 @@ const profile = {
 };
 
 const pages = {
+  physics: {
+    title: "Playground",
+    html: `<div class="physics-app">
+      <header class="physics-app-top"><div><small>EXPERIMENT NO. 01</small><h1>Soft Spot</h1></div><button id="physicsReset" type="button" aria-label="Reset soft circle">↻ Reset</button></header>
+      <div class="physics-field" id="physicsField" aria-label="Interactive soft circle. Drag and throw it against the walls."><canvas id="physicsCanvas" aria-hidden="true"></canvas><div class="physics-instruction">drag, throw, watch it bounce</div></div>
+      <footer class="physics-app-bottom"><span>NO RULES. JUST PLAY.</span><span>✳</span></footer>
+    </div>`
+  },
   notes: {
     title: "Notes",
     html: `<div class="ios-notes">
@@ -1077,6 +1085,7 @@ function openApp(key, sourceButton) {
   appScreen.classList.toggle("files-active", key === "files");
   appScreen.classList.toggle("notes-active", key === "notes");
   appScreen.classList.toggle("photos-active", key === "photos");
+  appScreen.classList.toggle("physics-active", key === "physics");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -1103,11 +1112,13 @@ function openApp(key, sourceButton) {
   if (key === "files") initFiles();
   if (key === "notes") initNotes();
   if (key === "photos") initPhotos();
+  if (key === "physics") initPhysics();
   updateAssistiveTouch();
 }
 
 function goHome() {
   if (appScreen.classList.contains("hidden")) return;
+  physicsStop();
   clearTimeout(appTransitionTimer);
   appScreen.classList.remove("is-opening");
   appScreen.classList.add("is-closing");
@@ -1122,12 +1133,9 @@ function goHome() {
 }
 
 // Soft-body circle experiment: only runs while its overlay is visible.
-const pitchLabOverlay=document.getElementById("pitchLabOverlay");
-const physicsField=document.getElementById("physicsField");
-const physicsCanvas=document.getElementById("physicsCanvas");
-const physicsCtx=physicsCanvas.getContext("2d");
 const physicsColours=["#05c8ef","#ffda42","#ff709e","#a2f76e","#a998ff","#ff9050"];
 let physicsFrame=0,physicsLast=0,physicsDrag=null,physicsColour=0;
+let physicsField=null,physicsCanvas=null,physicsCtx=null;
 const blob={x:0,y:0,vx:165,vy:115,r:82,sx:1,sy:1,angle:0,impact:0,ripple:0,phase:0};
 function physicsSize(){
   const rect=physicsField.getBoundingClientRect();
@@ -1140,7 +1148,7 @@ function physicsSize(){
   blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,blob.y||rect.height/2));
 }
 function physicsReset(){physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;blob.vx=165;blob.vy=125;blob.sx=1;blob.sy=1;blob.impact=0;blob.ripple=0;blob.phase=0;physicsColour=0;}
-function physicsClose(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
+function physicsStop(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;}
 function physicsStep(t){
   const dt=Math.min((t-physicsLast)/1000||0,.033);physicsLast=t;
   const w=physicsField.clientWidth,h=physicsField.clientHeight,r=blob.r;
@@ -1193,11 +1201,12 @@ function physicsStep(t){
   physicsCtx.restore();
   physicsFrame=requestAnimationFrame(physicsStep);
 }
-function physicsOpen(){pitchLabOverlay.classList.remove("hidden");physicsReset();physicsLast=performance.now();cancelAnimationFrame(physicsFrame);physicsFrame=requestAnimationFrame(physicsStep);}
-document.getElementById("pitchLabTrigger").addEventListener("click",physicsOpen);
-document.getElementById("pitchLabClose").addEventListener("click",physicsClose);
-document.getElementById("physicsReset").addEventListener("click",physicsReset);
-pitchLabOverlay.addEventListener("click",e=>{if(e.target===pitchLabOverlay)physicsClose();});
+function physicsOpen(){physicsReset();physicsLast=performance.now();physicsStop();physicsFrame=requestAnimationFrame(physicsStep);}
+function initPhysics(){
+  physicsField=document.getElementById("physicsField");
+  physicsCanvas=document.getElementById("physicsCanvas");
+  physicsCtx=physicsCanvas.getContext("2d");
+  document.getElementById("physicsReset").addEventListener("click",physicsReset);
 physicsField.addEventListener("pointerdown",e=>{
   if(e.pointerType==="mouse"&&e.button!==0)return;
   const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
@@ -1222,8 +1231,9 @@ function physicsRelease(e){
 }
 physicsField.addEventListener("pointerup",physicsRelease);
 physicsField.addEventListener("pointercancel",physicsRelease);
-pitchLabOverlay.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();physicsClose();}});
-window.addEventListener("resize",()=>{if(!pitchLabOverlay.classList.contains("hidden"))physicsSize();});
+  physicsOpen();
+}
+window.addEventListener("resize",()=>{if(physicsFrame&&physicsField)physicsSize();});
 
 document.getElementById("backButton").addEventListener("click", goHome);
 
