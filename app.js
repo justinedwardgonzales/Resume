@@ -767,6 +767,18 @@ function initNotes() {
       localStorage.setItem(key,"1");
     }
   } catch(e) {}
+  // Reconcile the three published notes with older browser copies.
+  // Keep user-created notes, but replace outdated published starter content.
+  try {
+    const publishedIds=new Set(seeds.map(n=>n.id));
+    const custom=notes.filter(n=>!publishedIds.has(n.id)&&!["campaign-notes","music","learning","about","highlights","campaigns","ai","outside"].includes(n.id));
+    const published=seeds.map(n=>{
+      const previous=notes.find(old=>old.id===n.id);
+      return {...n,createdAt:previous?.createdAt||Date.now(),updatedAt:previous?.updatedAt||undefined};
+    });
+    notes=[...published,...custom];
+    localStorage.setItem(storageKey,JSON.stringify(notes));
+  } catch(e) { notes=seeds.map(n=>({...n,createdAt:Date.now()})); }
   let current=null, filter="all";
   const save=()=>{try{localStorage.setItem(storageKey,JSON.stringify(notes));}catch(e){}};
   const escapeHTML=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
