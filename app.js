@@ -1121,6 +1121,30 @@ function goHome() {
   }, 210);
 }
 
+// Optional creative Easter egg on the Home Screen calendar.
+const pitchLabOverlay = document.getElementById("pitchLabOverlay");
+const pitchIdeas = [
+  ["Coors Light","The Coldest Commute","Turn the hottest transit stop in the city into an unexpectedly refreshing pop-up experience."],
+  ["Molson Canadian","The Neighbourhood Cheer","Connect local hockey watch parties with a live, city-wide celebration of the fans."],
+  ["Miller Lite","The Seventh-Inning Studio","Give baseball podcasts a travelling recording booth right outside the ballpark."],
+  ["Madrí","The Long Lunch Club","Transform an ordinary downtown lunch hour into a spontaneous street-side cultural experience."],
+  ["Coors Light","After-Hours Gallery","Invite emerging artists to reimagine familiar city spaces through light, temperature and sound."],
+  ["Molson Canadian","The Away-Game Welcome","Bring a little hometown hospitality to Canadians cheering for their team on the road."]
+];
+let lastPitchIdea = 0;
+function closePitchLab(){pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
+document.getElementById("pitchLabTrigger").addEventListener("click",()=>{pitchLabOverlay.classList.remove("hidden");document.getElementById("pitchLabGenerate").focus({preventScroll:true});});
+document.getElementById("pitchLabClose").addEventListener("click",closePitchLab);
+pitchLabOverlay.addEventListener("click",event=>{if(event.target===pitchLabOverlay)closePitchLab();});
+document.getElementById("pitchLabGenerate").addEventListener("click",()=>{
+  lastPitchIdea=(lastPitchIdea+1+Math.floor(Math.random()*(pitchIdeas.length-1)))%pitchIdeas.length;
+  const [brand,title,description]=pitchIdeas[lastPitchIdea];
+  document.getElementById("pitchLabBrand").textContent=brand;
+  document.getElementById("pitchLabConcept").textContent=title;
+  document.getElementById("pitchLabDescription").textContent=description;
+});
+document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!pitchLabOverlay.classList.contains("hidden")){event.stopImmediatePropagation();closePitchLab();}},true);
+
 document.getElementById("backButton").addEventListener("click", goHome);
 
 document.querySelectorAll("[data-app]").forEach(button => {
