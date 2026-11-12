@@ -707,8 +707,7 @@ function initNotes() {
   const seeds = [
     {id:"travel",title:"Places to explore ✈️",body:"Places I'd love to revisit\n\n• Hokkaido, Japan 🇯🇵\n• Seoul, South Korea 🇰🇷\n\nSomewhere new\n\n• Nagoya, Japan 🇯🇵\n• Jeju Island, South Korea 🇰🇷\n• Hong Kong 🇭🇰\n• Rome, Italy 🇮🇹\n• Shanghai, China 🇨🇳\n• Paris, France 🇫🇷\n• London, England 🇬🇧\n• Nice, France 🇫🇷\n• Berlin, Germany 🇩🇪\n\nMore places to wander, good food to try, and memories to make.",personal:true},
     {id:"ideas",title:"Random ideas 💡",body:"• skinny jeans are back. calling it now — mainstream by 2027.\n\n• glow-in-the-dark running shoes. especially for night runs.\n\n• live-action Treasure Planet. why hasn't this happened yet?\n\n• electric kei truck. small, practical, ridiculously cool.\n\n• smartwatch attachments like Spy Kids. imagine all the gadgets you could add.\n\njust putting these out into the universe.",personal:true},
-    {id:"campaign-notes",title:"Ideas worth pitching",body:"What makes a brand partnership feel like part of culture instead of just another ad?\n\nA couple of projects I've helped pitch and execute:\n• Molson × The Amazing Race Canada\n• Miller Lite × Blue Jays Territory\n\nAlways interested in unexpected connections between brands and audiences."},
-    {id:"little-things",title:"Little things to remember",body:"Good music. Interesting places. Creative people. Ideas that deserve a second look.\n\nA place to collect small moments and thoughts as they happen.",personal:true}
+    {id:"little-things",title:"Little things to remember",body:"☐ Get snowboards waxed\n☐ Buy wool socks\n☐ Think of Christmas gifts for family",personal:true}
   ];
   let notes;
   try {
@@ -754,6 +753,17 @@ function initNotes() {
         ideas.body="• skinny jeans are back. calling it now — mainstream by 2027.\n\n• glow-in-the-dark running shoes. especially for night runs.\n\n• live-action Treasure Planet. why hasn't this happened yet?\n\n• electric kei truck. small, practical, ridiculously cool.\n\n• smartwatch attachments like Spy Kids. imagine all the gadgets you could add.\n\njust putting these out into the universe.";
         localStorage.setItem(storageKey,JSON.stringify(notes));
       }
+      localStorage.setItem(key,"1");
+    }
+  } catch(e) {}
+  // Update the personal checklist and retire the unused work note on existing devices.
+  try {
+    const key="justin-ios-notes-winter-list-v1";
+    if(!localStorage.getItem(key)){
+      const reminder=notes.find(n=>n.id==="little-things");
+      if(reminder && !reminder.updated && !reminder.updatedAt) reminder.body="☐ Get snowboards waxed\n☐ Buy wool socks\n☐ Think of Christmas gifts for family";
+      notes=notes.filter(n=>n.id!=="campaign-notes"||n.updated||n.updatedAt);
+      localStorage.setItem(storageKey,JSON.stringify(notes));
       localStorage.setItem(key,"1");
     }
   } catch(e) {}
