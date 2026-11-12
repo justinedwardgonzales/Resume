@@ -2281,20 +2281,25 @@ body {
 .home-gesture-zone.is-dragging{cursor:default}
 .home-gesture-zone::after{content:"";position:absolute;left:50%;bottom:11px;width:134px;height:5px;border-radius:10px;background:#fff;transform:translateX(-50%);pointer-events:none}
 
-/* Pitch Lab: optional, self-contained Home Screen Easter egg */
+
+/* Pocket Arcade stays hidden until the unlocked Home Screen calendar is tapped. */
 .calendar-widget{cursor:pointer;text-align:left;font:inherit;border:0}
 .calendar-widget:focus-visible{outline:3px solid #0a84ff;outline-offset:3px}
-.pitch-lab-overlay{position:absolute;inset:0;z-index:90;background:rgba(9,11,18,.67);display:flex;align-items:center;justify-content:center;padding:22px;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
-.pitch-lab-overlay.hidden{display:none}
-.pitch-lab-card{width:100%;max-width:345px;border-radius:27px;padding:22px 20px;background:#f5f5f7;color:#16171b;box-shadow:0 18px 55px #0006}
-.pitch-lab-top{display:flex;align-items:center;justify-content:space-between;color:#8b7a39;font-size:10px;font-weight:800;letter-spacing:.09em}
-.pitch-lab-top button{width:32px;height:32px;border:0;border-radius:50%;background:#e4e4e8;color:#333;font-size:24px;cursor:pointer}
-.pitch-lab-card h2{font-size:30px;letter-spacing:-.05em;margin:12px 0 6px}
-.pitch-lab-intro{font-size:13px;line-height:1.5;color:#6a6a70;margin:0 0 18px}
-.pitch-lab-idea{background:white;border-radius:17px;padding:19px 16px;min-height:172px;display:flex;flex-direction:column;gap:8px}
-.pitch-lab-idea span{font-size:11px;color:#b18b1c;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
-.pitch-lab-idea strong{font-size:21px;line-height:1.15;letter-spacing:-.03em}
-.pitch-lab-idea p{font-size:13px;line-height:1.5;color:#616168;margin:0}
-.pitch-lab-generate{display:block;width:100%;margin:15px 0 10px;border:0;border-radius:13px;background:#17171b;color:white;font-size:14px;font-weight:700;padding:14px;cursor:pointer}
-.pitch-lab-generate:active{transform:scale(.98)}
-.pitch-lab-card small{display:block;text-align:center;font-size:10px;color:#85858a}
+.pitch-lab-overlay{position:absolute;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:18px;background:#080d1ac4;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.pitch-lab-overlay.hidden{display:none!important;pointer-events:none!important}
+.arcade-card{width:100%;max-width:340px;padding:18px 15px 14px;border-radius:24px;background:#151e3b;color:#fff;border:2px solid #6977ad;box-shadow:0 20px 65px #0009}
+.arcade-card .pitch-lab-top{display:flex;justify-content:space-between;align-items:center;color:#ffdc7d;font-size:10px;font-weight:800;letter-spacing:.1em}
+.arcade-card .pitch-lab-top button{border:0;border-radius:50%;width:32px;height:32px;background:#334062;color:#fff;font-size:24px}
+.arcade-card h2{font-size:26px;letter-spacing:-.04em;margin:7px 0 12px}
+.arcade-hud{display:flex;justify-content:space-between;margin-bottom:9px;color:#bfc8e6;font-size:10px;font-weight:800;letter-spacing:.06em}
+.arcade-hud strong{display:block;color:white;font-size:21px;margin-top:3px}
+.arcade-field{height:275px;position:relative;overflow:hidden;border-radius:14px;background:radial-gradient(ellipse at 50% 115%,#46548e,#1b2852 52%,#0c1534);touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.arcade-field:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#ffffff9c 1px,transparent 1px);background-size:29px 37px;opacity:.32;pointer-events:none}
+.arcade-stars{position:absolute;inset:0;pointer-events:none}
+.arcade-star{position:absolute;transform:translate(-50%,-50%);font-size:26px;color:#ffe079;text-shadow:0 0 12px #ffb84d}
+.arcade-basket{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);font-size:38px;pointer-events:none;line-height:1}
+.arcade-message{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:82%;padding:17px 10px;border-radius:15px;background:#0c143be8;text-align:center;font-size:17px;font-weight:800;pointer-events:none}
+.arcade-message.hidden{display:none}
+.arcade-message small{display:block;margin-top:8px;color:#d1d7ef;font-size:12px;font-weight:500}
+.arcade-card .pitch-lab-generate{display:block;width:100%;margin:12px 0 10px;padding:12px;border:0;border-radius:12px;background:#ffe079;color:#18203b;font-size:14px;font-weight:800;cursor:pointer}
+.arcade-card>small{display:block;text-align:center;font-size:10px;color:#c3c9df}
