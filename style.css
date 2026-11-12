@@ -2273,3 +2273,10 @@ body {
 .home-gesture-zone{position:absolute;left:0;right:0;bottom:0;height:43px;z-index:81;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;background:transparent}
 .home-gesture-zone.is-dragging{cursor:grabbing}
 .outer-home-indicator,.app-home-indicator,.swipe-pill{pointer-events:none;user-select:none;-webkit-user-select:none}
+
+/* Home gesture must not turn other controls into draggable objects */
+.phone.swipe-ready,.phone.swipe-ready .screen,.phone.swipe-ready .screen *,
+.phone.swipe-dragging,.phone.swipe-dragging .screen,.phone.swipe-dragging .screen *{cursor:auto!important}
+.home-gesture-zone{height:48px;cursor:default;touch-action:none;overscroll-behavior:contain}
+.home-gesture-zone.is-dragging{cursor:default}
+.home-gesture-zone::after{content:"";position:absolute;left:50%;bottom:11px;width:134px;height:5px;border-radius:10px;background:#fff;transform:translateX(-50%);pointer-events:none}
