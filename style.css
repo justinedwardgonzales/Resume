@@ -2190,3 +2190,46 @@ body {
 .app-screen.notes-active .ios-notes-date-group{margin:0 0 24px!important}
 .app-screen.notes-active .ios-notes-date-group h2{margin:0 0 10px!important;padding:0!important;background:transparent!important}
 .app-screen.notes-active .ios-notes-date-card{background:#fff!important;border-radius:15px!important;overflow:hidden!important}
+
+/* Campaign photography: image-first iOS Photos */
+.app-screen.photos-active>.app-header{display:none!important}
+.app-screen.photos-active>.app-content{padding:0!important;overflow:hidden!important;background:#fff!important}
+.campaign-photos{height:100%;display:flex;flex-direction:column;background:#fff;color:#111;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",Arial,sans-serif;position:relative}
+.campaign-photos .hidden{display:none!important}
+.campaign-photos button{font-family:inherit;cursor:pointer}
+.campaign-photos-header{height:48px;flex-shrink:0;padding:8px 17px;display:flex;align-items:center;justify-content:space-between;font-size:16px;font-weight:600}
+.campaign-photos-header button{border:0;background:#f3f3f6;border-radius:50%;width:34px;height:34px;font-size:17px;letter-spacing:1px}
+.campaign-photos-main{overflow-y:auto;min-height:0;flex:1}
+.campaign-photos-main h1{font-size:30px;letter-spacing:-.8px;margin:10px 17px 16px}
+.campaign-photos-filters{display:flex;gap:7px;padding:0 13px 14px;overflow-x:auto;scrollbar-width:none}
+.campaign-photos-filters::-webkit-scrollbar{display:none}
+.campaign-photos-filters button{border:0;background:#f1f1f3;padding:8px 13px;border-radius:20px;white-space:nowrap;font-size:12px;font-weight:600;color:#252529}
+.campaign-photos-filters button.active{background:#202025;color:white}
+.campaign-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px}
+.campaign-photo-grid>button:not(.campaign-album-tile){border:0;padding:0;background:#e7e7eb;aspect-ratio:1;overflow:hidden}
+.campaign-photo-grid>button>img{width:100%;height:100%;object-fit:cover;display:block}
+.campaign-photo-grid>button.image-unavailable{display:none}
+.campaign-photo-grid.albums{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding:0 16px 25px}
+.campaign-album-tile{background:none;border:0;padding:0;text-align:left;min-width:0}
+.campaign-album-tile>div{width:100%;aspect-ratio:1;background:#e9e9ed;border-radius:10px;overflow:hidden;display:grid;place-items:center;color:#aaa;font-size:42px}
+.campaign-album-tile img{width:100%;height:100%;object-fit:cover}
+.campaign-album-tile strong{display:block;margin-top:7px;font-size:14px}
+.campaign-album-tile small{display:block;color:#8a8a91;font-size:12px;margin-top:2px}
+.campaign-photo-empty{grid-column:1/-1;color:#85858d;text-align:center;padding:55px 18px;font-size:14px}
+.campaign-photos-footer{height:59px;flex-shrink:0;display:flex;justify-content:space-around;align-items:center;background:rgba(248,248,250,.97);border-top:1px solid #e8e8ec}
+.campaign-photos-footer button{border:0;background:none;color:#92929b;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:10px;font-weight:600;min-width:72px}
+.campaign-photos-footer button span{font-size:23px;line-height:1.1}
+.campaign-photos-footer button.selected{color:#007aff}
+.campaign-photo-viewer{position:absolute;inset:0;background:#050505;color:white;z-index:20;display:flex;flex-direction:column}
+.campaign-photo-viewer>header{display:flex;justify-content:space-between;align-items:center;min-height:57px;padding:6px 16px}
+.campaign-photo-viewer>header button{background:none;border:0;color:#fff;font-size:32px;width:36px;text-align:left}
+.campaign-photo-viewer>header div{text-align:center;max-width:75%}
+.campaign-photo-viewer>header strong{font-size:14px;display:block}
+.campaign-photo-viewer>header small{font-size:11px;color:#b6b6ba}
+.campaign-viewer-stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:space-between;position:relative}
+.campaign-viewer-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;min-width:0}
+.campaign-viewer-stage button{position:absolute;z-index:1;background:rgba(0,0,0,.25);border:0;color:white;font-size:31px;width:33px;height:55px}
+.campaign-viewer-stage button:first-child{left:0}
+.campaign-viewer-stage button:last-child{right:0}
+.campaign-photo-viewer>footer{height:54px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:13px;color:#d1d1d6}
+.campaign-photo-viewer>footer span:last-child{font-size:24px}
