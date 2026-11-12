@@ -39,13 +39,20 @@ const pages = {
   },
   photos: {
     title: "Photos",
-    html: `<div class="photos-topline"><span>Albums</span><span>•••</span></div><h1>Campaign gallery</h1><p>A visual collection of selected work, planning and campaign moments.</p>
-      <div class="photo-albums">
-        <div class="photo-album"><div class="album-art album-one">01</div><strong>Campaign highlights</strong><small>Add selected campaign visuals</small></div>
-        <div class="photo-album"><div class="album-art album-two">02</div><strong>Strategy & planning</strong><small>Plans, channel mixes, insights</small></div>
-        <div class="photo-album"><div class="album-art album-three">03</div><strong>Creative & execution</strong><small>Creative examples and placements</small></div>
-        <div class="photo-album"><div class="album-art album-four">04</div><strong>Results & impact</strong><small>Approved performance snapshots</small></div>
-      </div><div class="ios-card"><p>Use only work you have permission to share. Client names and confidential performance data can be anonymized.</p></div>`
+    html: `<div class="campaign-photos">
+      <header class="campaign-photos-header"><span id="campaignBackLabel">Photos</span><button type="button" id="campaignMenu" aria-label="Photo options">•••</button></header>
+      <div class="campaign-photos-main">
+        <h1 id="campaignHeading">Library</h1>
+        <div class="campaign-photos-filters" id="campaignFilters"></div>
+        <div class="campaign-photo-grid" id="campaignPhotoGrid"></div>
+      </div>
+      <footer class="campaign-photos-footer"><button type="button" id="campaignLibraryTab" class="selected"><span>▦</span>Library</button><button type="button" id="campaignAlbumsTab"><span>▣</span>Albums</button></footer>
+      <div class="campaign-photo-viewer hidden" id="campaignViewer" role="dialog" aria-label="Campaign photo viewer">
+        <header><button type="button" id="campaignViewerClose" aria-label="Close photo">‹</button><div><strong id="campaignViewerTitle"></strong><small id="campaignViewerCounter"></small></div><span></span></header>
+        <div class="campaign-viewer-stage" id="campaignViewerStage"><button type="button" id="campaignPrev" aria-label="Previous photo">‹</button><img id="campaignViewerImage" alt=""><button type="button" id="campaignNext" aria-label="Next photo">›</button></div>
+        <footer><span id="campaignViewerBrand"></span><span>♡</span></footer>
+      </div>
+    </div>`
   },
   files: {
     title: "Files",
@@ -701,6 +708,55 @@ function initSpotify() {
     } catch(error) {}
   }
 })();
+function initPhotos() {
+  const $=id=>document.getElementById(id);
+  // Real published campaign photography only. Add new entries here as images are verified.
+  const images=[
+    {title:"Home DeCoors",brand:"Coors Light",src:"https://www.thestable.com.au/wp-content/uploads/2026/01/Home-deCoors-1.jpg"},
+    {title:"Nonna Supper Club",brand:"Birra Moretti",src:"https://images.squarespace-cdn.com/content/v1/67eaa5e98ee5ab450f8e72c6/a6642886-456c-40da-a36e-cb772ae1e2fd/Three%2BItalian%2BNonna%27s%2Bin%2BBirra%2BMoretti%2Baprons%2Bstanding%2Bbehind%2Ba%2Btable%2Bwith%2Bvegetables%2Band%2Bpasta%2Bbeing%2Bprepared%2Balong%2Bwith%2BBirra%2BMorretti%2Bbeer%2Bbottles..jpg"},
+    {title:"Home DeCoors — The Stool",brand:"Coors Light",src:"https://www.thestable.com.au/wp-content/uploads/2026/01/Home-deCoors-1.jpg"},
+    {title:"Nonna Supper Club — Recipe Book",brand:"Birra Moretti",src:"https://images.squarespace-cdn.com/content/v1/67eaa5e98ee5ab450f8e72c6/8fbb0cdd-710f-4e30-addc-2f39313007a2/Recipe%2Bbook%2Bwith%2Ba%2Bred%2Btomatoes%2Bbelow.png"}
+  ];
+  // Catalogue retains campaigns without presenting unrelated or unverified pictures.
+  const catalogue=[
+    ["Coors Light","Cold as the Rockies"],["Coors Light","Home DeCoors"],["Coors Light","Tall Girl"],["Coors Light","Golf Launch"],["Coors Light","Coors Light Records"],
+    ["Molson Canadian","Performance Enhancing Canadians"],["Molson Canadian","Paid Through Parents"],["Molson Canadian","Cheer Canadian"],["Molson Canadian","The Amazing Race Canada"],
+    ["Miller Lite","Turkeycase"],["Miller Lite","Blue Jays Territory"],
+    ["Madrí","Ibaka"],["Heineken","First Sip Wrapping Bar"],["Birra Moretti","Nonna Supper Club"],["Strongbow","Ultimate Stress-Free Day Off"]
+  ];
+  let active="All",current=0,visible=images.slice(),albumMode=false;
+  const brands=[...new Set(catalogue.map(c=>c[0]))];
+  function render(){
+    $("campaignHeading").textContent=albumMode?"Albums":active==="All"?"Library":active;
+    $("campaignBackLabel").textContent=albumMode?"Albums":"Photos";
+    $("campaignLibraryTab").classList.toggle("selected",!albumMode);
+    $("campaignAlbumsTab").classList.toggle("selected",albumMode);
+    $("campaignFilters").innerHTML=albumMode?"":['All',...brands].map(b=>`<button type="button" class="${active===b?"active":""}" data-brand="${b}">${b}</button>`).join("");
+    $("campaignFilters").querySelectorAll("[data-brand]").forEach(b=>b.onclick=()=>{active=b.dataset.brand;albumMode=false;render();});
+    visible=images.filter(x=>active==="All"||x.brand===active);
+    if(albumMode){
+      $("campaignPhotoGrid").className="campaign-photo-grid albums";
+      $("campaignPhotoGrid").innerHTML=brands.map(b=>{const img=images.find(x=>x.brand===b);return `<button class="campaign-album-tile" type="button" data-album="${b}"><div>${img?`<img src="${img.src}" alt="" loading="lazy">`:'<span>▣</span>'}</div><strong>${b}</strong><small>${catalogue.filter(x=>x[0]===b).length} campaigns</small></button>`}).join("");
+      $("campaignPhotoGrid").querySelectorAll("[data-album]").forEach(b=>b.onclick=()=>{active=b.dataset.album;albumMode=false;render();});
+    }else{
+      $("campaignPhotoGrid").className="campaign-photo-grid";
+      $("campaignPhotoGrid").innerHTML=visible.length?visible.map((x,i)=>`<button type="button" data-photo="${i}" aria-label="View ${x.title}"><img src="${x.src}" alt="${x.title}" loading="lazy" onerror="this.closest('button').classList.add('image-unavailable')"></button>`).join(""):'<p class="campaign-photo-empty">Campaign imagery is being sourced for this album.</p>';
+      $("campaignPhotoGrid").querySelectorAll("[data-photo]").forEach(b=>b.onclick=()=>openPhoto(Number(b.dataset.photo)));
+    }
+  }
+  function openPhoto(i){current=i;showPhoto();$("campaignViewer").classList.remove("hidden");}
+  function showPhoto(){const x=visible[current];if(!x)return;$("campaignViewerImage").src=x.src;$("campaignViewerImage").alt=x.title;$("campaignViewerTitle").textContent=x.title;$("campaignViewerBrand").textContent=x.brand;$("campaignViewerCounter").textContent=(current+1)+" of "+visible.length;}
+  function move(n){current=(current+n+visible.length)%visible.length;showPhoto();}
+  $("campaignViewerClose").onclick=()=>$("campaignViewer").classList.add("hidden");
+  $("campaignPrev").onclick=()=>move(-1);$("campaignNext").onclick=()=>move(1);
+  $("campaignLibraryTab").onclick=()=>{active="All";albumMode=false;render();};
+  $("campaignAlbumsTab").onclick=()=>{albumMode=true;render();};
+  $("campaignMenu").onclick=()=>{albumMode=!albumMode;render();};
+  let touchX=0;
+  $("campaignViewerStage").addEventListener("touchstart",e=>{touchX=e.changedTouches[0].screenX},{passive:true});
+  $("campaignViewerStage").addEventListener("touchend",e=>{const delta=e.changedTouches[0].screenX-touchX;if(Math.abs(delta)>45)move(delta<0?1:-1)},{passive:true});
+  render();
+}
 function initNotes() {
   const $ = id => document.getElementById(id);
   const storageKey = "justin-ios-notes-v1";
@@ -1005,6 +1061,7 @@ function openApp(key, sourceButton) {
   appScreen.classList.toggle("spotify-active", key === "spotify");
   appScreen.classList.toggle("files-active", key === "files");
   appScreen.classList.toggle("notes-active", key === "notes");
+  appScreen.classList.toggle("photos-active", key === "photos");
   appTitle.textContent = page.title;
   appContent.innerHTML = page.html;
   const source = sourceButton?.querySelector(".app-icon") || sourceButton;
@@ -1030,6 +1087,7 @@ function openApp(key, sourceButton) {
   if (key === "spotify") initSpotify();
   if (key === "files") initFiles();
   if (key === "notes") initNotes();
+  if (key === "photos") initPhotos();
   updateAssistiveTouch();
 }
 
