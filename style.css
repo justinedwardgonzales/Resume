@@ -2233,3 +2233,9 @@ body {
 .campaign-viewer-stage button:last-child{right:0}
 .campaign-photo-viewer>footer{height:54px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:13px;color:#d1d1d6}
 .campaign-photo-viewer>footer span:last-child{font-size:24px}
+
+/* Video thumbnails and embedded films in the Photos gallery */
+.campaign-photo-grid>button:not(.campaign-album-tile){position:relative}
+.campaign-video-mark{position:absolute;right:7px;top:6px;color:white;font-size:13px;text-shadow:0 1px 5px #000;background:rgba(0,0,0,.35);border-radius:50%;width:25px;height:25px;display:grid;place-items:center}
+.campaign-film-frame{width:100%;aspect-ratio:16/9;max-height:80%;border:0;z-index:1}
+.campaign-film-link{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(40,40,40,.9);padding:8px 12px;border-radius:18px;text-decoration:none;font-size:12px;white-space:nowrap;z-index:2}
