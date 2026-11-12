@@ -2239,3 +2239,27 @@ body {
 .campaign-video-mark{position:absolute;right:7px;top:6px;color:white;font-size:13px;text-shadow:0 1px 5px #000;background:rgba(0,0,0,.35);border-radius:50%;width:25px;height:25px;display:grid;place-items:center}
 .campaign-film-frame{width:100%;aspect-ratio:16/9;max-height:80%;border:0;z-index:1}
 .campaign-film-link{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#fff;background:rgba(40,40,40,.9);padding:8px 12px;border-radius:18px;text-decoration:none;font-size:12px;white-space:nowrap;z-index:2}
+
+/* Final iPhone experience refinements */
+.weather-city{font-weight:700;color:#fff;letter-spacing:.02em}
+.weather-widget .widget-app-label{white-space:nowrap}
+.weather-widget .weather-main{align-items:baseline}
+.home-screen .app,.home-screen .home-widget{touch-action:manipulation}
+.home-screen .app:active .app-icon{transform:scale(.94);filter:brightness(.95)}
+.home-screen .app-icon{transition:transform .17s ease,filter .17s ease}
+.home-screen .home-widget:active{transform:scale(.985)}
+.home-screen .home-widget{transition:transform .17s ease}
+.home-screen button:focus-visible,.lock-screen button:focus-visible,.campaign-photos button:focus-visible{outline:2px solid #0a84ff;outline-offset:3px}
+.app-screen .app-content,.campaign-photos-main{-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.campaign-photo-grid>button:active img{filter:brightness(.88)}
+.campaign-photo-grid>button img{transition:filter .16s ease}
+@media(max-width:380px){
+  .home-screen .app-grid{row-gap:17px}
+  .home-screen .dock{padding-inline:7px}
+  .home-screen .dock .app-icon{width:clamp(43px,13vw,58px);height:clamp(43px,13vw,58px);flex-basis:auto}
+  .home-screen .home-widgets{gap:7px}
+  .weather-widget .widget-app-label{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){
+  .home-screen .app-icon,.home-screen .home-widget,.campaign-photo-grid>button img{transition:none!important}
+}
