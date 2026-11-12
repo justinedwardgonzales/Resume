@@ -1121,29 +1121,55 @@ function goHome() {
   }, 210);
 }
 
-// Optional creative Easter egg on the Home Screen calendar.
-const pitchLabOverlay = document.getElementById("pitchLabOverlay");
-const pitchIdeas = [
-  ["Coors Light","The Coldest Commute","Turn the hottest transit stop in the city into an unexpectedly refreshing pop-up experience."],
-  ["Molson Canadian","The Neighbourhood Cheer","Connect local hockey watch parties with a live, city-wide celebration of the fans."],
-  ["Miller Lite","The Seventh-Inning Studio","Give baseball podcasts a travelling recording booth right outside the ballpark."],
-  ["Madrí","The Long Lunch Club","Transform an ordinary downtown lunch hour into a spontaneous street-side cultural experience."],
-  ["Coors Light","After-Hours Gallery","Invite emerging artists to reimagine familiar city spaces through light, temperature and sound."],
-  ["Molson Canadian","The Away-Game Welcome","Bring a little hometown hospitality to Canadians cheering for their team on the road."]
-];
-let lastPitchIdea = 0;
-function closePitchLab(){pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
-document.getElementById("pitchLabTrigger").addEventListener("click",()=>{pitchLabOverlay.classList.remove("hidden");document.getElementById("pitchLabGenerate").focus({preventScroll:true});});
-document.getElementById("pitchLabClose").addEventListener("click",closePitchLab);
-pitchLabOverlay.addEventListener("click",event=>{if(event.target===pitchLabOverlay)closePitchLab();});
-document.getElementById("pitchLabGenerate").addEventListener("click",()=>{
-  lastPitchIdea=(lastPitchIdea+1+Math.floor(Math.random()*(pitchIdeas.length-1)))%pitchIdeas.length;
-  const [brand,title,description]=pitchIdeas[lastPitchIdea];
-  document.getElementById("pitchLabBrand").textContent=brand;
-  document.getElementById("pitchLabConcept").textContent=title;
-  document.getElementById("pitchLabDescription").textContent=description;
-});
-document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!pitchLabOverlay.classList.contains("hidden")){event.stopImmediatePropagation();closePitchLab();}},true);
+// Pocket Arcade — an optional, work-free game hidden in the calendar widget.
+const arcade = document.getElementById("pocketArcadeOverlay");
+const arcadeField = document.getElementById("arcadeField");
+const arcadeStars = document.getElementById("arcadeStars");
+const arcadeBasket = document.getElementById("arcadeBasket");
+const arcadeMessage = document.getElementById("arcadeMessage");
+const arcadePlay = document.getElementById("arcadePlay");
+let arcadeRunning = false, arcadeFrame = 0, arcadeLast = 0, arcadeElapsed = 0, arcadeSpawn = 0;
+let arcadeScore = 0, arcadeBest = 0, arcadeX = .5, arcadeItems = [];
+try { arcadeBest = Number(localStorage.getItem("pocketArcadeBest") || 0) || 0; } catch (_) {}
+document.getElementById("arcadeBest").textContent = arcadeBest;
+function arcadeStop() { arcadeRunning = false; cancelAnimationFrame(arcadeFrame); arcadeItems.forEach(item=>item.el.remove()); arcadeItems=[]; }
+function arcadeClose() { arcadeStop(); arcade.classList.add("hidden"); document.getElementById("pitchLabTrigger").focus({preventScroll:true}); }
+function arcadePosition(x) { const r=arcadeField.getBoundingClientRect(); arcadeX=Math.max(.09,Math.min(.91,(x-r.left)/r.width)); arcadeBasket.style.left=(arcadeX*100)+"%"; }
+function arcadeEnd() {
+  arcadeRunning=false;cancelAnimationFrame(arcadeFrame);
+  if(arcadeScore>arcadeBest){arcadeBest=arcadeScore;try{localStorage.setItem("pocketArcadeBest",String(arcadeBest));}catch(_){}}
+  document.getElementById("arcadeBest").textContent=arcadeBest;
+  arcadeMessage.innerHTML="Time's up!<small>You caught "+arcadeScore+" stars. Play again?</small>";
+  arcadeMessage.classList.remove("hidden");arcadePlay.textContent="Play again";
+}
+function arcadeTick(t) {
+  if(!arcadeRunning)return;
+  const dt=Math.min((t-arcadeLast)/1000||0,.05);arcadeLast=t;arcadeElapsed+=dt;arcadeSpawn+=dt;
+  const rect=arcadeField.getBoundingClientRect(),w=rect.width,h=rect.height;
+  document.getElementById("arcadeTime").textContent=Math.max(0,Math.ceil(30-arcadeElapsed));
+  if(arcadeElapsed>=30){arcadeEnd();return;}
+  if(arcadeSpawn>.48){arcadeSpawn=0;const el=document.createElement("span");el.className="arcade-falling-star";el.textContent="★";arcadeStars.appendChild(el);arcadeItems.push({el,x:.06+Math.random()*.88,y:-.07,speed:.27+Math.random()*.17+arcadeElapsed*.004});}
+  arcadeItems=arcadeItems.filter(item=>{
+    item.y+=item.speed*dt;item.el.style.left=(item.x*100)+"%";item.el.style.top=(item.y*100)+"%";
+    if(item.y>.82 && item.y<.96 && Math.abs(item.x-arcadeX)<.115){arcadeScore++;document.getElementById("arcadeScore").textContent=arcadeScore;item.el.remove();return false;}
+    if(item.y>1.07){item.el.remove();return false;}return true;
+  });
+  arcadeFrame=requestAnimationFrame(arcadeTick);
+}
+function arcadeStart(){
+  arcadeStop();arcadeScore=0;arcadeElapsed=0;arcadeSpawn=0;arcadeX=.5;arcadeBasket.style.left="50%";
+  document.getElementById("arcadeScore").textContent="0";document.getElementById("arcadeTime").textContent="30";
+  arcadeMessage.classList.add("hidden");arcadePlay.textContent="Restart game";
+  arcadeRunning=true;arcadeLast=performance.now();arcadeFrame=requestAnimationFrame(arcadeTick);
+}
+document.getElementById("pitchLabTrigger").addEventListener("click",()=>{arcade.classList.remove("hidden");arcadePlay.focus({preventScroll:true});});
+document.getElementById("arcadeClose").addEventListener("click",arcadeClose);
+arcade.addEventListener("click",e=>{if(e.target===arcade)arcadeClose();});
+arcadePlay.addEventListener("click",arcadeStart);
+arcadeField.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button!==0)return;arcadePosition(e.clientX);arcadeField.setPointerCapture(e.pointerId);});
+arcadeField.addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="touch")arcadePosition(e.clientX);});
+arcade.addEventListener("keydown",e=>{if(e.key==="ArrowLeft"||e.key==="ArrowRight"){e.preventDefault();arcadeX=Math.max(.09,Math.min(.91,arcadeX+(e.key==="ArrowLeft"?-.075:.075)));arcadeBasket.style.left=(arcadeX*100)+"%";}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!arcade.classList.contains("hidden")){e.stopImmediatePropagation();arcadeClose();}},true);
 
 document.getElementById("backButton").addEventListener("click", goHome);
 
