@@ -2184,3 +2184,9 @@ body {
 /* Notes screen must not inherit the home-screen icon artwork or child hiding. */
 .app-screen.notes-active .app-content .ios-notes{background:#f2f2f7!important;background-image:none!important;background-size:auto!important;background-position:initial!important;display:block!important;place-items:initial!important}
 .app-screen.notes-active .app-content .ios-notes> *{display:flex}
+
+/* Date-grouped Notes must be separate white cards on a grey canvas. */
+.app-screen.notes-active .ios-notes-list{background:transparent!important;border-radius:0!important;overflow:visible!important}
+.app-screen.notes-active .ios-notes-date-group{margin:0 0 24px!important}
+.app-screen.notes-active .ios-notes-date-group h2{margin:0 0 10px!important;padding:0!important;background:transparent!important}
+.app-screen.notes-active .ios-notes-date-card{background:#fff!important;border-radius:15px!important;overflow:hidden!important}
