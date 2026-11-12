@@ -756,10 +756,12 @@ function initPhotos() {
       $("campaignPhotoGrid").querySelectorAll("[data-photo]").forEach(b=>b.onclick=()=>openPhoto(Number(b.dataset.photo)));
     }
   }
-  function openPhoto(i){current=i;showPhoto();$("campaignViewer").classList.remove("hidden");}
+  function openPhoto(i){current=i;showPhoto();$("campaignViewer").classList.remove("hidden");$("campaignViewer").focus({preventScroll:true});}
   function showPhoto(){const x=visible[current];if(!x)return;const stage=$("campaignViewerStage");stage.querySelectorAll(".campaign-film-frame,.campaign-film-link").forEach(el=>el.remove());$("campaignViewerImage").style.display=x.video?"none":"";if(x.video){const frame=document.createElement("iframe");frame.className="campaign-film-frame";frame.src="https://www.youtube-nocookie.com/embed/"+x.video+"?autoplay=1&playsinline=1";frame.title=x.title;frame.allow="autoplay; encrypted-media; picture-in-picture";frame.allowFullscreen=true;stage.appendChild(frame);const link=document.createElement("a");link.className="campaign-film-link";link.href="https://www.youtube.com/watch?v="+x.video;link.target="_blank";link.rel="noopener noreferrer";link.textContent="Watch on YouTube ↗";stage.appendChild(link);}$("campaignViewerImage").src=x.src;$("campaignViewerImage").alt=x.title;$("campaignViewerTitle").textContent=x.title;$("campaignViewerBrand").textContent=x.brand;$("campaignViewerCounter").textContent=(current+1)+" of "+visible.length;}
   function move(n){current=(current+n+visible.length)%visible.length;showPhoto();}
   $("campaignViewerClose").onclick=()=>{$("campaignViewer").classList.add("hidden");$("campaignViewerStage").querySelectorAll(".campaign-film-frame,.campaign-film-link").forEach(el=>el.remove());};
+  $("campaignViewer").addEventListener("keydown",e=>{if(e.key==="Escape")$("campaignViewerClose").click();if(e.key==="ArrowLeft")move(-1);if(e.key==="ArrowRight")move(1);});
+  $("campaignViewer").setAttribute("tabindex","-1");
   $("campaignPrev").onclick=()=>move(-1);$("campaignNext").onclick=()=>move(1);
   $("campaignLibraryTab").onclick=()=>{active="All";albumMode=false;render();};
   $("campaignAlbumsTab").onclick=()=>{albumMode=true;render();};
