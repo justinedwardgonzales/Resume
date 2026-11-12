@@ -714,7 +714,6 @@ function initPhotos() {
   const images=[
     {title:"Home DeCoors",brand:"Coors Light",src:"https://www.thestable.com.au/wp-content/uploads/2026/01/Home-deCoors-1.jpg"},
     {title:"Nonna Supper Club",brand:"Birra Moretti",src:"https://images.squarespace-cdn.com/content/v1/67eaa5e98ee5ab450f8e72c6/a6642886-456c-40da-a36e-cb772ae1e2fd/Three%2BItalian%2BNonna%27s%2Bin%2BBirra%2BMoretti%2Baprons%2Bstanding%2Bbehind%2Ba%2Btable%2Bwith%2Bvegetables%2Band%2Bpasta%2Bbeing%2Bprepared%2Balong%2Bwith%2BBirra%2BMorretti%2Bbeer%2Bbottles..jpg"},
-    {title:"Home DeCoors — The Stool",brand:"Coors Light",src:"https://www.thestable.com.au/wp-content/uploads/2026/01/Home-deCoors-1.jpg"},
     {title:"Nonna Supper Club — Recipe Book",brand:"Birra Moretti",src:"https://images.squarespace-cdn.com/content/v1/67eaa5e98ee5ab450f8e72c6/8fbb0cdd-710f-4e30-addc-2f39313007a2/Recipe%2Bbook%2Bwith%2Ba%2Bred%2Btomatoes%2Bbelow.png"}
   ];
   // Catalogue retains campaigns without presenting unrelated or unverified pictures.
