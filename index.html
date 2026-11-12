@@ -18,7 +18,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23101827'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-weight='700' font-size='31' text-anchor='middle' fill='white'%3EJG%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="style.css?v=arcade-safe-20261112">
+  <link rel="stylesheet" href="style.css?v=playground-20261112">
 </head>
 <body>
   <main class="stage">
@@ -99,7 +99,7 @@
           <div class="home-widgets photography-widgets">
             <button class="home-widget photo-widget" data-app="photos" type="button" aria-label="Open selected work and photo portfolio">
             </button>
-            <button class="home-widget calendar-widget" id="pitchLabTrigger" type="button" aria-label="Open hidden Catch the Stars mini-game">
+            <button class="home-widget calendar-widget" id="pitchLabTrigger" type="button" aria-label="Open interactive art playground">
               <span class="calendar-weekday" id="homeCalendarWeekday">MON</span>
               <strong class="calendar-day" id="homeCalendarDay">09</strong>
               <span class="calendar-month" id="homeCalendarMonth">NOVEMBER</span>
@@ -142,16 +142,19 @@
         </section>
 
         <div class="pitch-lab-overlay hidden" id="pitchLabOverlay" role="dialog" aria-modal="true" aria-labelledby="pitchLabTitle">
-          <div class="pitch-lab-card arcade-card">
-            <div class="pitch-lab-top"><span>★ POCKET ARCADE</span><button type="button" id="pitchLabClose" aria-label="Close arcade">×</button></div>
-            <h2 id="pitchLabTitle">Catch the Stars</h2>
-            <div class="arcade-hud"><span>SCORE <strong id="arcadeScore">0</strong></span><span>BEST <strong id="arcadeBest">0</strong></span><span>TIME <strong id="arcadeTime">30</strong></span></div>
-            <div class="arcade-field" id="arcadeField" aria-label="Move the basket to catch falling stars">
-              <div id="arcadeStars" class="arcade-stars"></div><div class="arcade-basket" id="arcadeBasket">🧺</div>
-              <div id="arcadeMessage" class="arcade-message">Catch the stars!<small>Move your finger or mouse to steer.</small></div>
+          <div class="playground-shell">
+            <div class="playground-top"><span>✳ LITTLE INTERNET EXPERIMENT</span><button id="pitchLabClose" type="button" aria-label="Close playground">×</button></div>
+            <h2 id="pitchLabTitle">move things around.</h2>
+            <p class="playground-hint">drag the words · tap the circle · make a mess</p>
+            <div class="playground-canvas" id="playgroundCanvas">
+              <svg class="playground-orbit" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="playgroundCirclePath" d="M150,150 m-111,0 a111,111 0 1,1 222,0 a111,111 0 1,1 -222,0"/></defs><text><textPath href="#playgroundCirclePath">nothing to win · nowhere to go · just play · </textPath></text></svg>
+              <button class="playground-core" id="playgroundCore" type="button" aria-label="Change playground colour">✳</button>
+              <span class="playground-piece" style="left:12%;top:13%" tabindex="0">HELLO!</span>
+              <span class="playground-piece" style="left:58%;top:18%" tabindex="0">↗ WHY NOT</span>
+              <span class="playground-piece" style="left:12%;top:69%" tabindex="0">DAYDREAM</span>
+              <span class="playground-piece" style="left:57%;top:78%" tabindex="0">★ MORE FUN</span>
             </div>
-            <button id="pitchLabGenerate" class="pitch-lab-generate" type="button">Start game</button>
-            <small>30 seconds · Touch, mouse or arrow keys</small>
+            <button id="playgroundRemix" class="playground-remix" type="button">↻ remix everything</button>
           </div>
         </div>
         <section id="appScreen" class="app-screen hidden">
@@ -195,6 +198,6 @@
       <div class="home-gesture-zone" id="homeGestureZone" aria-label="Swipe up for Home"></div>
     </div>
   </main>
-  <script src="app.js?v=arcade-safe-20261112"></script>
+  <script src="app.js?v=playground-20261112"></script>
 </body>
 </html>
