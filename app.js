@@ -1121,59 +1121,47 @@ function goHome() {
   }, 210);
 }
 
-// Isolated mini-game: never intercept Lock Screen or global swipe gestures.
-const pitchLabOverlay = document.getElementById("pitchLabOverlay");
-const arcadeField = document.getElementById("arcadeField");
-const arcadeStars = document.getElementById("arcadeStars");
-const arcadeBasket = document.getElementById("arcadeBasket");
-const arcadeMessage = document.getElementById("arcadeMessage");
-const arcadePlay = document.getElementById("pitchLabGenerate");
-let arcadeActive=false, arcadeRaf=0, arcadeLast=0, arcadeElapsed=0, arcadeSpawn=0, arcadeScore=0, arcadeBest=0, arcadeX=.5, arcadeItems=[];
-try { arcadeBest=Number(localStorage.getItem("justinArcadeBest")||0)||0; } catch (_) {}
-document.getElementById("arcadeBest").textContent=arcadeBest;
-function arcadeStop(){arcadeActive=false;cancelAnimationFrame(arcadeRaf);arcadeItems.forEach(item=>item.el.remove());arcadeItems=[];}
-function closePitchLab(){arcadeStop();pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
-function arcadeMove(x){const r=arcadeField.getBoundingClientRect();arcadeX=Math.max(.1,Math.min(.9,(x-r.left)/r.width));arcadeBasket.style.left=(arcadeX*100)+"%";}
-function arcadeFinish(){
-  arcadeActive=false;cancelAnimationFrame(arcadeRaf);
-  if(arcadeScore>arcadeBest){arcadeBest=arcadeScore;try{localStorage.setItem("justinArcadeBest",String(arcadeBest));}catch(_){}}
-  document.getElementById("arcadeBest").textContent=arcadeBest;
-  arcadeMessage.innerHTML="Time's up!<small>You caught "+arcadeScore+" stars!</small>";
-  arcadeMessage.classList.remove("hidden");arcadePlay.textContent="Play again";
-}
-function arcadeTick(now){
-  if(!arcadeActive)return;
-  const dt=Math.min((now-arcadeLast)/1000||0,.05);arcadeLast=now;arcadeElapsed+=dt;arcadeSpawn+=dt;
-  document.getElementById("arcadeTime").textContent=Math.max(0,Math.ceil(30-arcadeElapsed));
-  if(arcadeElapsed>=30){arcadeFinish();return;}
-  if(arcadeSpawn>=.5){
-    arcadeSpawn=0;const el=document.createElement("span");el.className="arcade-star";el.textContent="★";arcadeStars.appendChild(el);
-    arcadeItems.push({el,x:.08+Math.random()*.84,y:-.08,speed:.28+Math.random()*.15+arcadeElapsed*.003});
-  }
-  arcadeItems=arcadeItems.filter(item=>{
-    item.y+=item.speed*dt;item.el.style.left=(item.x*100)+"%";item.el.style.top=(item.y*100)+"%";
-    if(item.y>.82&&item.y<.96&&Math.abs(item.x-arcadeX)<.13){arcadeScore++;document.getElementById("arcadeScore").textContent=arcadeScore;item.el.remove();return false;}
-    if(item.y>1.08){item.el.remove();return false;}return true;
+// Experimental toy box, scoped to its own overlay. No Lock Screen listeners.
+const pitchLabOverlay=document.getElementById("pitchLabOverlay");
+const playgroundCanvas=document.getElementById("playgroundCanvas");
+const playgroundPieces=[...playgroundCanvas.querySelectorAll(".playground-piece")];
+const playgroundColours=["#00c9ed","#ffcf42","#ff89b8","#b9f76e","#a5a0ff"];
+let playgroundColour=0,playgroundDrag=null;
+function closePitchLab(){pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
+function playgroundPaint(){playgroundColour=(playgroundColour+1)%playgroundColours.length;playgroundCanvas.style.background=playgroundColours[playgroundColour];}
+function playgroundRemix(){
+  playgroundPaint();
+  playgroundPieces.forEach((piece,i)=>{
+    piece.style.left=(7+Math.random()*54)+"%";piece.style.top=(8+Math.random()*76)+"%";
+    piece.style.transform="rotate("+(-28+Math.random()*56)+"deg)";
   });
-  arcadeRaf=requestAnimationFrame(arcadeTick);
+  playgroundCanvas.querySelector(".playground-orbit").style.transform="translate(-50%,-50%) rotate("+Math.floor(Math.random()*360)+"deg)";
 }
-function arcadeStart(){
-  arcadeStop();arcadeScore=0;arcadeElapsed=0;arcadeSpawn=0;arcadeX=.5;arcadeBasket.style.left="50%";
-  document.getElementById("arcadeScore").textContent="0";document.getElementById("arcadeTime").textContent="30";
-  arcadeMessage.classList.add("hidden");arcadePlay.textContent="Restart";
-  arcadeActive=true;arcadeLast=performance.now();arcadeRaf=requestAnimationFrame(arcadeTick);
-}
-document.getElementById("pitchLabTrigger").addEventListener("click",()=>{pitchLabOverlay.classList.remove("hidden");arcadePlay.focus({preventScroll:true});});
+document.getElementById("pitchLabTrigger").addEventListener("click",()=>{pitchLabOverlay.classList.remove("hidden");document.getElementById("pitchLabClose").focus({preventScroll:true});});
 document.getElementById("pitchLabClose").addEventListener("click",closePitchLab);
-pitchLabOverlay.addEventListener("click",event=>{if(event.target===pitchLabOverlay)closePitchLab();});
-arcadePlay.addEventListener("click",arcadeStart);
-arcadeField.addEventListener("pointerdown",event=>{if(event.pointerType==="mouse"&&event.button!==0)return;arcadeMove(event.clientX);try{arcadeField.setPointerCapture(event.pointerId);}catch(_){}});
-arcadeField.addEventListener("pointermove",event=>{if(event.buttons||event.pointerType==="touch")arcadeMove(event.clientX);});
-pitchLabOverlay.addEventListener("keydown",event=>{
-  if(event.key==="Escape"){event.preventDefault();event.stopPropagation();closePitchLab();}
-  if(event.key==="ArrowLeft"||event.key==="ArrowRight"){event.preventDefault();arcadeX=Math.max(.1,Math.min(.9,arcadeX+(event.key==="ArrowLeft"?-.075:.075)));arcadeBasket.style.left=(arcadeX*100)+"%";}
+pitchLabOverlay.addEventListener("click",e=>{if(e.target===pitchLabOverlay)closePitchLab();});
+document.getElementById("playgroundCore").addEventListener("click",playgroundPaint);
+document.getElementById("playgroundRemix").addEventListener("click",playgroundRemix);
+playgroundPieces.forEach(piece=>{
+  piece.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse"&&e.button!==0)return;
+    e.preventDefault();const rect=playgroundCanvas.getBoundingClientRect();
+    playgroundDrag={piece,id:e.pointerId,rect,dx:e.clientX-piece.getBoundingClientRect().left,dy:e.clientY-piece.getBoundingClientRect().top};
+    try{piece.setPointerCapture(e.pointerId);}catch(_){}
+    piece.classList.add("dragging");
+  });
+  piece.addEventListener("pointermove",e=>{
+    if(!playgroundDrag||playgroundDrag.piece!==piece||playgroundDrag.id!==e.pointerId)return;
+    const d=playgroundDrag;
+    const x=Math.max(0,Math.min(d.rect.width-piece.offsetWidth,e.clientX-d.rect.left-d.dx));
+    const y=Math.max(0,Math.min(d.rect.height-piece.offsetHeight,e.clientY-d.rect.top-d.dy));
+    piece.style.left=x+"px";piece.style.top=y+"px";
+  });
+  const finish=e=>{if(playgroundDrag?.piece===piece&&playgroundDrag.id===e.pointerId)playgroundDrag=null;piece.classList.remove("dragging");};
+  piece.addEventListener("pointerup",finish);piece.addEventListener("pointercancel",finish);
+  piece.addEventListener("keydown",e=>{if(e.key.startsWith("Arrow")){e.preventDefault();const r=playgroundCanvas.getBoundingClientRect();const x=piece.offsetLeft+(e.key==="ArrowRight"?12:e.key==="ArrowLeft"?-12:0),y=piece.offsetTop+(e.key==="ArrowDown"?12:e.key==="ArrowUp"?-12:0);piece.style.left=Math.max(0,Math.min(r.width-piece.offsetWidth,x))+"px";piece.style.top=Math.max(0,Math.min(r.height-piece.offsetHeight,y))+"px";}});
 });
-document.addEventListener("keydown",event=>{if(event.key==="Escape"&&!pitchLabOverlay.classList.contains("hidden")){event.stopImmediatePropagation();closePitchLab();}},true);
+pitchLabOverlay.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closePitchLab();}});
 
 document.getElementById("backButton").addEventListener("click", goHome);
 
