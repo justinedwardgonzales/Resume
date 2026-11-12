@@ -721,11 +721,9 @@ function initPhotos() {
     {"title":"Ultimate Stress-Free Day Off","brand":"Strongbow","src":"https://d3q27bh1u24u2o.cloudfront.net/news/Strongbow_Vacation_Kits.png"},
     {"title":"Performance Enhancing Canadians — OOH","brand":"Molson Canadian","src":"https://image.adsoftheworld.com/3a3jbecpgc9p8xr5mvvvl0q28urq"},
     {"title":"First Sip Wrapping Bar","brand":"Heineken","src":"https://www.narcity.com/media-library/heineken-will-wrap-your-gifts-for-free-at-their-union-station-pop-up-between-dec-18-22.png?coordinates=2%2C0%2C3%2C0&height=700&id=55313902&quality=85&width=1245"},
-    {"title":"Paid Through Parents — Film","brand":"Molson Canadian","src":"https://mma.prnewswire.com/media/2466810/Molson_Molson_is_rewarding_the_grit_and_determination_of_Team_Ca.jpg?p=twitter"},
     {"title":"Coors Light Records — Artist Pass","brand":"Coors Light","src":"https://ca.billboard.com/media-library/coors-light-records-is-giving-one-fan-the-artist-treatment-at-osheaga-2025.jpg?id=61194467&quality=50&width=800"},
+    {"title":"Paid Through Parents — Campaign Film","brand":"Molson Canadian","src":"https://img.youtube.com/vi/H8ANXS5b_HA/hqdefault.jpg","video":"H8ANXS5b_HA"},
     {"title":"Nonna Supper Club — Recipe Book","brand":"Birra Moretti","src":"https://images.squarespace-cdn.com/content/v1/67eaa5e98ee5ab450f8e72c6/8fbb0cdd-710f-4e30-addc-2f39313007a2/Recipe%2Bbook%2Bwith%2Ba%2Bred%2Btomatoes%2Bbelow.png"},
-    {"title":"Paid Through Parents — Portrait","brand":"Molson Canadian","src":"https://cdn.musebycl.io/2024-07/Molson1.jpg"},
-    {"title":"Paid Through Parents — Portrait","brand":"Molson Canadian","src":"https://cdn.musebycl.io/2024-07/Molson2.jpg"}
   ];
   // Catalogue retains campaigns without presenting unrelated or unverified pictures.
   const catalogue=[
@@ -750,14 +748,14 @@ function initPhotos() {
       $("campaignPhotoGrid").querySelectorAll("[data-album]").forEach(b=>b.onclick=()=>{active=b.dataset.album;albumMode=false;render();});
     }else{
       $("campaignPhotoGrid").className="campaign-photo-grid";
-      $("campaignPhotoGrid").innerHTML=visible.length?visible.map((x,i)=>`<button type="button" data-photo="${i}" aria-label="View ${x.title}"><img src="${x.src}" alt="${x.title}" loading="lazy" onerror="this.closest('button').classList.add('image-unavailable')"></button>`).join(""):'<p class="campaign-photo-empty">Campaign imagery is being sourced for this album.</p>';
+      $("campaignPhotoGrid").innerHTML=visible.length?visible.map((x,i)=>`<button type="button" data-photo="${i}" aria-label="View ${x.title}"><img src="${x.src}" alt="${x.title}" loading="lazy" onerror="this.closest('button').classList.add('image-unavailable')">${x.video?'<span class="campaign-video-mark">▶</span>':""}</button>`).join(""):'<p class="campaign-photo-empty">Campaign imagery is being sourced for this album.</p>';
       $("campaignPhotoGrid").querySelectorAll("[data-photo]").forEach(b=>b.onclick=()=>openPhoto(Number(b.dataset.photo)));
     }
   }
   function openPhoto(i){current=i;showPhoto();$("campaignViewer").classList.remove("hidden");}
-  function showPhoto(){const x=visible[current];if(!x)return;$("campaignViewerImage").src=x.src;$("campaignViewerImage").alt=x.title;$("campaignViewerTitle").textContent=x.title;$("campaignViewerBrand").textContent=x.brand;$("campaignViewerCounter").textContent=(current+1)+" of "+visible.length;}
+  function showPhoto(){const x=visible[current];if(!x)return;const stage=$("campaignViewerStage");stage.querySelectorAll(".campaign-film-frame,.campaign-film-link").forEach(el=>el.remove());$("campaignViewerImage").style.display=x.video?"none":"";if(x.video){const frame=document.createElement("iframe");frame.className="campaign-film-frame";frame.src="https://www.youtube-nocookie.com/embed/"+x.video+"?autoplay=1&playsinline=1";frame.title=x.title;frame.allow="autoplay; encrypted-media; picture-in-picture";frame.allowFullscreen=true;stage.appendChild(frame);const link=document.createElement("a");link.className="campaign-film-link";link.href="https://www.youtube.com/watch?v="+x.video;link.target="_blank";link.rel="noopener noreferrer";link.textContent="Watch on YouTube ↗";stage.appendChild(link);}$("campaignViewerImage").src=x.src;$("campaignViewerImage").alt=x.title;$("campaignViewerTitle").textContent=x.title;$("campaignViewerBrand").textContent=x.brand;$("campaignViewerCounter").textContent=(current+1)+" of "+visible.length;}
   function move(n){current=(current+n+visible.length)%visible.length;showPhoto();}
-  $("campaignViewerClose").onclick=()=>$("campaignViewer").classList.add("hidden");
+  $("campaignViewerClose").onclick=()=>{$("campaignViewer").classList.add("hidden");$("campaignViewerStage").querySelectorAll(".campaign-film-frame,.campaign-film-link").forEach(el=>el.remove());};
   $("campaignPrev").onclick=()=>move(-1);$("campaignNext").onclick=()=>move(1);
   $("campaignLibraryTab").onclick=()=>{active="All";albumMode=false;render();};
   $("campaignAlbumsTab").onclick=()=>{albumMode=true;render();};
