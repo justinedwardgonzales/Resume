@@ -2268,3 +2268,8 @@ body {
 .weather-widget .widget-app-label{gap:8px}
 .weather-widget .widget-app-icon{display:inline-flex;align-items:center;justify-content:center;min-width:18px;flex-shrink:0}
 .weather-widget .weather-city{margin-left:2px}
+
+/* Dedicated home gesture: avoid grabbing underlying images and text */
+.home-gesture-zone{position:absolute;left:0;right:0;bottom:0;height:43px;z-index:81;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab;background:transparent}
+.home-gesture-zone.is-dragging{cursor:grabbing}
+.outer-home-indicator,.app-home-indicator,.swipe-pill{pointer-events:none;user-select:none;-webkit-user-select:none}
