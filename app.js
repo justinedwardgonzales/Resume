@@ -1194,6 +1194,24 @@ homeGestureZone.addEventListener("pointerup", event => {
 homeGestureZone.addEventListener("pointercancel", () => {homeGestureStart=null;homeGestureZone.classList.remove("is-dragging");});
 homeGestureZone.addEventListener("dragstart", event => event.preventDefault());
 
+// On the Lock Screen, an upward swipe anywhere on the background can unlock.
+// This avoids depending on a tiny bottom-edge hit target on touch devices.
+let lockSwipeStart = null;
+lockScreen.addEventListener("pointerdown", event => {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  if (event.target.closest("button, a, input, [role=button]")) return;
+  lockSwipeStart = {id:event.pointerId,x:event.clientX,y:event.clientY};
+});
+lockScreen.addEventListener("pointerup", event => {
+  if (!lockSwipeStart || lockSwipeStart.id !== event.pointerId) return;
+  const dy=event.clientY-lockSwipeStart.y, dx=Math.abs(event.clientX-lockSwipeStart.x);
+  lockSwipeStart=null;
+  if (dy < -55 && Math.abs(dy)>dx*1.15 && !lockScreen.classList.contains("hidden")) {
+    event.preventDefault(); unlock();
+  }
+});
+lockScreen.addEventListener("pointercancel",()=>{lockSwipeStart=null;});
+
 // The dedicated bottom strip owns Home gestures. Do not start gestures on app content.
 phone.addEventListener("dragstart", event => {
   if (event.target.closest(".home-gesture-zone")) event.preventDefault();
