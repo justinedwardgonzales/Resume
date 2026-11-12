@@ -1144,6 +1144,31 @@ languagePopover.querySelectorAll("button").forEach(button => {
   });
 });
 
+// Capture Home gestures on a dedicated, non-scrolling bottom edge.
+const homeGestureZone = document.getElementById("homeGestureZone");
+let homeGestureStart = null;
+homeGestureZone.addEventListener("pointerdown", event => {
+  if (event.pointerType === "mouse" && event.button !== 0) return;
+  event.preventDefault();
+  event.stopPropagation();
+  homeGestureStart = {id:event.pointerId, x:event.clientX, y:event.clientY};
+  homeGestureZone.classList.add("is-dragging");
+  homeGestureZone.setPointerCapture(event.pointerId);
+});
+homeGestureZone.addEventListener("pointerup", event => {
+  event.stopPropagation();
+  homeGestureZone.classList.remove("is-dragging");
+  if (!homeGestureStart || homeGestureStart.id !== event.pointerId) return;
+  const dy=event.clientY-homeGestureStart.y, dx=Math.abs(event.clientX-homeGestureStart.x);
+  homeGestureStart=null;
+  if (dy < -48 && Math.abs(dy) > dx*1.15) {
+    if (!appScreen.classList.contains("hidden")) goHome();
+    else if (!lockScreen.classList.contains("hidden")) unlock();
+  }
+});
+homeGestureZone.addEventListener("pointercancel", () => {homeGestureStart=null;homeGestureZone.classList.remove("is-dragging");});
+homeGestureZone.addEventListener("dragstart", event => event.preventDefault());
+
 let startY = null;
 let startX = null;
 let startedAtBottomEdge = false;
