@@ -1153,9 +1153,10 @@ homeGestureZone.addEventListener("pointerdown", event => {
   event.stopPropagation();
   homeGestureStart = {id:event.pointerId, x:event.clientX, y:event.clientY};
   homeGestureZone.classList.add("is-dragging");
-  homeGestureZone.setPointerCapture(event.pointerId);
+  try { homeGestureZone.setPointerCapture(event.pointerId); } catch (_) {}
 });
 homeGestureZone.addEventListener("pointerup", event => {
+  event.preventDefault();
   event.stopPropagation();
   homeGestureZone.classList.remove("is-dragging");
   if (!homeGestureStart || homeGestureStart.id !== event.pointerId) return;
@@ -1169,64 +1170,10 @@ homeGestureZone.addEventListener("pointerup", event => {
 homeGestureZone.addEventListener("pointercancel", () => {homeGestureStart=null;homeGestureZone.classList.remove("is-dragging");});
 homeGestureZone.addEventListener("dragstart", event => event.preventDefault());
 
-let startY = null;
-let startX = null;
-let startedAtBottomEdge = false;
-
-// Show a grab cursor only over the bottom-edge swipe gesture zone.
-function updateSwipeCursor(event) {
-  if (event.pointerType === "touch") return;
-  const rect = phone.getBoundingClientRect();
-  const inSwipeZone = event.clientX >= rect.left && event.clientX <= rect.right &&
-    event.clientY >= rect.bottom - 54 && event.clientY <= rect.bottom;
-  phone.classList.toggle("swipe-ready", inSwipeZone);
-}
-phone.addEventListener("pointermove", updateSwipeCursor, { passive: true });
-phone.addEventListener("pointerleave", () => {
-  phone.classList.remove("swipe-ready", "swipe-dragging");
+// The dedicated bottom strip owns Home gestures. Do not start gestures on app content.
+phone.addEventListener("dragstart", event => {
+  if (event.target.closest(".home-gesture-zone")) event.preventDefault();
 });
-phone.addEventListener("pointerdown", event => {
-  if (event.pointerType !== "touch") updateSwipeCursor(event);
-  phone.classList.toggle("swipe-dragging", event.pointerType !== "touch" && phone.classList.contains("swipe-ready"));
-});
-
-phone.addEventListener("pointerdown", event => {
-  const phoneRect = phone.getBoundingClientRect();
-  startY = event.clientY;
-  startX = event.clientX;
-  startedAtBottomEdge = phoneRect.bottom - event.clientY <= 44;
-}, { passive: true });
-
-phone.addEventListener("pointerup", event => {
-  phone.classList.remove("swipe-dragging");
-  if (startY === null) return;
-
-  const deltaY = event.clientY - startY;
-  const deltaX = event.clientX - startX;
-  const mostlyVertical = Math.abs(deltaY) > Math.abs(deltaX) * 1.2;
-
-  // Face ID iPhone gesture: a quick upward swipe from the bottom edge returns Home.
-  if (startedAtBottomEdge && mostlyVertical && deltaY < -65) {
-    if (!appScreen.classList.contains("hidden")) {
-      goHome();
-    } else if (!lockScreen.classList.contains("hidden")) {
-      unlock();
-    }
-  } else if (!homeScreen.classList.contains("hidden") && deltaY > 90) {
-    lockPhone();
-  }
-
-  startY = null;
-  startX = null;
-  startedAtBottomEdge = false;
-}, { passive: true });
-
-phone.addEventListener("pointercancel", () => {
-  phone.classList.remove("swipe-dragging", "swipe-ready");
-  startY = null;
-  startX = null;
-  startedAtBottomEdge = false;
-}, { passive: true });
 
 document.addEventListener("keydown", event => {
   if (event.key === "Escape") {
