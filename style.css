@@ -2263,3 +2263,8 @@ body {
 @media(prefers-reduced-motion:reduce){
   .home-screen .app-icon,.home-screen .home-widget,.campaign-photo-grid>button img{transition:none!important}
 }
+
+/* Lock Screen weather label legibility */
+.weather-widget .widget-app-label{gap:8px}
+.weather-widget .widget-app-icon{display:inline-flex;align-items:center;justify-content:center;min-width:18px;flex-shrink:0}
+.weather-widget .weather-city{margin-left:2px}
