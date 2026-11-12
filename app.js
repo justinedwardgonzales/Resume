@@ -905,7 +905,7 @@ function initFiles() {
   const $ = id => document.getElementById(id);
   const browser = $("filesBrowser"), preview = $("filesPreview"), locations = $("filesLocations"), folder = $("filesFolder"), recents = $("filesRecents");
   const search = $("filesSearch");
-  let tab = "browse";
+  let tab = "recents";
   function showTab(next) {
     tab = next; browser.classList.remove("hidden"); preview.classList.add("hidden");
     $("filesTabBrowse").classList.toggle("selected", next === "browse");
@@ -944,6 +944,7 @@ function initFiles() {
     else if (navigator.clipboard) { try { await navigator.clipboard.writeText(url); $("filesShare").querySelector("span").textContent="Copied!"; } catch(e) { window.open(url,"_blank","noopener"); } }
     else window.open(url,"_blank","noopener");
   });
+  showTab("recents");
   search.addEventListener("input", () => {
     const q=search.value.trim().toLowerCase();
     if (tab === "browse" && q && folder.classList.contains("hidden")) { openFolder("Search Results"); search.value=q; }
