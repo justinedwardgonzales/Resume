@@ -724,13 +724,17 @@ function initPhotos() {
     {"title":"Coors Light Records — Artist Pass","brand":"Coors Light","src":"https://ca.billboard.com/media-library/coors-light-records-is-giving-one-fan-the-artist-treatment-at-osheaga-2025.jpg?id=61194467&quality=50&width=800"},
     {"title":"Paid Through Parents — Campaign Film","brand":"Molson Canadian","src":"https://img.youtube.com/vi/H8ANXS5b_HA/hqdefault.jpg","video":"H8ANXS5b_HA"},
     {"title":"Nonna Supper Club — Recipe Book","brand":"Birra Moretti","src":"https://images.squarespace-cdn.com/content/v1/67eaa5e98ee5ab450f8e72c6/8fbb0cdd-710f-4e30-addc-2f39313007a2/Recipe%2Bbook%2Bwith%2Ba%2Bred%2Btomatoes%2Bbelow.png"},
+        {"title":"ColdVision","brand":"Coors Light","src":"https://bestads-files.b-cdn.net/thumbs/07072387d0.jpg"},
+    {"title":"Miller Lite × Who Killed the Montreal Expos?","brand":"Miller Lite","src":"https://images.ctfassets.net/4cd45et68cgf/6F3nnCI1w03zQ3gGieH365/64b484909e5a43c44900af37cc22119e/Who_Killed_The_Montreal_Expos_Miller_Lite_EN.png?w=2000"},
+    {"title":"Madrí Día Libre — Toronto","brand":"Madrí","src":"https://images.squarespace-cdn.com/content/v1/603d711337f7937a7c15f6d4/2bf03f66-19fd-4549-9dac-02744153bc89/Madri-76.jpg"},
+    {"title":"The Great Canadian Giveaway","brand":"Molson Canadian","src":"https://lh3.googleusercontent.com/D2w-3R5XEaKWP9ygDb9Xb-_DY3HM0kStuy3_HUxh6kmgVN8DICdTK-fevnz4ZGA1uxW6lMapvBg8PLD9ctrteez_cnLTa7o=s1440-rw"},
   ];
   // Catalogue retains campaigns without presenting unrelated or unverified pictures.
   const catalogue=[
-    ["Coors Light","Cold as the Rockies"],["Coors Light","Home DeCoors"],["Coors Light","Tall Girl"],["Coors Light","Golf Launch"],["Coors Light","Coors Light Records"],
-    ["Molson Canadian","Performance Enhancing Canadians"],["Molson Canadian","Paid Through Parents"],["Molson Canadian","Cheer Canadian"],["Molson Canadian","The Amazing Race Canada"],
-    ["Miller Lite","Turkeycase"],["Miller Lite","Blue Jays Territory"],
-    ["Madrí","Ibaka"],["Heineken","First Sip Wrapping Bar"],["Birra Moretti","Nonna Supper Club"],["Strongbow","Ultimate Stress-Free Day Off"]
+    ["Coors Light","Cold as the Rockies"],["Coors Light","ColdVision"],["Coors Light","Home DeCoors"],["Coors Light","Tall Girl"],["Coors Light","Golf Launch"],["Coors Light","Coors Light Records"],
+    ["Molson Canadian","The Great Canadian Giveaway"],["Molson Canadian","Cheer Canadian: Buffalo"],["Molson Canadian","Performance Enhancing Canadians"],["Molson Canadian","Paid Through Parents"],["Molson Canadian","Cheer Canadian"],["Molson Canadian","The Amazing Race Canada"],
+    ["Miller Lite","Who Killed the Montreal Expos?"],["Miller Lite","Turkeycase"],["Miller Lite","Blue Jays Territory"],
+    ["Madrí","Día Libre"],["Madrí","Spontaneity Bottle Launch"],["Madrí","Ibaka"],["Heineken","First Sip Wrapping Bar"],["Birra Moretti","Nonna Supper Club"],["Strongbow","Ultimate Stress-Free Day Off"]
   ];
   let active="All",current=0,visible=images.slice(),albumMode=false;
   const brands=[...new Set(catalogue.map(c=>c[0]))];
