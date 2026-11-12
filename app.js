@@ -1121,47 +1121,91 @@ function goHome() {
   }, 210);
 }
 
-// Experimental toy box, scoped to its own overlay. No Lock Screen listeners.
+// Soft-body circle experiment: only runs while its overlay is visible.
 const pitchLabOverlay=document.getElementById("pitchLabOverlay");
-const playgroundCanvas=document.getElementById("playgroundCanvas");
-const playgroundPieces=[...playgroundCanvas.querySelectorAll(".playground-piece")];
-const playgroundColours=["#00c9ed","#ffcf42","#ff89b8","#b9f76e","#a5a0ff"];
-let playgroundColour=0,playgroundDrag=null;
-function closePitchLab(){pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
-function playgroundPaint(){playgroundColour=(playgroundColour+1)%playgroundColours.length;playgroundCanvas.style.background=playgroundColours[playgroundColour];}
-function playgroundRemix(){
-  playgroundPaint();
-  playgroundPieces.forEach((piece,i)=>{
-    piece.style.left=(7+Math.random()*54)+"%";piece.style.top=(8+Math.random()*76)+"%";
-    piece.style.transform="rotate("+(-28+Math.random()*56)+"deg)";
-  });
-  playgroundCanvas.querySelector(".playground-orbit").style.transform="translate(-50%,-50%) rotate("+Math.floor(Math.random()*360)+"deg)";
+const physicsField=document.getElementById("physicsField");
+const physicsCanvas=document.getElementById("physicsCanvas");
+const physicsCtx=physicsCanvas.getContext("2d");
+const physicsColours=["#05c8ef","#ffda42","#ff709e","#a2f76e","#a998ff","#ff9050"];
+let physicsFrame=0,physicsLast=0,physicsDrag=null,physicsColour=0;
+const blob={x:0,y:0,vx:165,vy:115,r:82,sx:1,sy:1,angle:0,impact:0};
+function physicsSize(){
+  const rect=physicsField.getBoundingClientRect();
+  const dpr=Math.min(window.devicePixelRatio||1,2);
+  physicsCanvas.width=Math.round(rect.width*dpr);physicsCanvas.height=Math.round(rect.height*dpr);
+  physicsCanvas.style.width=rect.width+"px";physicsCanvas.style.height=rect.height+"px";
+  physicsCtx.setTransform(dpr,0,0,dpr,0,0);
+  blob.r=Math.min(82,Math.min(rect.width,rect.height)*.21);
+  blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,blob.x||rect.width/2));
+  blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,blob.y||rect.height/2));
 }
-document.getElementById("pitchLabTrigger").addEventListener("click",()=>{pitchLabOverlay.classList.remove("hidden");document.getElementById("pitchLabClose").focus({preventScroll:true});});
-document.getElementById("pitchLabClose").addEventListener("click",closePitchLab);
-pitchLabOverlay.addEventListener("click",e=>{if(e.target===pitchLabOverlay)closePitchLab();});
-document.getElementById("playgroundCore").addEventListener("click",playgroundPaint);
-document.getElementById("playgroundRemix").addEventListener("click",playgroundRemix);
-playgroundPieces.forEach(piece=>{
-  piece.addEventListener("pointerdown",e=>{
-    if(e.pointerType==="mouse"&&e.button!==0)return;
-    e.preventDefault();const rect=playgroundCanvas.getBoundingClientRect();
-    playgroundDrag={piece,id:e.pointerId,rect,dx:e.clientX-piece.getBoundingClientRect().left,dy:e.clientY-piece.getBoundingClientRect().top};
-    try{piece.setPointerCapture(e.pointerId);}catch(_){}
-    piece.classList.add("dragging");
-  });
-  piece.addEventListener("pointermove",e=>{
-    if(!playgroundDrag||playgroundDrag.piece!==piece||playgroundDrag.id!==e.pointerId)return;
-    const d=playgroundDrag;
-    const x=Math.max(0,Math.min(d.rect.width-piece.offsetWidth,e.clientX-d.rect.left-d.dx));
-    const y=Math.max(0,Math.min(d.rect.height-piece.offsetHeight,e.clientY-d.rect.top-d.dy));
-    piece.style.left=x+"px";piece.style.top=y+"px";
-  });
-  const finish=e=>{if(playgroundDrag?.piece===piece&&playgroundDrag.id===e.pointerId)playgroundDrag=null;piece.classList.remove("dragging");};
-  piece.addEventListener("pointerup",finish);piece.addEventListener("pointercancel",finish);
-  piece.addEventListener("keydown",e=>{if(e.key.startsWith("Arrow")){e.preventDefault();const r=playgroundCanvas.getBoundingClientRect();const x=piece.offsetLeft+(e.key==="ArrowRight"?12:e.key==="ArrowLeft"?-12:0),y=piece.offsetTop+(e.key==="ArrowDown"?12:e.key==="ArrowUp"?-12:0);piece.style.left=Math.max(0,Math.min(r.width-piece.offsetWidth,x))+"px";piece.style.top=Math.max(0,Math.min(r.height-piece.offsetHeight,y))+"px";}});
+function physicsReset(){physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;blob.vx=165;blob.vy=125;blob.sx=1;blob.sy=1;blob.impact=0;physicsColour=0;}
+function physicsClose(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;pitchLabOverlay.classList.add("hidden");document.getElementById("pitchLabTrigger").focus({preventScroll:true});}
+function physicsStep(t){
+  const dt=Math.min((t-physicsLast)/1000||0,.033);physicsLast=t;
+  const w=physicsField.clientWidth,h=physicsField.clientHeight,r=blob.r;
+  if(!physicsDrag){
+    blob.x+=blob.vx*dt;blob.y+=blob.vy*dt;
+    let hitX=false,hitY=false;
+    if(blob.x-r<0){blob.x=r;blob.vx=Math.abs(blob.vx);hitX=true;}
+    if(blob.x+r>w){blob.x=w-r;blob.vx=-Math.abs(blob.vx);hitX=true;}
+    if(blob.y-r<0){blob.y=r;blob.vy=Math.abs(blob.vy);hitY=true;}
+    if(blob.y+r>h){blob.y=h-r;blob.vy=-Math.abs(blob.vy);hitY=true;}
+    if(hitX||hitY){
+      physicsColour=(physicsColour+1)%physicsColours.length;
+      blob.sx=hitX?.66:1.28;blob.sy=hitY?.66:1.28;blob.impact=1;
+      const kick=Math.min(1.25,Math.max(.7,Math.hypot(blob.vx,blob.vy)/260));
+      blob.vx*=kick;blob.vy*=kick;
+    }
+  }
+  blob.sx+=(1-blob.sx)*Math.min(1,dt*9);blob.sy+=(1-blob.sy)*Math.min(1,dt*9);
+  blob.impact=Math.max(0,blob.impact-dt*3.2);
+  physicsCtx.clearRect(0,0,w,h);
+  physicsCtx.save();physicsCtx.translate(blob.x,blob.y);
+  physicsCtx.scale(blob.sx,blob.sy);
+  physicsCtx.beginPath();
+  const wobble=blob.impact*.10;
+  for(let i=0;i<=64;i++){
+    const a=i/64*Math.PI*2;
+    const wave=1+wobble*Math.sin(a*4+t*.018);
+    const px=Math.cos(a)*r*wave,py=Math.sin(a)*r*wave;
+    if(i===0)physicsCtx.moveTo(px,py);else physicsCtx.lineTo(px,py);
+  }
+  physicsCtx.closePath();physicsCtx.fillStyle=physicsColours[physicsColour];physicsCtx.fill();
+  physicsCtx.restore();
+  physicsFrame=requestAnimationFrame(physicsStep);
+}
+function physicsOpen(){pitchLabOverlay.classList.remove("hidden");physicsReset();physicsLast=performance.now();cancelAnimationFrame(physicsFrame);physicsFrame=requestAnimationFrame(physicsStep);}
+document.getElementById("pitchLabTrigger").addEventListener("click",physicsOpen);
+document.getElementById("pitchLabClose").addEventListener("click",physicsClose);
+document.getElementById("physicsReset").addEventListener("click",physicsReset);
+pitchLabOverlay.addEventListener("click",e=>{if(e.target===pitchLabOverlay)physicsClose();});
+physicsField.addEventListener("pointerdown",e=>{
+  if(e.pointerType==="mouse"&&e.button!==0)return;
+  const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+  if(Math.hypot(x-blob.x,y-blob.y)>blob.r*1.35)return;
+  e.preventDefault();physicsDrag={id:e.pointerId,px:x,py:y,time:performance.now(),vx:0,vy:0,dx:blob.x-x,dy:blob.y-y};
+  try{physicsField.setPointerCapture(e.pointerId);}catch(_){}
 });
-pitchLabOverlay.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closePitchLab();}});
+physicsField.addEventListener("pointermove",e=>{
+  if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
+  const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+  const now=performance.now(),dt=Math.max(.016,(now-physicsDrag.time)/1000);
+  physicsDrag.vx=Math.max(-650,Math.min(650,(x-physicsDrag.px)/dt));
+  physicsDrag.vy=Math.max(-650,Math.min(650,(y-physicsDrag.py)/dt));
+  physicsDrag.px=x;physicsDrag.py=y;physicsDrag.time=now;
+  blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,x+physicsDrag.dx));
+  blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,y+physicsDrag.dy));
+  blob.sx=1.13;blob.sy=.88;
+});
+function physicsRelease(e){
+  if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
+  blob.vx=physicsDrag.vx||120;blob.vy=physicsDrag.vy||95;physicsDrag=null;
+}
+physicsField.addEventListener("pointerup",physicsRelease);
+physicsField.addEventListener("pointercancel",physicsRelease);
+pitchLabOverlay.addEventListener("keydown",e=>{if(e.key==="Escape"){e.preventDefault();e.stopPropagation();physicsClose();}});
+window.addEventListener("resize",()=>{if(!pitchLabOverlay.classList.contains("hidden"))physicsSize();});
 
 document.getElementById("backButton").addEventListener("click", goHome);
 
