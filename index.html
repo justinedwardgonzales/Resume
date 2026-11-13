@@ -18,7 +18,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%23101827'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-weight='700' font-size='31' text-anchor='middle' fill='white'%3EJG%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="style.css?v=physics-app-20261112">
+  <link rel="stylesheet" href="style.css?v=playground-icon-20261113">
 </head>
 <body>
   <main class="stage">
@@ -99,7 +99,7 @@
           <div class="home-widgets photography-widgets">
             <button class="home-widget photo-widget" data-app="photos" type="button" aria-label="Open selected work and photo portfolio">
             </button>
-            <button class="home-widget calendar-widget" id="pitchLabTrigger" data-app="physics" type="button" aria-label="Open interactive soft circle app">
+            <div class="home-widget calendar-widget" aria-label="Calendar date and today’s schedule">
               <span class="calendar-weekday" id="homeCalendarWeekday">MON</span>
               <strong class="calendar-day" id="homeCalendarDay">09</strong>
               <span class="calendar-month" id="homeCalendarMonth">NOVEMBER</span>
@@ -107,12 +107,13 @@
                 <span class="calendar-event"><span class="calendar-event-dot run-dot"></span><time>7:00 AM</time><strong>Morning run</strong></span>
                 <span class="calendar-event"><span class="calendar-event-dot lesson-dot"></span><time>1:00 PM</time><strong>Japanese lesson</strong></span>
               </div>
-            </button>
+            </div>
           </div>
           <div class="app-grid">
             <button class="app" data-app="notes"><span class="app-icon ios-notes" role="img" aria-label="Apple Notes app icon"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="14" fill="#fff"/><path d="M0 14A14 14 0 0 1 14 0h32a14 14 0 0 1 14 14v7H0z" fill="#ffd33d"/><path d="M0 20.5h60" stroke="#e9c12e" stroke-width="1"/><path d="M11 30h38M11 38h38M11 46h38" stroke="#d1d1d6" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Notes</span></button>
             <button class="app" data-app="files"><span class="app-icon ios-files" role="img" aria-label="Apple Files app icon"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="14" fill="#fff"/><defs><linearGradient id="fileBlueNew" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5ac8fa"/><stop offset="1" stop-color="#007aff"/></linearGradient></defs><path d="M8 18.5c0-2.5 2-4.5 4.5-4.5H25l5.2 5.2h17.3c2.5 0 4.5 2 4.5 4.5V42a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z" fill="#4bb7f7"/><path d="M8 25h44v17a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z" fill="url(#fileBlueNew)"/><path d="M8 25h44" stroke="#a7e5ff" stroke-width="1.2"/></svg></span><span>Files</span></button>
             <button class="app" data-app="safari"><span class="app-icon ios-safari" role="img" aria-label="Safari app icon"><svg viewBox="0 0 60 60" aria-hidden="true"><defs><linearGradient id="safariNew" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#5ad9ff"/><stop offset="1" stop-color="#0878f9"/></linearGradient></defs><rect width="60" height="60" rx="14" fill="url(#safariNew)"/><circle cx="30" cy="30" r="23" fill="#fff"/><circle cx="30" cy="30" r="20" fill="#168fe8"/><circle cx="30" cy="30" r="18" fill="none" stroke="#c7eaff" stroke-width=".8"/><g stroke="#c7eaff" stroke-width=".8"><path d="M30 11v5M30 44v5M11 30h5M44 30h5M16.6 16.6l3.3 3.3M40.1 40.1l3.3 3.3M43.4 16.6l-3.3 3.3M19.9 40.1l-3.3 3.3"/></g><path d="M39.8 19.4 33 33l-12.8 7.6L27 27z" fill="#ff3b30"/><path d="M20.2 40.6 27 27l6 6z" fill="#fff"/><circle cx="30" cy="30" r="2" fill="#fff"/></svg></span><span>Safari</span></button>
+            <button class="app" data-app="physics" type="button" aria-label="Open Playground"><span class="app-icon playground-icon" role="img" aria-label="Playground app icon"><svg viewBox="0 0 60 60" aria-hidden="true"><rect width="60" height="60" rx="14" fill="#00c9ed"/><path d="M30 10 C42 7 52 17 49 29 C54 42 42 52 30 49 C18 53 8 43 11 30 C7 18 18 8 30 10Z" fill="#101010"/></svg></span><span>Playground</span></button>
           </div>
           <div class="dock">
             <button class="app" data-app="photos" aria-label="Open Photos">
@@ -182,6 +183,6 @@
       <div class="home-gesture-zone" id="homeGestureZone" aria-label="Swipe up for Home"></div>
     </div>
   </main>
-  <script src="app.js?v=physics-app-20261112"></script>
+  <script src="app.js?v=playground-icon-20261113"></script>
 </body>
 </html>
