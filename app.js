@@ -1162,8 +1162,9 @@ function physicsStep(t){
     if(hitX||hitY){
       physicsColour=(physicsColour+1)%physicsColours.length;
       blob.sx=hitX?.78:1.18;blob.sy=hitY?.78:1.18;blob.impact=1;blob.ripple=Math.min(1.5,blob.ripple+.85);
-      const kick=Math.min(1.25,Math.max(.7,Math.hypot(blob.vx,blob.vy)/260));
-      blob.vx*=kick;blob.vy*=kick;
+      // A wall reverses direction but never adds speed.
+      // A slight loss of energy keeps repeated bounces calm and natural.
+      blob.vx*=.985;blob.vy*=.985;
     }
   }
   // Keep the silhouette alive even between impacts, with springy ripples.
