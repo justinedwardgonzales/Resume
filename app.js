@@ -1137,19 +1137,19 @@ const physicsColours=["#00c9ed","#ffdc56","#ff91b9","#b7ef85","#b3a2fa","#ffae75
 const orbitText="justin gonzales · a little corner of the internet · made to play · ";
 let physicsFrame=0,physicsLast=0,physicsDrag=null,physicsColour=0;
 let physicsField=null,physicsCanvas=null,physicsCtx=null;
-const blob={x:0,y:0,vx:85,vy:65,r:110,rotation:0,impact:0,ripple:0,phase:0,sx:1,sy:1};
+const blob={x:0,y:0,vx:48,vy:37,r:75,rotation:0,impact:0,ripple:0,phase:0,sx:1,sy:1};
 function physicsSize(){
   const rect=physicsField.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
   physicsCanvas.width=Math.round(rect.width*dpr);physicsCanvas.height=Math.round(rect.height*dpr);
   physicsCanvas.style.width=rect.width+"px";physicsCanvas.style.height=rect.height+"px";
   physicsCtx.setTransform(dpr,0,0,dpr,0,0);
-  blob.r=Math.min(125,Math.min(rect.width,rect.height)*.33);
+  blob.r=Math.min(94,Math.max(45,Math.min(rect.width*.245,rect.height*.19)));
   blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,blob.x||rect.width/2));
   blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,blob.y||rect.height/2));
 }
 function physicsReset(){
   physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;
-  blob.vx=85;blob.vy=65;blob.rotation=0;blob.impact=0;blob.ripple=0;blob.phase=0;blob.sx=1;blob.sy=1;physicsColour=0;physicsField.style.background=physicsColours[0];
+  blob.vx=48;blob.vy=37;blob.rotation=0;blob.impact=0;blob.ripple=0;blob.phase=0;blob.sx=1;blob.sy=1;physicsColour=0;physicsField.style.background=physicsColours[0];
 }
 function physicsStop(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;}
 function physicsStep(t){
@@ -1165,15 +1165,15 @@ function physicsStep(t){
     if(hitX||hitY){
       physicsColour=(physicsColour+1)%physicsColours.length;
       physicsField.style.background=physicsColours[physicsColour];
-      blob.sx=hitX?.84:1.1;blob.sy=hitY?.84:1.1;
-      blob.impact=1;blob.ripple=Math.min(1.2,blob.ripple+.6);
+      blob.sx=hitX?.72:1.16;blob.sy=hitY?.72:1.16;
+      blob.impact=1;blob.ripple=Math.min(1.4,blob.ripple+.9);
       // Never accelerate on impact.
       blob.vx*=.995;blob.vy*=.995;
     }
     blob.rotation+=dt*.13;
   }
-  blob.sx+=(1-blob.sx)*Math.min(1,dt*5);
-  blob.sy+=(1-blob.sy)*Math.min(1,dt*5);
+  blob.sx+=(1-blob.sx)*Math.min(1,dt*3.5);
+  blob.sy+=(1-blob.sy)*Math.min(1,dt*3.5);
   blob.impact=Math.max(0,blob.impact-dt*1.6);
   blob.ripple*=Math.exp(-dt*2.5);
   blob.phase+=dt*2.4;
@@ -1181,10 +1181,10 @@ function physicsStep(t){
   physicsCtx.save();
   physicsCtx.translate(blob.x,blob.y);
   physicsCtx.fillStyle="#101010";
-  const fontSize=Math.max(13,Math.min(18,r*.15));
+  const fontSize=Math.max(11,Math.min(15,r*.16));
   physicsCtx.font=fontSize+"px Arial, sans-serif";
   physicsCtx.textAlign="center";physicsCtx.textBaseline="middle";
-  const phrase=orbitText.repeat(3);
+  const phrase=orbitText.repeat(2);
   const widths=[...phrase].map(char=>physicsCtx.measureText(char).width);
   const total=widths.reduce((sum,n)=>sum+n,0);
   const circumference=2*Math.PI*r;
@@ -1193,7 +1193,7 @@ function physicsStep(t){
   for(let i=0;i<phrase.length;i++){
     const width=widths[i],angle=(travelled+width/2)/total*Math.PI*2+blob.rotation-Math.PI/2;
     travelled+=width;
-    const elastic=1+.016*Math.sin(3*angle-blob.phase)+blob.ripple*.055*Math.sin(4*angle+blob.phase*2);
+    const elastic=1+.025*Math.sin(3*angle-blob.phase)+blob.ripple*.085*Math.sin(4*angle+blob.phase*2);
     const x=Math.cos(angle)*r*elastic*blob.sx,y=Math.sin(angle)*r*elastic*blob.sy;
     physicsCtx.save();physicsCtx.translate(x,y);
     physicsCtx.rotate(angle+Math.PI/2);
@@ -1220,8 +1220,8 @@ function initPhysics(){
     if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
     const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
     const now=performance.now(),dt=Math.max(.016,(now-physicsDrag.time)/1000);
-    physicsDrag.vx=Math.max(-250,Math.min(250,(x-physicsDrag.px)/dt));
-    physicsDrag.vy=Math.max(-250,Math.min(250,(y-physicsDrag.py)/dt));
+    physicsDrag.vx=Math.max(-125,Math.min(125,(x-physicsDrag.px)/dt));
+    physicsDrag.vy=Math.max(-125,Math.min(125,(y-physicsDrag.py)/dt));
     physicsDrag.px=x;physicsDrag.py=y;physicsDrag.time=now;
     blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,x+physicsDrag.dx));
     blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,y+physicsDrag.dy));
