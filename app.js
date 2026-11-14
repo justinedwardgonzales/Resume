@@ -1149,7 +1149,7 @@ function physicsSize(){
 }
 function physicsReset(){
   physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;
-  blob.vx=85;blob.vy=65;blob.rotation=0;blob.impact=0;blob.ripple=0;blob.phase=0;blob.sx=1;blob.sy=1;physicsColour=0;
+  blob.vx=85;blob.vy=65;blob.rotation=0;blob.impact=0;blob.ripple=0;blob.phase=0;blob.sx=1;blob.sy=1;physicsColour=0;physicsField.style.background=physicsColours[0];
 }
 function physicsStop(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;}
 function physicsStep(t){
@@ -1164,6 +1164,7 @@ function physicsStep(t){
     if(blob.y+r>h){blob.y=h-r;blob.vy=-Math.abs(blob.vy);hitY=true;}
     if(hitX||hitY){
       physicsColour=(physicsColour+1)%physicsColours.length;
+      physicsField.style.background=physicsColours[physicsColour];
       blob.sx=hitX?.84:1.1;blob.sy=hitY?.84:1.1;
       blob.impact=1;blob.ripple=Math.min(1.2,blob.ripple+.6);
       // Never accelerate on impact.
