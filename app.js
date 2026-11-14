@@ -27,8 +27,8 @@ const pages = {
   physics: {
     title: "Playground",
     html: `<div class="physics-app">
-      <header class="physics-app-top"><div><small>EXPERIMENT NO. 01</small><h1>Soft Spot</h1></div><button id="physicsReset" type="button" aria-label="Reset soft circle">↻ Reset</button></header>
-      <div class="physics-field" id="physicsField" aria-label="Interactive soft circle. Drag and throw it against the walls."><canvas id="physicsCanvas" aria-hidden="true"></canvas><div class="physics-instruction">drag, throw, watch it bounce</div></div>
+      <header class="physics-app-top"><div><small>EXPERIMENT NO. 01</small><h1>Type Orbit</h1></div><button id="physicsReset" type="button" aria-label="Reset type circle">↻ Reset</button></header>
+      <div class="physics-field" id="physicsField" aria-label="Interactive circular typography. Drag and throw the text ring against the walls."><canvas id="physicsCanvas" aria-hidden="true"></canvas><div class="physics-instruction">drag the circle · watch it flex</div></div>
       <footer class="physics-app-bottom"><span>NO RULES. JUST PLAY.</span><span>✳</span></footer>
     </div>`
   },
@@ -1132,22 +1132,25 @@ function goHome() {
   }, 210);
 }
 
-// Soft-body circle experiment: only runs while its overlay is visible.
-const physicsColours=["#05c8ef","#ffda42","#ff709e","#a2f76e","#a998ff","#ff9050"];
+// Type Orbit: circular typography, no filled blob. Runs only in Playground.
+const physicsColours=["#00c9ed","#ffdc56","#ff91b9","#b7ef85","#b3a2fa","#ffae75"];
+const orbitText="justin gonzales · a little corner of the internet · made to play · ";
 let physicsFrame=0,physicsLast=0,physicsDrag=null,physicsColour=0;
 let physicsField=null,physicsCanvas=null,physicsCtx=null;
-const blob={x:0,y:0,vx:165,vy:115,r:82,sx:1,sy:1,angle:0,impact:0,ripple:0,phase:0};
+const blob={x:0,y:0,vx:85,vy:65,r:110,rotation:0,impact:0,ripple:0,phase:0,sx:1,sy:1};
 function physicsSize(){
-  const rect=physicsField.getBoundingClientRect();
-  const dpr=Math.min(window.devicePixelRatio||1,2);
+  const rect=physicsField.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
   physicsCanvas.width=Math.round(rect.width*dpr);physicsCanvas.height=Math.round(rect.height*dpr);
   physicsCanvas.style.width=rect.width+"px";physicsCanvas.style.height=rect.height+"px";
   physicsCtx.setTransform(dpr,0,0,dpr,0,0);
-  blob.r=Math.min(82,Math.min(rect.width,rect.height)*.21);
+  blob.r=Math.min(125,Math.min(rect.width,rect.height)*.33);
   blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,blob.x||rect.width/2));
   blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,blob.y||rect.height/2));
 }
-function physicsReset(){physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;blob.vx=165;blob.vy=125;blob.sx=1;blob.sy=1;blob.impact=0;blob.ripple=0;blob.phase=0;physicsColour=0;}
+function physicsReset(){
+  physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;
+  blob.vx=85;blob.vy=65;blob.rotation=0;blob.impact=0;blob.ripple=0;blob.phase=0;blob.sx=1;blob.sy=1;physicsColour=0;
+}
 function physicsStop(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;}
 function physicsStep(t){
   const dt=Math.min((t-physicsLast)/1000||0,.033);physicsLast=t;
@@ -1161,44 +1164,41 @@ function physicsStep(t){
     if(blob.y+r>h){blob.y=h-r;blob.vy=-Math.abs(blob.vy);hitY=true;}
     if(hitX||hitY){
       physicsColour=(physicsColour+1)%physicsColours.length;
-      blob.sx=hitX?.78:1.18;blob.sy=hitY?.78:1.18;blob.impact=1;blob.ripple=Math.min(1.5,blob.ripple+.85);
-      // A wall reverses direction but never adds speed.
-      // A slight loss of energy keeps repeated bounces calm and natural.
-      blob.vx*=.985;blob.vy*=.985;
+      blob.sx=hitX?.84:1.1;blob.sy=hitY?.84:1.1;
+      blob.impact=1;blob.ripple=Math.min(1.2,blob.ripple+.6);
+      // Never accelerate on impact.
+      blob.vx*=.995;blob.vy*=.995;
     }
+    blob.rotation+=dt*.13;
   }
-  // Keep the silhouette alive even between impacts, with springy ripples.
-  const seconds=t*.001;
-  const speed=Math.hypot(blob.vx,blob.vy);
-  const travelAngle=Math.atan2(blob.vy,blob.vx);
-  const travelStretch=Math.min(.11,speed/5000);
-  const idlePulse=.018*Math.sin(seconds*2.4);
-  blob.sx+=(1-blob.sx)*Math.min(1,dt*5.5);
-  blob.sy+=(1-blob.sy)*Math.min(1,dt*5.5);
-  blob.impact=Math.max(0,blob.impact-dt*1.5);
-  blob.ripple*=Math.exp(-dt*2.2);
-  blob.phase+=dt*(5+speed*.009);
+  blob.sx+=(1-blob.sx)*Math.min(1,dt*5);
+  blob.sy+=(1-blob.sy)*Math.min(1,dt*5);
+  blob.impact=Math.max(0,blob.impact-dt*1.6);
+  blob.ripple*=Math.exp(-dt*2.5);
+  blob.phase+=dt*2.4;
   physicsCtx.clearRect(0,0,w,h);
-  physicsCtx.save();physicsCtx.translate(blob.x,blob.y);
-  physicsCtx.beginPath();
-  // Four soft undulations plus a directional stretch make it feel elastic,
-  // rather than scaling a rigid circle. Keep edges within collision bounds.
-  const motion=.022+Math.min(.026,speed/15000);
-  const ripple=blob.ripple*.075;
-  for(let i=0;i<=96;i++){
-    const a=i/96*Math.PI*2;
-    const directional=travelStretch*Math.cos(2*(a-travelAngle));
-    const wave=1+idlePulse+motion*Math.sin(3*a-blob.phase)
-      +.014*Math.sin(5*a+seconds*3.1)
-      +ripple*Math.sin(4*a+blob.phase*1.7)
-      +directional;
-    const x=Math.cos(a)*r*wave*blob.sx;
-    const y=Math.sin(a)*r*wave*blob.sy;
-    if(i===0)physicsCtx.moveTo(x,y);else physicsCtx.lineTo(x,y);
+  physicsCtx.save();
+  physicsCtx.translate(blob.x,blob.y);
+  physicsCtx.fillStyle="#101010";
+  const fontSize=Math.max(13,Math.min(18,r*.15));
+  physicsCtx.font=fontSize+"px Arial, sans-serif";
+  physicsCtx.textAlign="center";physicsCtx.textBaseline="middle";
+  const phrase=orbitText.repeat(3);
+  const widths=[...phrase].map(char=>physicsCtx.measureText(char).width);
+  const total=widths.reduce((sum,n)=>sum+n,0);
+  const circumference=2*Math.PI*r;
+  let travelled=0;
+  // Individually position and rotate glyphs along a gently deforming circular path.
+  for(let i=0;i<phrase.length;i++){
+    const width=widths[i],angle=(travelled+width/2)/total*Math.PI*2+blob.rotation-Math.PI/2;
+    travelled+=width;
+    const elastic=1+.016*Math.sin(3*angle-blob.phase)+blob.ripple*.055*Math.sin(4*angle+blob.phase*2);
+    const x=Math.cos(angle)*r*elastic*blob.sx,y=Math.sin(angle)*r*elastic*blob.sy;
+    physicsCtx.save();physicsCtx.translate(x,y);
+    physicsCtx.rotate(angle+Math.PI/2);
+    physicsCtx.fillText(phrase[i],0,0);
+    physicsCtx.restore();
   }
-  physicsCtx.closePath();
-  physicsCtx.fillStyle=physicsColours[physicsColour];
-  physicsCtx.fill();
   physicsCtx.restore();
   physicsFrame=requestAnimationFrame(physicsStep);
 }
@@ -1208,30 +1208,30 @@ function initPhysics(){
   physicsCanvas=document.getElementById("physicsCanvas");
   physicsCtx=physicsCanvas.getContext("2d");
   document.getElementById("physicsReset").addEventListener("click",physicsReset);
-physicsField.addEventListener("pointerdown",e=>{
-  if(e.pointerType==="mouse"&&e.button!==0)return;
-  const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
-  if(Math.hypot(x-blob.x,y-blob.y)>blob.r*1.35)return;
-  e.preventDefault();physicsDrag={id:e.pointerId,px:x,py:y,time:performance.now(),vx:0,vy:0,dx:blob.x-x,dy:blob.y-y};
-  try{physicsField.setPointerCapture(e.pointerId);}catch(_){}
-});
-physicsField.addEventListener("pointermove",e=>{
-  if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
-  const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
-  const now=performance.now(),dt=Math.max(.016,(now-physicsDrag.time)/1000);
-  physicsDrag.vx=Math.max(-650,Math.min(650,(x-physicsDrag.px)/dt));
-  physicsDrag.vy=Math.max(-650,Math.min(650,(y-physicsDrag.py)/dt));
-  physicsDrag.px=x;physicsDrag.py=y;physicsDrag.time=now;
-  blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,x+physicsDrag.dx));
-  blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,y+physicsDrag.dy));
-  blob.sx=1.1;blob.sy=.93;blob.ripple=Math.max(blob.ripple,.2);
-});
-function physicsRelease(e){
-  if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
-  blob.vx=physicsDrag.vx||120;blob.vy=physicsDrag.vy||95;physicsDrag=null;
-}
-physicsField.addEventListener("pointerup",physicsRelease);
-physicsField.addEventListener("pointercancel",physicsRelease);
+  physicsField.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse"&&e.button!==0)return;
+    const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+    if(Math.hypot(x-blob.x,y-blob.y)>blob.r*1.25)return;
+    e.preventDefault();physicsDrag={id:e.pointerId,px:x,py:y,time:performance.now(),vx:0,vy:0,dx:blob.x-x,dy:blob.y-y};
+    try{physicsField.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  physicsField.addEventListener("pointermove",e=>{
+    if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
+    const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
+    const now=performance.now(),dt=Math.max(.016,(now-physicsDrag.time)/1000);
+    physicsDrag.vx=Math.max(-250,Math.min(250,(x-physicsDrag.px)/dt));
+    physicsDrag.vy=Math.max(-250,Math.min(250,(y-physicsDrag.py)/dt));
+    physicsDrag.px=x;physicsDrag.py=y;physicsDrag.time=now;
+    blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,x+physicsDrag.dx));
+    blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,y+physicsDrag.dy));
+    blob.ripple=Math.max(blob.ripple,.18);
+  });
+  const release=e=>{
+    if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
+    blob.vx=physicsDrag.vx*.65;blob.vy=physicsDrag.vy*.65;physicsDrag=null;
+  };
+  physicsField.addEventListener("pointerup",release);
+  physicsField.addEventListener("pointercancel",release);
   physicsOpen();
 }
 window.addEventListener("resize",()=>{if(physicsFrame&&physicsField)physicsSize();});
