@@ -26,10 +26,20 @@ const profile = {
 const pages = {
   physics: {
     title: "Playground",
-    html: `<div class="physics-app">
-      <header class="physics-app-top"><div><small>EXPERIMENT NO. 01</small><h1>Type Orbit</h1></div><button id="physicsReset" type="button" aria-label="Reset type circle">↻ Reset</button></header>
-      <div class="physics-field" id="physicsField" aria-label="Interactive circular typography. Drag and throw the text ring against the walls."><canvas id="physicsCanvas" aria-hidden="true"></canvas><div class="physics-instruction">drag the circle · watch it flex</div></div>
-      <footer class="physics-app-bottom"><span>NO RULES. JUST PLAY.</span><span>✳</span></footer>
+    html: `<div class="gacha-app">
+      <header class="gacha-header"><div><small>PLAYGROUND / TOKYO ARCADE</small><h1>Gacha Gacha <span>★</span></h1></div><button type="button" id="gachaCollectionButton" aria-label="View collection">🎒 <b id="gachaCount">0</b></button></header>
+      <div class="gacha-stage" id="gachaStage">
+        <div class="gacha-sparkles" aria-hidden="true">✦　·　✧　·　✦</div>
+        <div class="gacha-machine">
+          <div class="gacha-dome"><div class="gacha-capsules" aria-hidden="true"><i>🟡</i><i>🟣</i><i>🔴</i><i>🟢</i><i>🔵</i><i>🟠</i><i>🟡</i><i>🔴</i></div><div class="gacha-glare"></div></div>
+          <div class="gacha-body"><div class="gacha-sticker">LUCKY<br><strong>CAPSULE</strong><small>¥ 100</small></div><button class="gacha-handle" id="gachaHandle" type="button" aria-label="Turn the gachapon handle"><span>✳</span></button><div class="gacha-chute">▼</div></div>
+          <div class="gacha-feet"></div>
+        </div>
+        <div class="gacha-drop hidden" id="gachaDrop" role="button" tabindex="0" aria-label="Open capsule"><span>?</span></div>
+        <div class="gacha-reveal hidden" id="gachaReveal" role="status"><div class="gacha-reveal-tag" id="gachaRarity">COMMON</div><div class="gacha-prize" id="gachaPrize">🐸</div><h2 id="gachaPrizeName">Little Friend</h2><p id="gachaPrizeDesc">A tiny surprise.</p><button type="button" id="gachaAgain">Spin again ↻</button></div>
+        <div class="gacha-collection hidden" id="gachaCollection"><div class="gacha-collection-head"><strong>My little collection</strong><button type="button" id="gachaCollectionClose" aria-label="Close collection">×</button></div><p id="gachaCollectionSummary"></p><div class="gacha-collection-grid" id="gachaCollectionGrid"></div></div>
+      </div>
+      <footer class="gacha-footer"><span id="gachaHint">TURN THE HANDLE TO TRY YOUR LUCK</span><span>✿</span></footer>
     </div>`
   },
   notes: {
@@ -1132,111 +1142,74 @@ function goHome() {
   }, 210);
 }
 
-// Type Orbit: circular typography, no filled blob. Runs only in Playground.
-const physicsColours=["#00c9ed","#ffdc56","#ff91b9","#b7ef85","#b3a2fa","#ffae75"];
-const orbitText="justin gonzales · a little corner of the internet · made to play · ";
-let physicsFrame=0,physicsLast=0,physicsDrag=null,physicsColour=0;
-let physicsField=null,physicsCanvas=null,physicsCtx=null;
-const blob={x:0,y:0,vx:48,vy:37,r:75,rotation:0,impact:0,ripple:0,phase:0,sx:1,sy:1};
-function physicsSize(){
-  const rect=physicsField.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
-  physicsCanvas.width=Math.round(rect.width*dpr);physicsCanvas.height=Math.round(rect.height*dpr);
-  physicsCanvas.style.width=rect.width+"px";physicsCanvas.style.height=rect.height+"px";
-  physicsCtx.setTransform(dpr,0,0,dpr,0,0);
-  blob.r=Math.min(94,Math.max(45,Math.min(rect.width*.245,rect.height*.19)));
-  blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,blob.x||rect.width/2));
-  blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,blob.y||rect.height/2));
+// Gachapon is self-contained inside Playground; no global touch handlers.
+const gachaPrizes=[
+  {name:"Sleepy Onigiri",emoji:"🍙",rarity:"COMMON",desc:"Five more minutes, please.",weight:18},
+  {name:"Tiny Frog",emoji:"🐸",rarity:"COMMON",desc:"He's just happy to be here.",weight:18},
+  {name:"Lucky Cat",emoji:"🐱",rarity:"COMMON",desc:"Good things are coming.",weight:18},
+  {name:"Pocket Ramen",emoji:"🍜",rarity:"COMMON",desc:"Extra noodles, always.",weight:18},
+  {name:"Mini UFO",emoji:"🛸",rarity:"RARE",desc:"Definitely not from around here.",weight:8},
+  {name:"Disco Octopus",emoji:"🐙",rarity:"RARE",desc:"Eight arms, infinite moves.",weight:8},
+  {name:"Golden Duck",emoji:"🐤",rarity:"ULTRA RARE",desc:"The chosen quack.",weight:3},
+  {name:"Moon Bunny",emoji:"🐰",rarity:"ULTRA RARE",desc:"A visitor from the moon.",weight:3},
+  {name:"Secret Star",emoji:"🌟",rarity:"SECRET",desc:"You found the impossible.",weight:1}
+];
+let gachaTimer=0,gachaBusy=false,gachaCurrent=null,gachaOwned={};
+try{gachaOwned=JSON.parse(localStorage.getItem("justinGachaCollection")||"{}")||{};}catch(_){gachaOwned={};}
+function physicsStop(){clearTimeout(gachaTimer);gachaTimer=0;gachaBusy=false;}
+function gachaPick(){
+  const total=gachaPrizes.reduce((n,p)=>n+p.weight,0);
+  let n=Math.random()*total;
+  return gachaPrizes.find(p=>(n-=p.weight)<0)||gachaPrizes[0];
 }
-function physicsReset(){
-  physicsSize();blob.x=physicsField.clientWidth/2;blob.y=physicsField.clientHeight/2;
-  blob.vx=48;blob.vy=37;blob.rotation=0;blob.impact=0;blob.ripple=0;blob.phase=0;blob.sx=1;blob.sy=1;physicsColour=0;physicsField.style.background=physicsColours[0];
-}
-function physicsStop(){cancelAnimationFrame(physicsFrame);physicsFrame=0;physicsDrag=null;}
-function physicsStep(t){
-  const dt=Math.min((t-physicsLast)/1000||0,.033);physicsLast=t;
-  const w=physicsField.clientWidth,h=physicsField.clientHeight,r=blob.r;
-  if(!physicsDrag){
-    blob.x+=blob.vx*dt;blob.y+=blob.vy*dt;
-    let hitX=false,hitY=false;
-    if(blob.x-r<0){blob.x=r;blob.vx=Math.abs(blob.vx);hitX=true;}
-    if(blob.x+r>w){blob.x=w-r;blob.vx=-Math.abs(blob.vx);hitX=true;}
-    if(blob.y-r<0){blob.y=r;blob.vy=Math.abs(blob.vy);hitY=true;}
-    if(blob.y+r>h){blob.y=h-r;blob.vy=-Math.abs(blob.vy);hitY=true;}
-    if(hitX||hitY){
-      physicsColour=(physicsColour+1)%physicsColours.length;
-      physicsField.style.background=physicsColours[physicsColour];
-      blob.sx=hitX?.72:1.16;blob.sy=hitY?.72:1.16;
-      blob.impact=1;blob.ripple=Math.min(1.4,blob.ripple+.9);
-      // Never accelerate on impact.
-      blob.vx*=.995;blob.vy*=.995;
-    }
-    blob.rotation+=dt*.13;
-  }
-  blob.sx+=(1-blob.sx)*Math.min(1,dt*3.5);
-  blob.sy+=(1-blob.sy)*Math.min(1,dt*3.5);
-  blob.impact=Math.max(0,blob.impact-dt*1.6);
-  blob.ripple*=Math.exp(-dt*2.5);
-  blob.phase+=dt*2.4;
-  physicsCtx.clearRect(0,0,w,h);
-  physicsCtx.save();
-  physicsCtx.translate(blob.x,blob.y);
-  physicsCtx.fillStyle="#101010";
-  const fontSize=Math.max(11,Math.min(15,r*.16));
-  physicsCtx.font=fontSize+"px Arial, sans-serif";
-  physicsCtx.textAlign="center";physicsCtx.textBaseline="middle";
-  const phrase=orbitText.repeat(2);
-  const widths=[...phrase].map(char=>physicsCtx.measureText(char).width);
-  const total=widths.reduce((sum,n)=>sum+n,0);
-  const circumference=2*Math.PI*r;
-  let travelled=0;
-  // Individually position and rotate glyphs along a gently deforming circular path.
-  for(let i=0;i<phrase.length;i++){
-    const width=widths[i],angle=(travelled+width/2)/total*Math.PI*2+blob.rotation-Math.PI/2;
-    travelled+=width;
-    const elastic=1+.025*Math.sin(3*angle-blob.phase)+blob.ripple*.085*Math.sin(4*angle+blob.phase*2);
-    const x=Math.cos(angle)*r*elastic*blob.sx,y=Math.sin(angle)*r*elastic*blob.sy;
-    physicsCtx.save();physicsCtx.translate(x,y);
-    physicsCtx.rotate(angle+Math.PI/2);
-    physicsCtx.fillText(phrase[i],0,0);
-    physicsCtx.restore();
-  }
-  physicsCtx.restore();
-  physicsFrame=requestAnimationFrame(physicsStep);
-}
-function physicsOpen(){physicsReset();physicsLast=performance.now();physicsStop();physicsFrame=requestAnimationFrame(physicsStep);}
 function initPhysics(){
-  physicsField=document.getElementById("physicsField");
-  physicsCanvas=document.getElementById("physicsCanvas");
-  physicsCtx=physicsCanvas.getContext("2d");
-  document.getElementById("physicsReset").addEventListener("click",physicsReset);
-  physicsField.addEventListener("pointerdown",e=>{
-    if(e.pointerType==="mouse"&&e.button!==0)return;
-    const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
-    if(Math.hypot(x-blob.x,y-blob.y)>blob.r*1.25)return;
-    e.preventDefault();physicsDrag={id:e.pointerId,px:x,py:y,time:performance.now(),vx:0,vy:0,dx:blob.x-x,dy:blob.y-y};
-    try{physicsField.setPointerCapture(e.pointerId);}catch(_){}
-  });
-  physicsField.addEventListener("pointermove",e=>{
-    if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
-    const rect=physicsField.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;
-    const now=performance.now(),dt=Math.max(.016,(now-physicsDrag.time)/1000);
-    physicsDrag.vx=Math.max(-125,Math.min(125,(x-physicsDrag.px)/dt));
-    physicsDrag.vy=Math.max(-125,Math.min(125,(y-physicsDrag.py)/dt));
-    physicsDrag.px=x;physicsDrag.py=y;physicsDrag.time=now;
-    blob.x=Math.max(blob.r,Math.min(rect.width-blob.r,x+physicsDrag.dx));
-    blob.y=Math.max(blob.r,Math.min(rect.height-blob.r,y+physicsDrag.dy));
-    blob.ripple=Math.max(blob.ripple,.18);
-  });
-  const release=e=>{
-    if(!physicsDrag||e.pointerId!==physicsDrag.id)return;
-    blob.vx=physicsDrag.vx*.65;blob.vy=physicsDrag.vy*.65;physicsDrag=null;
-  };
-  physicsField.addEventListener("pointerup",release);
-  physicsField.addEventListener("pointercancel",release);
-  physicsOpen();
+  const stage=document.getElementById("gachaStage"),handle=document.getElementById("gachaHandle");
+  const drop=document.getElementById("gachaDrop"),reveal=document.getElementById("gachaReveal");
+  const collection=document.getElementById("gachaCollection"),hint=document.getElementById("gachaHint");
+  const count=document.getElementById("gachaCount");
+  function updateCount(){count.textContent=Object.keys(gachaOwned).filter(k=>gachaOwned[k]>0).length;}
+  function reset(){physicsStop();handle.classList.remove("spinning");drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");hint.textContent="TURN THE HANDLE TO TRY YOUR LUCK";}
+  function spin(){
+    if(gachaBusy)return;
+    reset();gachaBusy=true;handle.classList.add("spinning");hint.textContent="HERE IT COMES...";
+    gachaCurrent=gachaPick();
+    gachaTimer=setTimeout(()=>{handle.classList.remove("spinning");drop.classList.remove("hidden");drop.classList.add("dropping");hint.textContent="TAP THE CAPSULE TO OPEN IT";gachaTimer=setTimeout(()=>{drop.classList.remove("dropping");},650);},900);
+  }
+  function openCapsule(){
+    if(drop.classList.contains("hidden")||!gachaCurrent)return;
+    drop.classList.add("hidden");reveal.classList.remove("hidden");
+    document.getElementById("gachaRarity").textContent=gachaCurrent.rarity;
+    document.getElementById("gachaPrize").textContent=gachaCurrent.emoji;
+    document.getElementById("gachaPrizeName").textContent=gachaCurrent.name;
+    document.getElementById("gachaPrizeDesc").textContent=gachaCurrent.desc;
+    gachaOwned[gachaCurrent.name]=(gachaOwned[gachaCurrent.name]||0)+1;
+    try{localStorage.setItem("justinGachaCollection",JSON.stringify(gachaOwned));}catch(_){}
+    updateCount();hint.textContent="ANOTHER ONE?";
+    gachaBusy=false;
+  }
+  function showCollection(){
+    physicsStop();drop.classList.add("hidden");reveal.classList.add("hidden");
+    collection.classList.remove("hidden");
+    const found=gachaPrizes.filter(p=>gachaOwned[p.name]>0);
+    document.getElementById("gachaCollectionSummary").textContent=found.length+" of "+gachaPrizes.length+" surprises discovered";
+    const grid=document.getElementById("gachaCollectionGrid");grid.replaceChildren();
+    gachaPrizes.forEach(p=>{
+      const owned=gachaOwned[p.name]>0;
+      const item=document.createElement("div");item.className="gacha-collectible"+(owned?"":" locked");
+      const emoji=document.createElement("span");emoji.textContent=owned?p.emoji:"?";
+      const name=document.createElement("small");name.textContent=owned?p.name:"???";
+      const qty=document.createElement("em");qty.textContent=owned?"×"+gachaOwned[p.name]:"";
+      item.append(emoji,name,qty);grid.appendChild(item);
+    });
+  }
+  handle.addEventListener("click",spin);
+  drop.addEventListener("click",openCapsule);
+  drop.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openCapsule();}});
+  document.getElementById("gachaAgain").addEventListener("click",spin);
+  document.getElementById("gachaCollectionButton").addEventListener("click",showCollection);
+  document.getElementById("gachaCollectionClose").addEventListener("click",reset);
+  updateCount();
 }
-window.addEventListener("resize",()=>{if(physicsFrame&&physicsField)physicsSize();});
-
 document.getElementById("backButton").addEventListener("click", goHome);
 
 document.querySelectorAll("[data-app]").forEach(button => {
