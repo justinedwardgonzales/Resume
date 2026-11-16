@@ -1144,16 +1144,33 @@ function goHome() {
 
 // Gachapon is self-contained inside Playground; no global touch handlers.
 const gachaPrizes=[
-  {name:"Sleepy Onigiri",emoji:"🍙",rarity:"COMMON",desc:"Five more minutes, please.",weight:18},
-  {name:"Tiny Frog",emoji:"🐸",rarity:"COMMON",desc:"He's just happy to be here.",weight:18},
-  {name:"Lucky Cat",emoji:"🐱",rarity:"COMMON",desc:"Good things are coming.",weight:18},
-  {name:"Pocket Ramen",emoji:"🍜",rarity:"COMMON",desc:"Extra noodles, always.",weight:18},
-  {name:"Mini UFO",emoji:"🛸",rarity:"RARE",desc:"Definitely not from around here.",weight:8},
-  {name:"Disco Octopus",emoji:"🐙",rarity:"RARE",desc:"Eight arms, infinite moves.",weight:8},
-  {name:"Golden Duck",emoji:"🐤",rarity:"ULTRA RARE",desc:"The chosen quack.",weight:3},
-  {name:"Moon Bunny",emoji:"🐰",rarity:"ULTRA RARE",desc:"A visitor from the moon.",weight:3},
-  {name:"Secret Star",emoji:"🌟",rarity:"SECRET",desc:"You found the impossible.",weight:1}
+  {name:"Mini Ramen",toy:"ramen",rarity:"COMMON",desc:"A tiny bowl with all the toppings.",weight:18},
+  {name:"Melon Soda",toy:"soda",rarity:"COMMON",desc:"An ice-cold kissaten classic.",weight:18},
+  {name:"Taiyaki",toy:"taiyaki",rarity:"COMMON",desc:"Fresh from a miniature street stall.",weight:18},
+  {name:"Film Camera",toy:"camera",rarity:"COMMON",desc:"Tiny camera, big adventures.",weight:18},
+  {name:"Retro Vending Machine",toy:"vending",rarity:"RARE",desc:"Pocket-sized drinks on demand.",weight:8},
+  {name:"Mini Shinkansen",toy:"train",rarity:"RARE",desc:"Next stop: everywhere.",weight:8},
+  {name:"Golden Daruma",toy:"daruma",rarity:"ULTRA RARE",desc:"Make a wish. Keep it close.",weight:3},
+  {name:"Crystal Jellyfish",toy:"jelly",rarity:"ULTRA RARE",desc:"A little ocean in your pocket.",weight:3},
+  {name:"Secret Golden Capsule",toy:"gold",rarity:"SECRET",desc:"The one everyone hopes to find.",weight:1}
 ];
+// Original SVG toy artwork is used for both reveals and the collection.
+const gachaToyArt={
+  ramen:'<ellipse cx="60" cy="92" rx="43" ry="12" fill="#c4a7a0"/><path d="M22 55 Q24 102 60 102 Q96 102 98 55Z" fill="#e74742" stroke="#96302b" stroke-width="3"/><ellipse cx="60" cy="55" rx="39" ry="15" fill="#f7f1df" stroke="#96302b" stroke-width="3"/><ellipse cx="60" cy="55" rx="32" ry="10" fill="#c78a48"/><path d="M39 53q8-10 17 0t17 0" stroke="#f7cf72" stroke-width="5" fill="none"/><circle cx="74" cy="52" r="9" fill="#fff8e3"/><circle cx="74" cy="52" r="4" fill="#f0bc39"/><path d="M42 41l-8-25m14 28-4-28" stroke="#5d382f" stroke-width="4"/><rect x="48" y="75" width="24" height="10" rx="3" fill="#fff1d0"/>',
+  soda:'<ellipse cx="60" cy="105" rx="30" ry="6" fill="#b6c8b5"/><path d="M37 27h46l-6 72q-17 9-34 0Z" fill="#8edb7d" stroke="#4a9a73" stroke-width="3"/><path d="M42 31h36l-5 60q-13 6-26 0Z" fill="#4dc66b"/><path d="M60 27L74 8" stroke="#e65d71" stroke-width="5"/><ellipse cx="60" cy="27" rx="23" ry="6" fill="#e7fff0"/><circle cx="60" cy="25" r="15" fill="#fff7e8" stroke="#d8d4c7" stroke-width="3"/><circle cx="60" cy="25" r="8" fill="#ec3e47"/><path d="M48 51l7-8m12 26 5-8" stroke="#e7ffe9" stroke-width="5" opacity=".7"/>',
+  taiyaki:'<ellipse cx="61" cy="99" rx="44" ry="8" fill="#d9bca1"/><path d="M23 59Q43 24 79 40L99 27L95 58L102 83L77 75Q43 94 23 59Z" fill="#d79a53" stroke="#9d6436" stroke-width="4"/><path d="M42 44q12 17 0 31m13-35q12 20 0 39m13-35q9 15 0 29" stroke="#b8793d" stroke-width="3" fill="none"/><circle cx="34" cy="57" r="4" fill="#553627"/><path d="M21 65q8 5 13 0" stroke="#9d6436" stroke-width="3" fill="none"/>',
+  camera:'<ellipse cx="60" cy="100" rx="43" ry="7" fill="#c9b4b0"/><rect x="17" y="35" width="86" height="58" rx="9" fill="#e2c7a1" stroke="#6a625b" stroke-width="4"/><path d="M18 48h84v19H18Z" fill="#4d595c"/><rect x="27" y="26" width="26" height="12" rx="3" fill="#6c6964"/><circle cx="64" cy="61" r="25" fill="#343d44" stroke="#d7d2c6" stroke-width="5"/><circle cx="64" cy="61" r="17" fill="#66889a" stroke="#1f333c" stroke-width="5"/><circle cx="64" cy="61" r="7" fill="#2d4858"/><circle cx="91" cy="43" r="4" fill="#e4a54b"/>',
+  vending:'<ellipse cx="60" cy="108" rx="35" ry="6" fill="#b5b4b7"/><rect x="31" y="9" width="58" height="95" rx="5" fill="#e54743" stroke="#a9292a" stroke-width="4"/><rect x="38" y="18" width="37" height="52" rx="3" fill="#c4f1ff" stroke="#f7e4d8" stroke-width="3"/><path d="M40 43h33M40 58h33" stroke="#668c9d" stroke-width="2"/><g fill="#f9d96b"><rect x="43" y="24" width="7" height="14" rx="2"/><rect x="54" y="24" width="7" height="14" rx="2"/><rect x="65" y="24" width="7" height="14" rx="2"/></g><g fill="#75c7a4"><rect x="43" y="46" width="7" height="9" rx="2"/><rect x="54" y="46" width="7" height="9" rx="2"/><rect x="65" y="46" width="7" height="9" rx="2"/></g><rect x="77" y="35" width="8" height="22" rx="2" fill="#333d47"/><rect x="43" y="79" width="34" height="14" rx="3" fill="#3d3540"/>',
+  train:'<ellipse cx="60" cy="100" rx="49" ry="8" fill="#bdcbd2"/><path d="M12 69Q20 39 58 35L99 42Q110 54 108 84L21 86Z" fill="#eaf2f2" stroke="#839da8" stroke-width="3"/><path d="M16 70h90v9H16Z" fill="#2988c5"/><path d="M55 41L92 47Q101 52 102 63H49Z" fill="#294d65"/><path d="M24 64Q32 48 47 43v21Z" fill="#294d65"/><path d="M30 89h17m29 0h17" stroke="#4a5961" stroke-width="6" stroke-linecap="round"/>',
+  daruma:'<ellipse cx="60" cy="105" rx="37" ry="7" fill="#d4b886"/><path d="M60 16Q91 17 96 68Q101 100 60 101Q19 100 24 68Q29 17 60 16Z" fill="#e6b842" stroke="#b8872e" stroke-width="4"/><ellipse cx="60" cy="46" rx="28" ry="25" fill="#f9e6c8"/><path d="M37 37q9-8 18 0m11 0q9-8 18 0" stroke="#513c30" stroke-width="4" fill="none"/><circle cx="47" cy="46" r="5" fill="#3d2e2b"/><circle cx="74" cy="46" r="5" fill="#3d2e2b"/><path d="M49 60q11 9 22 0" stroke="#a64c35" stroke-width="3" fill="none"/><path d="M40 79l20-8 20 8-20 13Z" fill="#f9e7ac"/>',
+  jelly:'<ellipse cx="60" cy="107" rx="34" ry="6" fill="#bfd6e6"/><path d="M29 61Q26 22 60 20Q94 22 91 61Z" fill="#9be6f1" stroke="#5db4d6" stroke-width="3" opacity=".9"/><path d="M29 61Q60 73 91 61" fill="none" stroke="#5db4d6" stroke-width="4"/><path d="M36 63q-8 22 0 32m14-30q-5 20 0 32m20-32q5 20 0 32m14-34q8 22 0 32" stroke="#85b7e7" stroke-width="5" stroke-linecap="round" fill="none"/><circle cx="48" cy="49" r="3" fill="#486b85"/><circle cx="72" cy="49" r="3" fill="#486b85"/><path d="M54 57q6 4 12 0" stroke="#486b85" stroke-width="2" fill="none"/><path d="M42 31q12-13 25-7" stroke="#fff" stroke-width="5" fill="none" opacity=".65"/>',
+  gold:'<ellipse cx="60" cy="105" rx="39" ry="7" fill="#c4b58d"/><circle cx="60" cy="57" r="39" fill="#f4c851" stroke="#a77b23" stroke-width="4"/><path d="M23 57h74" stroke="#fff0ac" stroke-width="5"/><path d="M30 38q14-20 34-19" stroke="#fff9db" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M60 32l7 15 17 2-13 11 4 17-15-9-15 9 4-17-13-11 17-2Z" fill="#fff1a1" stroke="#bd8d31" stroke-width="2"/>'
+};
+function gachaToyNode(toy){
+  const box=document.createElement("div");box.className="gacha-toy";
+  box.innerHTML='<svg viewBox="0 0 120 120" role="img" aria-label="Miniature collectible toy" xmlns="http://www.w3.org/2000/svg">'+(gachaToyArt[toy]||"")+'</svg>';
+  return box;
+}
 let gachaTimer=0,gachaBusy=false,gachaCurrent=null,gachaOwned={};
 try{gachaOwned=JSON.parse(localStorage.getItem("justinGachaCollection")||"{}")||{};}catch(_){gachaOwned={};}
 function physicsStop(){clearTimeout(gachaTimer);gachaTimer=0;gachaBusy=false;}
@@ -1179,7 +1196,7 @@ function initPhysics(){
     if(drop.classList.contains("hidden")||!gachaCurrent)return;
     drop.classList.add("hidden");reveal.classList.remove("hidden");
     document.getElementById("gachaRarity").textContent=gachaCurrent.rarity;
-    document.getElementById("gachaPrize").textContent=gachaCurrent.emoji;
+    document.getElementById("gachaPrize").replaceChildren(gachaToyNode(gachaCurrent.toy));
     document.getElementById("gachaPrizeName").textContent=gachaCurrent.name;
     document.getElementById("gachaPrizeDesc").textContent=gachaCurrent.desc;
     gachaOwned[gachaCurrent.name]=(gachaOwned[gachaCurrent.name]||0)+1;
@@ -1196,7 +1213,7 @@ function initPhysics(){
     gachaPrizes.forEach(p=>{
       const owned=gachaOwned[p.name]>0;
       const item=document.createElement("div");item.className="gacha-collectible"+(owned?"":" locked");
-      const emoji=document.createElement("span");emoji.textContent=owned?p.emoji:"?";
+      const emoji=owned?gachaToyNode(p.toy):document.createElement("span");if(!owned)emoji.textContent="?";
       const name=document.createElement("small");name.textContent=owned?p.name:"???";
       const qty=document.createElement("em");qty.textContent=owned?"×"+gachaOwned[p.name]:"";
       item.append(emoji,name,qty);grid.appendChild(item);
