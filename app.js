@@ -37,6 +37,12 @@ const pages = {
         </div>
         <div class="gacha-drop hidden" id="gachaDrop" role="button" tabindex="0" aria-label="Open capsule"><span>?</span></div>
         <div class="gacha-reveal hidden" id="gachaReveal" role="status"><div class="gacha-reveal-tag" id="gachaRarity">COMMON</div><div class="gacha-prize" id="gachaPrize">🐸</div><h2 id="gachaPrizeName">Little Friend</h2><p id="gachaPrizeDesc">A tiny surprise.</p><button type="button" id="gachaAgain">Spin again ↻</button></div>
+        <div class="gacha-bonus hidden" id="gachaBonus" role="dialog" aria-modal="true" aria-label="Collection completion surprise">
+          <div class="gacha-confetti" aria-hidden="true">✦ ★ ✧ ✦ ★ ✧ ✦</div>
+          <div class="gacha-bonus-ticket"><span class="gacha-bonus-overline">CONGRATULATIONS · 9 / 9</span><div class="gacha-bonus-medal">★</div><strong>GOLDEN TICKET</strong><p>YOU FOUND THEM ALL!</p><small>OFFICIAL CAPSULE COLLECTOR</small></div>
+          <p class="gacha-bonus-message">Every little surprise led to this one. Thanks for playing!</p>
+          <button type="button" id="gachaBonusClose">Back to collection</button>
+        </div>
         <div class="gacha-collection hidden" id="gachaCollection"><div class="gacha-collection-head"><strong>My little collection</strong><button type="button" id="gachaCollectionClose" aria-label="Close collection">×</button></div><p id="gachaCollectionSummary"></p><div class="gacha-collection-grid" id="gachaCollectionGrid"></div></div>
       </div>
       <footer class="gacha-footer"><span id="gachaHint">TURN THE HANDLE TO TRY YOUR LUCK</span><span>✿</span></footer>
@@ -1184,8 +1190,12 @@ function initPhysics(){
   const drop=document.getElementById("gachaDrop"),reveal=document.getElementById("gachaReveal");
   const collection=document.getElementById("gachaCollection"),hint=document.getElementById("gachaHint");
   const count=document.getElementById("gachaCount");
-  function updateCount(){count.textContent=Object.keys(gachaOwned).filter(k=>gachaOwned[k]>0).length;}
-  function reset(){physicsStop();handle.classList.remove("spinning");drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");hint.textContent="TURN THE HANDLE TO TRY YOUR LUCK";}
+  const bonus=document.getElementById("gachaBonus");
+  const completed=()=>gachaPrizes.every(p=>gachaOwned[p.name]>0);
+  function updateCount(){count.textContent=gachaPrizes.filter(p=>gachaOwned[p.name]>0).length;}
+  function showBonus(){drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");bonus.classList.remove("hidden");hint.textContent="COLLECTION COMPLETE!";}
+  function closeBonus(){bonus.classList.add("hidden");showCollection();}
+  function reset(){physicsStop();handle.classList.remove("spinning");drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");bonus.classList.add("hidden");hint.textContent="TURN THE HANDLE TO TRY YOUR LUCK";}
   function spin(){
     if(gachaBusy)return;
     reset();gachaBusy=true;handle.classList.add("spinning");hint.textContent="HERE IT COMES...";
@@ -1199,16 +1209,21 @@ function initPhysics(){
     document.getElementById("gachaPrize").replaceChildren(gachaToyNode(gachaCurrent.toy));
     document.getElementById("gachaPrizeName").textContent=gachaCurrent.name;
     document.getElementById("gachaPrizeDesc").textContent=gachaCurrent.desc;
+    const wasComplete=completed();
     gachaOwned[gachaCurrent.name]=(gachaOwned[gachaCurrent.name]||0)+1;
     try{localStorage.setItem("justinGachaCollection",JSON.stringify(gachaOwned));}catch(_){}
     updateCount();hint.textContent="ANOTHER ONE?";
     gachaBusy=false;
+    if(!wasComplete&&completed()){gachaTimer=setTimeout(showBonus,950);}
   }
   function showCollection(){
     physicsStop();drop.classList.add("hidden");reveal.classList.add("hidden");
-    collection.classList.remove("hidden");
+    bonus.classList.add("hidden");collection.classList.remove("hidden");
     const found=gachaPrizes.filter(p=>gachaOwned[p.name]>0);
     document.getElementById("gachaCollectionSummary").textContent=found.length+" of "+gachaPrizes.length+" surprises discovered";
+    let replay=document.getElementById("gachaBonusReplay");
+    if(completed()&&!replay){replay=document.createElement("button");replay.type="button";replay.id="gachaBonusReplay";replay.className="gacha-bonus-replay";replay.textContent="★ View your secret reward";replay.addEventListener("click",showBonus);document.getElementById("gachaCollectionSummary").after(replay);}
+    if(replay)replay.hidden=!completed();
     const grid=document.getElementById("gachaCollectionGrid");grid.replaceChildren();
     gachaPrizes.forEach(p=>{
       const owned=gachaOwned[p.name]>0;
@@ -1225,6 +1240,7 @@ function initPhysics(){
   document.getElementById("gachaAgain").addEventListener("click",spin);
   document.getElementById("gachaCollectionButton").addEventListener("click",showCollection);
   document.getElementById("gachaCollectionClose").addEventListener("click",reset);
+  document.getElementById("gachaBonusClose").addEventListener("click",closeBonus);
   updateCount();
 }
 document.getElementById("backButton").addEventListener("click", goHome);
