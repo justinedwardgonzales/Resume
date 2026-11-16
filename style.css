@@ -2519,3 +2519,40 @@ body {
   .home-screen .app-grid{top:210px}
   .home-screen .dock{bottom:calc(12px + env(safe-area-inset-bottom,0px))}
 }
+
+/* Safari dock hardening: pin the four shortcuts to the visible browser viewport,
+   independent of the legacy 852px design canvas and entrance animations. */
+@media (max-width:900px) and (pointer:coarse) {
+  #homeScreen:not(.hidden) > .dock {
+    position:fixed!important;
+    inset:auto 12px calc(env(safe-area-inset-bottom,0px) + 18px) 12px!important;
+    width:auto!important;
+    height:76px!important;
+    display:flex!important;
+    justify-content:space-around!important;
+    align-items:center!important;
+    padding:7px 8px!important;
+    z-index:100!important;
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    animation:none!important;
+    background:rgba(245,245,250,.30);
+    border-radius:25px;
+  }
+  #homeScreen:not(.hidden) > .dock .app {
+    display:flex!important;
+    flex:1 1 0!important;
+    min-width:0;
+    align-items:center;
+    justify-content:center;
+    opacity:1!important;
+    visibility:visible!important;
+  }
+  #homeScreen:not(.hidden) > .dock .app-icon{
+    width:clamp(44px,12vw,58px)!important;
+    height:clamp(44px,12vw,58px)!important;
+    flex:none!important;
+  }
+  #homeScreen:not(.hidden) > .home-page-indicator{bottom:5px}
+}
