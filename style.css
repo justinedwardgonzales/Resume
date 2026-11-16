@@ -2497,3 +2497,25 @@ body {
   .home-screen .app-grid{top:196px;row-gap:6px}
   .home-screen .dock{bottom:calc(env(safe-area-inset-bottom,0px) + 12px);height:66px}
 }
+
+/* Actual root cause of the mobile clipping: legacy fixed 394x852 screen
+   and JS --phone-scale were still shrinking the entire home screen. */
+@media (max-width:900px){
+  html,body{height:100%;width:100%;overflow:hidden}
+  .stage{height:100dvh;width:100%;display:block;overflow:hidden}
+  .phone{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;transform:none!important;border-radius:0!important;box-shadow:none!important}
+  .screen{width:100%!important;height:100%!important;border-radius:0!important}
+  .home-screen{inset:0;overflow:hidden}
+  .home-screen .home-widgets.photography-widgets{
+    top:clamp(55px,9dvh,78px);
+    width:min(332px,calc(100% - 32px));
+  }
+  .home-screen .app-grid{top:clamp(230px,34dvh,290px);left:4%;width:92%}
+  .home-screen .dock{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:4%;right:4%;width:auto;z-index:10}
+  .home-screen .home-page-indicator{bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+}
+@media (max-width:900px) and (max-height:720px){
+  .home-screen .home-widgets.photography-widgets{top:54px}
+  .home-screen .app-grid{top:210px}
+  .home-screen .dock{bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+}
