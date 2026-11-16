@@ -31,8 +31,8 @@ const pages = {
       <div class="gacha-stage" id="gachaStage">
         <div class="gacha-sparkles" aria-hidden="true">✦　·　✧　·　✦</div>
         <div class="gacha-machine">
-          <div class="gacha-dome"><div class="gacha-capsules" aria-hidden="true"><i>🟡</i><i>🟣</i><i>🔴</i><i>🟢</i><i>🔵</i><i>🟠</i><i>🟡</i><i>🔴</i></div><div class="gacha-glare"></div></div>
-          <div class="gacha-body"><div class="gacha-sticker">LUCKY<br><strong>CAPSULE</strong><small>¥ 100</small></div><button class="gacha-handle" id="gachaHandle" type="button" aria-label="Turn the gachapon handle"><span>✳</span></button><div class="gacha-chute">▼</div></div>
+          <div class="gacha-dome"><div class="gacha-capsules" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="gacha-glare"></div></div>
+          <div class="gacha-body"><div class="gacha-coin-slot" aria-hidden="true"><span></span><small>¥100</small></div><div class="gacha-sticker">LUCKY<br><strong>CAPSULE</strong><small>¥ 100</small></div><button class="gacha-handle" id="gachaHandle" type="button" aria-label="Turn the gachapon handle"><span class="gacha-crank" aria-hidden="true"></span></button><div class="gacha-chute"><span>TAKE ONE</span></div></div>
           <div class="gacha-feet"></div>
         </div>
         <div class="gacha-drop hidden" id="gachaDrop" role="button" tabindex="0" aria-label="Open capsule"><span>?</span></div>
