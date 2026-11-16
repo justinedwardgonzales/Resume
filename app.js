@@ -43,7 +43,7 @@ const pages = {
           <p class="gacha-bonus-message">Every little surprise led to this one. Thanks for playing!</p>
           <button type="button" id="gachaBonusClose">Back to collection</button>
         </div>
-        <div class="gacha-collection hidden" id="gachaCollection"><div class="gacha-collection-head"><strong>My little collection</strong><button type="button" id="gachaCollectionClose" aria-label="Close collection">×</button></div><p id="gachaCollectionSummary"></p><div class="gacha-collection-grid" id="gachaCollectionGrid"></div></div>
+        <div class="gacha-collection hidden" id="gachaCollection"><div class="gacha-collection-head"><strong>My little collection</strong><button type="button" id="gachaCollectionClose" aria-label="Close collection">×</button></div><p id="gachaCollectionSummary"></p><div class="gacha-collection-grid" id="gachaCollectionGrid"></div></div><div class="gacha-detail hidden" id="gachaDetail" role="dialog" aria-modal="true" aria-label="Collectible close-up"><div class="gacha-detail-stars" aria-hidden="true">✦ ✧ ✦</div><button type="button" class="gacha-detail-close" id="gachaDetailClose" aria-label="Back to collection">×</button><span class="gacha-detail-kicker">YOUR LITTLE TREASURE</span><div class="gacha-detail-art" id="gachaDetailArt"></div><span class="gacha-detail-zoom-hint">Pinch or double tap to zoom</span><span class="gacha-detail-rarity" id="gachaDetailRarity"></span><h2 id="gachaDetailName"></h2><p id="gachaDetailDesc"></p><div class="gacha-detail-navigation"><button type="button" id="gachaDetailPrev" aria-label="Previous collected reward">‹</button><span id="gachaDetailPosition"></span><button type="button" id="gachaDetailNext" aria-label="Next collected reward">›</button></div></div>
       </div>
       <footer class="gacha-footer"><span id="gachaHint">TURN THE HANDLE TO TRY YOUR LUCK</span><span>✿</span></footer>
     </div>`
@@ -1195,7 +1195,7 @@ function initPhysics(){
   function updateCount(){count.textContent=gachaPrizes.filter(p=>gachaOwned[p.name]>0).length;}
   function showBonus(){drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");bonus.classList.remove("hidden");hint.textContent="COLLECTION COMPLETE!";}
   function closeBonus(){bonus.classList.add("hidden");showCollection();}
-  function reset(){physicsStop();handle.classList.remove("spinning");drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");bonus.classList.add("hidden");hint.textContent="TURN THE HANDLE TO TRY YOUR LUCK";}
+  function reset(){physicsStop();handle.classList.remove("spinning");drop.classList.add("hidden");reveal.classList.add("hidden");collection.classList.add("hidden");bonus.classList.add("hidden");detail.classList.add("hidden");hint.textContent="TURN THE HANDLE TO TRY YOUR LUCK";}
   function spin(){
     if(gachaBusy)return;
     reset();gachaBusy=true;handle.classList.add("spinning");hint.textContent="HERE IT COMES...";
@@ -1218,7 +1218,7 @@ function initPhysics(){
   }
   function showCollection(){
     physicsStop();drop.classList.add("hidden");reveal.classList.add("hidden");
-    bonus.classList.add("hidden");collection.classList.remove("hidden");
+    bonus.classList.add("hidden");detail.classList.add("hidden");collection.classList.remove("hidden");
     const found=gachaPrizes.filter(p=>gachaOwned[p.name]>0);
     document.getElementById("gachaCollectionSummary").textContent=found.length+" of "+gachaPrizes.length+" surprises discovered";
     let replay=document.getElementById("gachaBonusReplay");
@@ -1227,13 +1227,70 @@ function initPhysics(){
     const grid=document.getElementById("gachaCollectionGrid");grid.replaceChildren();
     gachaPrizes.forEach(p=>{
       const owned=gachaOwned[p.name]>0;
-      const item=document.createElement("div");item.className="gacha-collectible"+(owned?"":" locked");
+      const item=document.createElement(owned?"button":"div");item.className="gacha-collectible"+(owned?"":" locked");if(owned){item.type="button";item.setAttribute("aria-label","View "+p.name+" up close");item.addEventListener("click",()=>openDetail(p));}
       const emoji=owned?gachaToyNode(p.toy):document.createElement("span");if(!owned)emoji.textContent="?";
       const name=document.createElement("small");name.textContent=owned?p.name:"???";
       const qty=document.createElement("em");qty.textContent=owned?"×"+gachaOwned[p.name]:"";
       item.append(emoji,name,qty);grid.appendChild(item);
     });
   }
+  const detail=document.getElementById("gachaDetail"),detailArt=document.getElementById("gachaDetailArt");
+  let detailIndex=0,detailScale=1,detailStartDistance=0,detailStartScale=1;
+  const collectedPrizes=()=>gachaPrizes.filter(p=>gachaOwned[p.name]>0);
+  function setDetailScale(scale){
+    detailScale=Math.max(1,Math.min(3,scale));
+    const art=detailArt.querySelector(".gacha-toy");
+    if(art)art.style.transform="scale("+detailScale+")";
+  }
+  function openDetail(prize){
+    const found=collectedPrizes();
+    if(!found.length)return;
+    detailIndex=Math.max(0,found.findIndex(p=>p.name===prize.name));
+    collection.classList.add("hidden");
+    detail.classList.remove("hidden");
+    renderDetail();
+    document.getElementById("gachaDetailClose").focus();
+  }
+  function renderDetail(){
+    const found=collectedPrizes(),prize=found[detailIndex];
+    if(!prize){closeDetail();return;}
+    detailArt.replaceChildren(gachaToyNode(prize.toy));setDetailScale(1);
+    document.getElementById("gachaDetailRarity").textContent=prize.rarity;
+    document.getElementById("gachaDetailName").textContent=prize.name;
+    document.getElementById("gachaDetailDesc").textContent=prize.desc;
+    document.getElementById("gachaDetailPosition").textContent=(detailIndex+1)+" / "+found.length;
+    document.getElementById("gachaDetailPrev").disabled=found.length<2;
+    document.getElementById("gachaDetailNext").disabled=found.length<2;
+    detail.classList.toggle("is-golden",prize.toy==="gold");
+  }
+  function moveDetail(direction){
+    const found=collectedPrizes();
+    if(!found.length)return;
+    detailIndex=(detailIndex+direction+found.length)%found.length;
+    renderDetail();
+  }
+  function closeDetail(){
+    detail.classList.add("hidden");
+    detail.classList.remove("is-golden");
+    collection.classList.remove("hidden");
+    document.getElementById("gachaCollectionGrid").querySelector(".gacha-collectible:not(.locked)")?.focus();
+  }
+  document.getElementById("gachaDetailClose").addEventListener("click",closeDetail);
+  document.getElementById("gachaDetailPrev").addEventListener("click",()=>moveDetail(-1));
+  document.getElementById("gachaDetailNext").addEventListener("click",()=>moveDetail(1));
+  detailArt.addEventListener("dblclick",()=>setDetailScale(detailScale>1?1:2));
+  detailArt.addEventListener("wheel",event=>{if(!detail.classList.contains("hidden")){event.preventDefault();setDetailScale(detailScale+(event.deltaY<0?.2:-.2));}},{passive:false});
+  detailArt.addEventListener("touchstart",event=>{
+    if(event.touches.length===2){detailStartDistance=Math.hypot(event.touches[0].clientX-event.touches[1].clientX,event.touches[0].clientY-event.touches[1].clientY);detailStartScale=detailScale;}
+  },{passive:true});
+  detailArt.addEventListener("touchmove",event=>{
+    if(event.touches.length===2&&detailStartDistance){event.preventDefault();const distance=Math.hypot(event.touches[0].clientX-event.touches[1].clientX,event.touches[0].clientY-event.touches[1].clientY);setDetailScale(detailStartScale*distance/detailStartDistance);}
+  },{passive:false});
+  detailArt.addEventListener("touchend",event=>{if(event.touches.length<2)detailStartDistance=0;});
+  let swipeStartX=null;
+  detail.addEventListener("touchstart",event=>{if(event.touches.length===1)swipeStartX=event.touches[0].clientX;},{passive:true});
+  detail.addEventListener("touchend",event=>{if(swipeStartX!==null&&event.changedTouches.length===1){const dx=event.changedTouches[0].clientX-swipeStartX;if(Math.abs(dx)>65&&detailScale===1)moveDetail(dx<0?1:-1);}swipeStartX=null;},{passive:true});
+  detail.addEventListener("keydown",event=>{if(event.key==="ArrowRight")moveDetail(1);if(event.key==="ArrowLeft")moveDetail(-1);if(event.key==="Escape"){event.stopPropagation();closeDetail();}});
   handle.addEventListener("click",spin);
   drop.addEventListener("click",openCapsule);
   drop.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openCapsule();}});
