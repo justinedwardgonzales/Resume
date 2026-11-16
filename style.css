@@ -2556,3 +2556,29 @@ body {
   }
   #homeScreen:not(.hidden) > .home-page-indicator{bottom:5px}
 }
+
+/* Balance the mobile home-screen spacing between widgets and dock. */
+@media (max-width:900px) and (pointer:coarse) {
+  #homeScreen .app-grid {
+    left:50%!important;
+    width:min(270px,76vw)!important;
+    transform:translateX(-50%);
+    top:clamp(300px,43dvh,420px)!important;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-auto-rows:auto;
+    column-gap:22px;
+    row-gap:clamp(18px,3dvh,28px)!important;
+    justify-items:center;
+  }
+  #homeScreen .app-grid > .app {
+    grid-column:auto!important;
+    grid-row:auto!important;
+    width:100%;
+    min-height:76px;
+  }
+  #homeScreen .app-grid .app-icon{width:clamp(52px,14vw,60px);height:clamp(52px,14vw,60px)}
+}
+@media (max-width:900px) and (max-height:720px) and (pointer:coarse) {
+  #homeScreen .app-grid{top:clamp(225px,38dvh,285px)!important;row-gap:12px!important}
+}
