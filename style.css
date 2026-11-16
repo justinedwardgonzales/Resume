@@ -2393,3 +2393,19 @@ body {
 .gacha-collectible .gacha-toy{width:100%;height:63px}
 .gacha-collectible .gacha-toy svg{max-height:63px}
 .gacha-collectible small{line-height:1.2;min-height:24px}
+
+/* Secret reward: unlocked only when all nine unique capsules are found */
+.gacha-bonus{position:absolute;inset:4%;z-index:12;border-radius:23px;padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:radial-gradient(circle at 50% 36%,#fff4c0,#f5b94f 65%,#e68a43);border:3px solid #8b4e29;box-shadow:0 12px 25px #603d3970}
+.gacha-confetti{position:absolute;inset:0;pointer-events:none;color:#fff9d1;font-size:30px;letter-spacing:13px;word-break:break-all;line-height:3;opacity:.75;animation:gachaConfetti 4s linear infinite}
+@keyframes gachaConfetti{50%{transform:translateY(12px) rotate(5deg)}}
+.gacha-bonus-ticket{position:relative;width:100%;max-width:260px;padding:19px 8px 21px;border:3px solid #fff2c5;border-radius:16px;background:linear-gradient(145deg,#ffeb9d,#d99c37 52%,#fff0a9);box-shadow:inset 0 0 0 2px #ac7228,0 8px 18px #9e5e3c88;transform:rotate(-3deg)}
+.gacha-bonus-overline{font-size:9px;font-weight:900;letter-spacing:.09em;color:#71441e}
+.gacha-bonus-medal{font-size:72px;line-height:1.2;color:#fff5d4;text-shadow:0 3px 0 #b77b24,0 0 17px #fff;animation:gachaMedal 1.8s ease-in-out infinite alternate}
+@keyframes gachaMedal{to{transform:scale(1.12) rotate(8deg)}}
+.gacha-bonus-ticket strong{display:block;font-size:24px;letter-spacing:-.06em;color:#5b3419}
+.gacha-bonus-ticket p{font-size:12px;font-weight:900;letter-spacing:.07em;color:#71421e;margin:8px 0}
+.gacha-bonus-ticket small{font-size:9px;font-weight:900;letter-spacing:.08em;color:#70451f}
+.gacha-bonus-message{position:relative;font-size:12px;font-weight:700;line-height:1.5;color:#5c371f;max-width:230px;margin:22px 0 15px}
+.gacha-bonus>button,.gacha-bonus-replay{position:relative;border:0;border-radius:13px;background:#362b3c;color:#fff;padding:12px 17px;font-size:12px;font-weight:900;cursor:pointer}
+.gacha-bonus-replay{width:100%;margin:0 0 12px;background:#b78231}
+.gacha-bonus-replay[hidden]{display:none!important}
