@@ -7,6 +7,8 @@ const appContent = document.getElementById("appContent");
 const phone = document.getElementById("phone");
 
 function fitPhoneToViewport() {
+  const mobile = window.matchMedia("(max-width: 900px)").matches;
+  if (mobile) { phone.style.setProperty("--phone-scale", "1"); return; }
   const scale = Math.min(1, (window.innerWidth - 40) / 394, (window.innerHeight - 40) / 852);
   phone.style.setProperty("--phone-scale", String(Math.max(0.25, scale)));
 }
